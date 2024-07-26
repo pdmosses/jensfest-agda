@@ -15,7 +15,7 @@ and type-checks with Agda version 2.6.4.3.
 In denotational semantics, types are generally taken to be Scott domains,
 so that they can be defined recursively (up to isomorphism).
 Similarly, functions between domains are required to be Scott-continuous,
-so that endofunctions on pointed domains have least fixed points.
+so that endofunctions on domains have least fixed points.
 Lambda-abstraction and function application preserve continuity,
 so functions defined by lambda-expressions are automatically continuous.
 
@@ -37,8 +37,8 @@ and *assume* the existence of isomorphisms between domains and
 their definitions.
 Functions defined by lambda-expressions are simply assumed to be continuous,
 as are all abstracted functions.
-Despite the impossibility of discharging these assumptions in the given code,
-they do not interfere with type-checking and proof validation in Agda.
+The impossibility of discharging these assumptions does not interfere with
+type-checking and proof validation in Agda.
 
 [Mosses 2024]: TBA
 [JensFest]: https://2024.splashcon.org/home/jensfest-2024
