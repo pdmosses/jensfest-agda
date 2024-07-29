@@ -32,25 +32,23 @@ The Agda definitions given below use the following modules from the standard lib
 %
 \begin{AgdaAlign}
 \begin{code}
-open import Data.Nat.Base     using (ℕ; zero; suc; _≤_)       -- natural numbers
-open import Data.Product.Base using (_×_; _,_; proj₁; proj₂)  -- A × B is Cartesian product
-open import Data.Sum.Base     using (_⊎_; inj₁; inj₂; [_,_])  -- A ⊎ B is disjoint union
-open import Data.Unit.Base    using (⊤; tt)                   -- tt is the only element of the type ⊤
-open import Function          using (Inverse; _↔_; _∘_)       -- A ↔ B is isomorphism between A and B
+open import Data.Nat.Base      using (ℕ; zero; suc; _≤_)       -- natural numbers
+open import Data.Product.Base  using (_×_; _,_; proj₁; proj₂)  -- A × B is Cartesian product
+open import Data.Sum.Base      using (_⊎_; inj₁; inj₂; [_,_])  -- A ⊎ B is disjoint union
+open import Data.Unit.Base     using (⊤; tt)                   -- tt is the only element of the type ⊤
+open import Function           using (Inverse; _↔_; _∘_)       -- A ↔ B is isomorphism between A and B
 \end{code}
 %
-For each instance argument with an isomorphism type "{{ A ↔ B }}",
-the following declaration introduces overloaded inverse functions
-"to : A → B" and "from: B → A":%
+For each instance argument with an isomorphism type "A ↔ B",
+the following declaration introduces overloaded inverse functions:%
 \footnote
 {Such isomorphisms are usually left implicit in published semantic definitions,
 but Agda requires them to be made explicit;
 similarly for injections into separated sum domains.}
 %
 \begin{code}
-open Inverse {{ ... }}
-import Relation.Binary.PropositionalEquality as Eq
-open Eq using (_≡_)
+open Inverse {{ ... }}         using (to; from)                -- to : A → B; from : B → A
+open import Relation.Binary.PropositionalEquality using (_≡_)  -- x ≡ y is equality of x and y
 
 module Inheritance.Definitions
 \end{code}
@@ -61,16 +59,16 @@ module Inheritance.Definitions
 The following notation for Scott domains and their operations is assumed.
 %
 \begin{code}
-    (Domain  :  Set₁)                                     -- Domain is a type of cpo
-    (⟨_⟩     :  Domain → Set)                             -- ⟨ D ⟩ is the type of elements of D
-    (⊥       :  {D : Domain} → ⟨ D ⟩)                     -- ⊥ is the least element of D
-    (fix     :  {D : Domain} → (⟨ D ⟩ → ⟨ D ⟩) → ⟨ D ⟩)   -- fix f is the least fixed-point of f
-    (?⊥      :  Domain)                                   -- ⊥ is the only element of ?⊥
-    (_+⊥_    :  Domain → Domain → Domain)                 -- D +⊥ E is the separated sum of D and E
-    (inl     :  {D E : Domain} → ⟨ D ⟩ → ⟨ D +⊥ E ⟩)      -- inl x injects elements x of D into D +⊥ E
-    (inr     :  {D E : Domain} → ⟨ E ⟩ → ⟨ D +⊥ E ⟩)      -- inr y injects elements y of E into D +⊥ E
-    ([_,_]⊥  :                                            -- [ f , g ]⊥ is case analysis for D +⊥ E
-                {D E F : Domain} → (⟨ D ⟩ → ⟨ F ⟩) → (⟨ E ⟩ → ⟨ F ⟩) → ⟨ D +⊥ E ⟩ → ⟨ F ⟩)
+    {Domain  :  Set₁}                                     -- Domain is a type of cpo
+    {⟨_⟩     :  Domain → Set}                             -- ⟨ D ⟩ is the type of elements of D
+    {⊥       :  {D : Domain} → ⟨ D ⟩}                     -- ⊥ is the least element of D
+    {fix     :  {D : Domain} → (⟨ D ⟩ → ⟨ D ⟩) → ⟨ D ⟩}   -- fix f is the least fixed-point of f
+    {?⊥      :  Domain}                                   -- ⊥ is the only element of ?⊥
+    {_+⊥_    :  Domain → Domain → Domain}                 -- D +⊥ E is the separated sum of D and E
+    {inl     :  {D E : Domain} → ⟨ D ⟩ → ⟨ D +⊥ E ⟩}      -- inl x injects elements x of D into D +⊥ E
+    {inr     :  {D E : Domain} → ⟨ E ⟩ → ⟨ D +⊥ E ⟩}      -- inr y injects elements y of E into D +⊥ E
+    {[_,_]⊥  :                                            -- [ f , g ]⊥ is case analysis for D +⊥ E
+                {D E F : Domain} → (⟨ D ⟩ → ⟨ F ⟩) → (⟨ E ⟩ → ⟨ F ⟩) → ⟨ D +⊥ E ⟩ → ⟨ F ⟩}
 \end{code}
 %
 As usual in denotational semantics,
@@ -104,11 +102,41 @@ however, the least elements of these domains are irrelevant,
 and it is simpler to use ordinary Agda types instead of flat domains:
 %
 \begin{code}
-    (Instance   : Set)  -- objects
-    (Name       : Set)  -- class names
-    (Key        : Set)  -- method names
-    (Primitive  : Set)  -- function names
+    {Instance   : Set}  -- objects
+    {Name       : Set}  -- class names
+    {Key        : Set}  -- method names
+    {Primitive  : Set}  -- function names
+\end{code}
+%
+Both the operational and the denotational semantics of method systems in CP89 involve
+the mutually-recursive domains "Value", "Behavior", and "Fun".
+These domains cannot be defined (safely) as Agda types, due to a negative polarity.
+However, the intended instantiation of the type "Domain" as a Scott domain
+ensures the existence of isomorphisms between the types of elements of such domains:
+%
+\begin{code}
+    {Number    : Domain}  -- the domain of numbers is unconstrained
+    {Value     : Domain}  -- a value is (isomorphic to) a behavior or a number
+    {Behavior  : Domain}  -- a behaviour maps a method name to a fun, or to the only element of ?⊥
+    {Fun       : Domain}  -- a fun maps an argument value to a value (possibly ⊥)
+    {{isoᵛ     : ⟨ Value ⟩     ↔ ⟨ Behavior +⊥ Number ⟩}}
+    {{isoᵇ     : ⟨ Behavior ⟩  ↔ (Key → ⟨ Fun +⊥ ?⊥ ⟩)}}
+    {{isoᶠ     : ⟨ Fun ⟩       ↔ (⟨ Value ⟩ → ⟨ Value ⟩)}}
+\end{code}
+%
+A semantic function for applying primitive functions to values is needed:
+%
+\begin{code}
+    {apply⟦_⟧  : Primitive → ⟨ Value ⟩ → ⟨ Value ⟩}
   where
+variable
+  ρ    : Instance
+  m    : Key
+  f    : Primitive
+  ν    : ⟨ Number ⟩
+  α    : ⟨ Value ⟩
+  σ π  : ⟨ Behavior ⟩
+  φ    : ⟨ Fun ⟩
 \end{code}
 %
 In CP89, the inheritance hierarchy is required to be a finite tree.
@@ -119,25 +147,22 @@ the function "parent" maps each subclass to its superclass.
 data Class : Set where
   child   : Name → Class → Class  -- a subclass
   origin  : Class                 -- the root of the tree
+variable κ : Class
+
 parent : Class → (Class ⊎ ⊤)
 parent (child _ κ)  = inj₁ κ
 parent origin       = inj₂ tt
-variable
-  ρ : Instance
-  κ : Class
-  m : Key
-  f : Primitive
 \end{code}
 %
 The syntax of method expressions is defined by the inductive type "Exp".
 %
 \begin{code}
 data Exp : Set where
-  self  : Exp                    -- the behavior of the current object
-  super : Exp                    -- the behavior in the superclass of the object
-  arg   : Exp                    -- the single argument of the method expression
-  call  : Exp → Key → Exp → Exp  -- "call e₁ m e₂" calls method m of object e₁ with argument e₂
-  appl  : Primitive → Exp → Exp  -- "appl f e₁" applies the unary function f to the value of e₁
+  self   : Exp                    -- the behavior of the current object
+  super  : Exp                    -- the behavior in the superclass of the object
+  arg    : Exp                    -- the single argument of the method expression
+  call   : Exp → Key → Exp → Exp  -- "call e₁ m e₂" calls method m of object e₁ with argument e₂
+  appl   : Primitive → Exp → Exp  -- "appl f e₁" applies the unary function f to the value of e₁
 variable e : Exp
 \end{code}
 %
@@ -145,41 +170,15 @@ The parameters of the following (anonymous) module are available in all the subs
 %
 \begin{code}
 module _ 
-    (class       : Instance → Class)            -- "class ρ" is the class of an object
-    (methods     : Class → Key → (Exp ⊎ ⊤))     -- "methods κ m" is the method named m in κ
-    (methodless  : methods origin m ≡ inj₂ tt)  -- the root class defines no methods
-\end{code}
-%
-Both the operational and the denotational semantics of method systems in CP89 involve
-the mutually-recursive domains "Value", "Behavior", and "Fun".
-These domains cannot be defined (safely) as Agda types, due to a negative polarity.
-However, the intended instantiation of the type "Domain" as a Scott domain
-ensures the existence of isomorphisms between the types of elements of such domains:
-%
-\begin{code}
-    (Number    : Domain)  -- the domain of numbers is unconstrained
-    (Value     : Domain)  -- a value is (isomorphic to) a behavior or a number
-    (Behavior  : Domain)  -- a behaviour maps a method name to a fun, or to the only element of ?⊥
-    (Fun       : Domain)  -- a fun maps an argument value to a value (possibly ⊥)
-    {{ isoᵛ    : ⟨ Value ⟩     ↔ ⟨ Behavior +⊥ Number ⟩   }}
-    {{ isoᵇ    : ⟨ Behavior ⟩  ↔ (Key → ⟨ Fun +⊥ ?⊥ ⟩)    }}
-    {{ isoᶠ    : ⟨ Fun ⟩       ↔ (⟨ Value ⟩ → ⟨ Value ⟩)  }}
-\end{code}
-%
-A semantic function for applying primitive functions to values is needed:
-%
-\begin{code}
-    (apply⟦_⟧ : Primitive → ⟨ Value ⟩ → ⟨ Value ⟩)
+    {class       : Instance → Class}            -- "class ρ" is the class of an object
+    {methods     : Class → Key → (Exp ⊎ ⊤)}     -- "methods κ m" is the method named m in κ
+    {methodless  : methods origin m ≡ inj₂ tt}  -- the root class defines no methods
   where
-  variable
-    α    : ⟨ Value ⟩
-    σ π  : ⟨ Behavior ⟩
-    φ    : ⟨ Fun ⟩
 \end{code}
 
 \subsection{Method Lookup Semantics}
 
-The method lookup semantics uses mutually-recursive functions "send", "lookup", and "do⟦_⟧".
+The method lookup semantics uses mutually-recursive functions "send", "lookup", and "do⟦ ⟧".
 Agda supports mutual recursion, but functions defined in Agda are supposed to be total,%
 \footnote{Agda can also be used in an unsafe mode that allows partial functions to be defined.}
 and the mutual recursion required here can be non-terminating, 
@@ -203,7 +202,7 @@ to obtain the behavior of ρ using the class of ρ itself:
 \end{code}
 %
 The behavior of "lookup κ ρ" for a subclass κ depends on whether it is called with a method m defined by κ:
-if so, it uses "do⟦ e ⟧" (via argument d⟦\_⟧ of g) to execute the corresponding method expression;
+if so, it uses "do⟦ e ⟧" (via argument d⟦ ⟧ of g) to execute the corresponding method expression;
 if not, it recursively looks up m in the superclass of κ.%
 \footnote{The isomorphisms "to" and "from" and the injection "inl" can be ignored.}
 The behavior is undefined when κ is the root of the inheritance hierarchy,
@@ -226,11 +225,11 @@ a behavior, a number, or undefined:
     do⟦ super         ⟧ ρ (child c κ)  = from λ α → from (inl (l κ ρ))
     do⟦ super         ⟧ ρ origin       = from λ α → ⊥
     do⟦ arg           ⟧ ρ κ            = from λ α → α
-    do⟦ call e₁ m e₂  ⟧ ρ κ            = from λ α →  
-                                          [  ( λ σ  →  [  ( λ φ →  to φ (to (d⟦ e₂ ⟧ ρ κ) α) ) ,
-                                                          ( λ _ →  ⊥ )
-                                                       ]⊥ (to σ m) ) ,
-                                             ( λ ν  →  ⊥ )
+    do⟦ call e₁ m e₂  ⟧ ρ κ            = from λ α →
+                                          [  ( λ σ →  [  ( λ φ →  to φ (to (d⟦ e₂ ⟧ ρ κ) α) ) ,
+                                                         ( λ _ →  ⊥ )
+                                                      ]⊥ (to σ m) ) ,
+                                             ( λ ν →  ⊥ )
                                           ]⊥ (to (to (d⟦ e₁ ⟧ ρ κ) α))
     do⟦ appl f e₁     ⟧ ρ κ            = from λ α → apply⟦ f ⟧ (to (d⟦ e₁ ⟧ ρ κ) α)
 \end{code}
@@ -266,16 +265,16 @@ The evaluation of the other method expressions is similar to their method lookup
 %
 \begin{code}
   eval⟦_⟧ : Exp → ⟨ Behavior ⟩ → ⟨ Behavior ⟩ → ⟨ Fun ⟩
-  eval⟦ self          ⟧ σ π   = from λ α → from (inl σ)
-  eval⟦ super         ⟧ σ π   = from λ α → from (inl π )
-  eval⟦ arg           ⟧ σ π   = from λ α → α
-  eval⟦ call e₁ m e₂  ⟧ σ π   = from λ α →
+  eval⟦ self          ⟧ σ π  = from λ α → from (inl σ)
+  eval⟦ super         ⟧ σ π  = from λ α → from (inl π )
+  eval⟦ arg           ⟧ σ π  = from λ α → α
+  eval⟦ call e₁ m e₂  ⟧ σ π  = from λ α →
                                 [  ( λ σ′ →  [  ( λ φ →  to φ (to (eval⟦ e₂ ⟧ σ π) α) ) ,
                                                 ( λ _ →  ⊥ )
-                                              ]⊥ (to σ′ m) ) ,
+                                             ]⊥ (to σ′ m) ) ,
                                    ( λ ν →   ⊥ )
                                 ]⊥ (to (to (eval⟦ e₁ ⟧ σ π) α))
-  eval⟦ appl f e₁     ⟧ σ π   = from λ α → apply⟦ f ⟧ (to (eval⟦ e₁ ⟧ σ π) α)
+  eval⟦ appl f e₁     ⟧ σ π  = from λ α → apply⟦ f ⟧ (to (eval⟦ e₁ ⟧ σ π) α)
 \end{code}
 %
 The evaluation function is obviously total,
@@ -301,7 +300,7 @@ Wrapper application is illstrated in Figure~9 of CP89.
   _⊕_ : ⟨ Behavior ⟩ → ⟨ Behavior ⟩ → ⟨ Behavior ⟩
   σ₁ ⊕ σ₂ = from λ m → [  ( λ φ → inl φ ) ,
                           ( λ _ → to σ₂ m ) 
-                        ]⊥ (to σ₁ m)
+                       ]⊥ (to σ₁ m)
 
   _⍄_ : Wrapper → Generator → Generator
   w ⍄ p = λ σ → (w σ (p σ)) ⊕ (p σ)
@@ -348,9 +347,9 @@ so they can be defined in Agda without an explicit least fixed-point:
 
   lookup′ zero κ ρ         = ⊥
   lookup′ n origin ρ       = ⊥
-  lookup′ n (child c κ) ρ  = from λ m → [  ( λ e → inl (do′ n ⟦ e ⟧ ρ (child c κ)) ) ,
-                                           ( λ _ → to (lookup′ n κ ρ ) m )
-                                        ] (methods (child c κ) m)
+  lookup′ n (child c κ) ρ  = from λ m →  [  ( λ e → inl (do′ n ⟦ e ⟧ ρ (child c κ)) ) ,
+                                            ( λ _ → to (lookup′ n κ ρ ) m )
+                                         ] (methods (child c κ) m)
 
   do′ zero     ⟦ e             ⟧ ρ κ            = from λ α → ⊥
   do′ (suc n)  ⟦ self          ⟧ ρ κ            = from λ α → from (inl (send′ n ρ))
@@ -363,9 +362,10 @@ so they can be defined in Agda without an explicit least fixed-point:
                                                                ]⊥ (to σ m) ) ,
                                                       ( λ ν →  ⊥ )
                                                    ]⊥ (to (to (do′ n ⟦ e₁ ⟧ ρ κ ) α))
-  do′ n       ⟦ appl f e₁      ⟧ ρ κ            = from λ α → apply⟦ f ⟧ (to (do′ n ⟦ e₁ ⟧ ρ κ) α)
+  do′ n        ⟦ appl f e₁     ⟧ ρ κ            = from λ α → apply⟦ f ⟧ (to (do′ n ⟦ e₁ ⟧ ρ κ) α)
 \end{code}
-
+\end{AgdaAlign}
+%
 That concludes the Agda formulation of the semantic definitions given in CP89.
 
 \subsection{Summary}
@@ -391,9 +391,9 @@ if needed.
 It is well known \cite{Klein2012RYR} that \emph{running} a specification
 can reveal unsuspected errors and omissions
 in published presentations of semantic definitions and proofs.
-After reformulating the definitions from C\&P89 in Agda
+After reformulating the definitions from CP89 in Agda
 and adding the implicit details (as shown in Section~\ref{sec:definitions}),
-the Agda type-checker revealed only a few minor issues in Figs.\ 14, 16, and 17 of C\&P89:
+the Agda type-checker revealed only a few minor issues in Figs.\ 14, 16, and 17 of CP89:
 %
 \begin{itemize}
 
