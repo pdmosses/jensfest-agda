@@ -7,7 +7,7 @@ using the definitions presented in \ref{sec:semantic-definitions}.
 Development of Agda proofs of the remaining results is left to future work.
 
 \begin{code}
-{-# OPTIONS --allow-unsolved-metas #-}
+-- {-# OPTIONS --allow-unsolved-metas #-}
 
 open import Axiom.Extensionality.Propositional using (Extensionality)  -- function extensionality
 open import Data.Nat.Base      using (ℕ; zero; suc; _≤_)       -- natural numbers
@@ -57,13 +57,14 @@ open import Inheritance.Definitions
     {{isoᵛ}} {{isoᵇ}} {{isoᶠ}} {apply⟦_⟧}
 
 module _ 
-    {class       : Instance → Class}            -- "class ρ" is the class of an object
-    {methods     : Class → Key → (Exp ⊎ ⊤)}     -- "methods κ m" is the method named m in κ
-    {methodless  : methods origin m ≡ inj₂ tt}  -- the root class defines no methods
+    {class       : Instance → Class}                        -- "class ρ" is the class of an object
+    {methods     : Class → Key → (Exp ⊎ ⊤)}                 -- "methods κ m" is the method named m in κ
+    {methodless  : (m : Key) → methods origin m ≡ inj₂ tt}  -- the root class defines no methods
 
     {ext : Extensionality lzero lzero}          -- function extensionality
   where
 
+  open Semantics {class} {methods} {methodless}
 \end{code}
 
 \subsection{Lemma 1}
@@ -90,7 +91,8 @@ Casper Bach Poulsen provided the two largest ones.
 \begin{code}
   lemma-2 : ∀ κ n ρ → gen κ (send′ n ρ) ≡ lookup′(suc n) κ ρ
 
-  lemma-2 origin n ρ = refl
+  lemma-2 = {!   !}
+  -- lemma-2 origin n ρ = refl
   -- lemma-2 (child c κ) n ρ =
   --   let π = lookup′(suc n) κ ρ in
   --   begin

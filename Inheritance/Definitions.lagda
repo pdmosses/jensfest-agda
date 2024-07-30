@@ -166,13 +166,13 @@ data Exp : Set where
 variable e : Exp
 \end{code}
 %
-The parameters of the following (anonymous) module are available in all the subsequent semantic definitions.
+The parameters of the following module are available in all the subsequent semantic definitions.
 %
 \begin{code}
-module _ 
-    {class       : Instance → Class}            -- "class ρ" is the class of an object
-    {methods     : Class → Key → (Exp ⊎ ⊤)}     -- "methods κ m" is the method named m in κ
-    {methodless  : methods origin m ≡ inj₂ tt}  -- the root class defines no methods
+module Semantics
+    {class       : Instance → Class}                        -- "class ρ" is the class of an object
+    {methods     : Class → Key → (Exp ⊎ ⊤)}                 -- "methods κ m" is the method named m in κ
+    {methodless  : (m : Key) → methods origin m ≡ inj₂ tt}  -- the root class defines no methods
   where
 \end{code}
 
