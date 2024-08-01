@@ -10,6 +10,7 @@ Development of Agda proofs of the remaining results is left to future work.
 -- {-# OPTIONS --allow-unsolved-metas #-}
 
 open import Axiom.Extensionality.Propositional using (Extensionality)  -- function extensionality
+open import Data.Maybe.Base    using (Maybe; maybe′; just; nothing)
 open import Data.Nat.Base      using (ℕ; zero; suc; _≤_)       -- natural numbers
 open import Data.Product.Base  using (_×_; _,_; proj₁; proj₂)  -- A × B is Cartesian product
 open import Data.Sum.Base      using (_⊎_; inj₁; inj₂; [_,_])  -- A ⊎ B is disjoint union
@@ -58,13 +59,17 @@ open import Inheritance.Definitions
 
 module _ 
     {class       : Instance → Class}                        -- "class ρ" is the class of an object
-    {methods     : Class → Key → (Exp ⊎ ⊤)}                 -- "methods κ m" is the method named m in κ
-    {methodless  : (m : Key) → methods origin m ≡ inj₂ tt}  -- the root class defines no methods
+    {methods′    : Class → Key → Maybe Exp}                 -- "methods′ κ m" is the method named m in κ
+    -- {methodless  : (m : Key) → methods origin m ≡ nothing}  -- the root class defines no methods
 
     {ext : Extensionality lzero lzero}          -- function extensionality
+    {D E F : Domain}
+    {[,]⊥-inl : {f : ⟨ D ⟩ → ⟨ F ⟩} {g : ⟨ E ⟩ → ⟨ F ⟩} {x : ⟨ D ⟩} → [ f , g ]⊥ (inl x) ≡ f x}
+    {[,]⊥-inr : {f : ⟨ D ⟩ → ⟨ F ⟩} {g : ⟨ E ⟩ → ⟨ F ⟩} {y : ⟨ E ⟩} → [ f , g ]⊥ (inr y) ≡ g y}
+    {[,]⊥-⊥   : {f : ⟨ D ⟩ → ⟨ F ⟩} {g : ⟨ E ⟩ → ⟨ F ⟩} → [ f , g ]⊥ ⊥ ≡ ⊥}
   where
 
-  open Semantics {class} {methods} {methodless}
+  open Semantics {class} {methods′} -- {methodless}
 \end{code}
 
 \subsection{Lemma 1}
@@ -89,16 +94,21 @@ As a novice user of Agda, I found it difficult to construct the terms representi
 Casper Bach Poulsen provided the two largest ones.
 
 \begin{code}
-  lemma-2 : ∀ κ n ρ → gen κ (send′ n ρ) ≡ lookup′(suc n) κ ρ
+  lemma-2 : ∀ κ n ρ → gen κ (send′ n ρ) ≡ ( wrap (child c κ) ⍄ gen κ ) (send′ n ρ)
+  -- lookup′(suc n) κ ρ
 
-  lemma-2 = {!   !}
-  -- lemma-2 origin n ρ = refl
-  -- lemma-2 (child c κ) n ρ =
-  --   let π = lookup′(suc n) κ ρ in
-  --   begin
-  --     gen (child c κ) (send′ n ρ) ≡⟨⟩
-  --     ( wrap (child c κ) ⍄ gen κ ) (send′ n ρ) ≡⟨⟩
-  --     ( wrap (child c κ) (send′ n ρ) ( gen κ (send′ n ρ)) ) ⊕ ( gen κ (send′ n ρ) )
+  lemma-2 origin n ρ = refl
+  lemma-2 (child c κ) n ρ =
+    let π = lookup′(suc n) κ ρ in
+    begin
+      gen (child c κ) (send′ n ρ)
+    ≡⟨⟩
+      ( wrap (child c κ) ⍄ gen κ ) (send′ n ρ)
+    -- ≡⟨⟩
+    --   lookup′(suc n) (child c κ) ρ
+    ∎
+
+      -- ( wrap (child c κ) (send′ n ρ) ( gen κ (send′ n ρ)) ) ⊕ ( gen κ (send′ n ρ) )
   --   ≡⟨ cong (λ X → wrap (child c κ) (send′ n ρ) X ⊕ X) (lemma-2 κ n ρ) ⟩
   --     ( wrap (child c κ) (send′ n ρ) π ) ⊕ π ≡⟨⟩
   --     from( λ m → 
