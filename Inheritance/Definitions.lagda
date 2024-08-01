@@ -35,8 +35,6 @@ The Agda definitions given below use the following modules from the standard lib
 open import Data.Nat.Base      using (ℕ; zero; suc; _≤_)       -- natural numbers
 open import Data.Maybe.Base    using (Maybe; maybe′; just; nothing)
 open import Data.Product.Base  using (_×_; _,_; proj₁; proj₂)  -- A × B is Cartesian product
-open import Data.Sum.Base      using (_⊎_; inj₁; inj₂; [_,_])  -- A ⊎ B is disjoint union
-open import Data.Unit.Base     using (⊤; tt)                   -- tt is the only element of the type ⊤
 open import Function           using (Inverse; _↔_; _∘_)       -- A ↔ B is isomorphism between A and B
 \end{code}
 %
@@ -49,7 +47,6 @@ similarly for injections into separated sum domains.}
 %
 \begin{code}
 open Inverse {{ ... }}         using (to; from)                -- to : A → B; from : B → A
-open import Relation.Binary.PropositionalEquality using (_≡_)  -- x ≡ y is equality of x and y
 
 module Inheritance.Definitions
 \end{code}
@@ -72,22 +69,30 @@ The following notation for Scott domains and their operations is assumed.
                 {D E F : Domain} → (⟨ D ⟩ → ⟨ F ⟩) → (⟨ E ⟩ → ⟨ F ⟩) → ⟨ D +⊥ E ⟩ → ⟨ F ⟩}
 \end{code}
 %
-As usual in denotational semantics,
-all domains are supposed to be cpos (complete posets)
-with least elements and lubs (least upper bounds) of increasing chains;
-and all functions between domains are supposed to be Scott continuous.
-Defining functions in lambda-notation preserves continuity.
+To specify denotational semantics properly in Agda,
+the type-theoretic structure of Scott domains has to be made explicit,
+and all functions have to be accompanied by proofs of their continuity.
+The [DomainTheory] modules from the [TypeTopology] library define 
+Scott domains as types of dcpos (directed-complete posets),
+and define types of functions that respect that structure.
 
-It should be possible to define the notation declared above by importing
-some of the DomainTheory modules from the TypeTopology library,
-taking Domain to be DCPO⊥ (directed-complete posets with least elements).
-However, all lambda-abstractions would then need to be accompanied by continuity proofs,
-and all applications would need to explicitly extract the underlying functions.
-This would signficantly complicate the semantic definitions given below,
-and is left to future work.
+However, it would be notationally quite burdensome to use those modules:
+every lambda-abstraction has to be proved continuous,
+and every function application has to explicitly discard the continuity proof.
+Such pedantic details significantly undermine simplicity and conciseness
+when defining functions in Agda using lambda-notation.
+This is left to future work.
+
+The compromise adopted here is to leave the structure of domains \emph{implicit},
+and simply \emph{assume} the existence of isomorphisms between domains and their definitions.
+Similarly, functions defined between the sets of elements of domains are assumed
+to be continuous, as are all abstracted functions.
+The impossibility of discharging these assumptions does not stop Agda from
+type-checking definitions and proofs,
+despite the potential for proving unsound results. 
 
 Functions between domains are ordered pointwise,
-and least function maps all elements to bottom;
+and the least function maps all elements to ⊥;
 Cartesian products of domains are ordered componentwise.
 Unordered types can be regarded as discretely-ordered dcpos,
 and all functions from an unordered type to a domain are then trivially continuous.
@@ -149,10 +154,6 @@ data Class : Set where
   child   : Name → Class → Class  -- a subclass
   origin  : Class                 -- the root of the tree
 variable κ : Class
-
--- parent : Class → (Class ⊎ ⊤)
--- parent (child _ κ)  = inj₁ κ
--- parent origin       = inj₂ tt
 \end{code}
 %
 The syntax of method expressions is defined by the inductive type "Exp".
@@ -171,12 +172,11 @@ The parameters of the following module are available in all the subsequent seman
 %
 \begin{code}
 module Semantics
-    {class       : Instance → Class}                        -- "class ρ" is the class of an object
-    {methods′    : Class → Key → Maybe Exp}                 -- "methods′ κ m" is the method named m in κ
-    -- {methodless  : (m : Key) → methods origin m ≡ nothing}  -- the root class defines no methods
+    {class       : Instance → Class}         -- "class ρ" is the class of an object
+    {methods′    : Class → Key → Maybe Exp}  -- "methods′ κ m" is the method named m in κ
   where
 
-  methods : Class → Key → Maybe Exp
+  methods : Class → Key → Maybe Exp          -- "methods κ m" has no methods when κ is the root class
   methods (child c κ) m = methods′ (child c κ) m
   methods origin m      = nothing
 \end{code}
@@ -211,14 +211,14 @@ if so, it uses "do⟦ e ⟧" (via argument d⟦ ⟧ of g) to execute the corresp
 if not, it recursively looks up m in the superclass of κ.%
 \footnote{The isomorphisms "to" and "from" and the injection "inl" can be ignored.}
 The behavior is undefined when κ is the root of the inheritance hierarchy,
-which is assumed not to define any methods:
+which does not define any methods:
 %
 \begin{code}
     lookup : Class → Instance → ⟨ Behavior ⟩
     lookup (child c κ) ρ  = from λ m →  maybe′  (λ e → inl (d⟦ e ⟧ ρ (child c κ)))
                                                 (to (l κ ρ) m)
                                                 (methods (child c κ) m)
-    lookup origin ρ       = from λ m →  ⊥
+    lookup origin ρ       = ⊥
 \end{code}
 %
 When applied to a value α, the value returned by the function "do⟦ e ⟧ ρ κ" may be
@@ -234,7 +234,7 @@ a behavior, a number, or undefined:
                                           [  ( λ σ →  [  ( λ φ →  to φ (to (d⟦ e₂ ⟧ ρ κ) α) ) ,
                                                          ( λ _ →  ⊥ )
                                                       ]⊥ (to σ m) ) ,
-                                             ( λ ν →  ⊥ )
+                                             ( λ ν →  from (inr ν) )
                                           ]⊥ (to (to (d⟦ e₁ ⟧ ρ κ) α))
     do⟦ appl f e₁     ⟧ ρ κ            = from λ α → apply⟦ f ⟧ (to (d⟦ e₁ ⟧ ρ κ) α)
 \end{code}
@@ -277,7 +277,7 @@ The evaluation of the other method expressions is similar to their method lookup
                                 [  ( λ σ′ →  [  ( λ φ →  to φ (to (eval⟦ e₂ ⟧ σ π) α) ) ,
                                                 ( λ _ →  ⊥ )
                                              ]⊥ (to σ′ m) ) ,
-                                   ( λ ν →   ⊥ )
+                                   ( λ ν →   from (inr ν) )
                                 ]⊥ (to (to (eval⟦ e₁ ⟧ σ π) α))
   eval⟦ appl f e₁     ⟧ σ π  = from λ α → apply⟦ f ⟧ (to (eval⟦ e₁ ⟧ σ π) α)
 \end{code}
@@ -317,7 +317,7 @@ Wrapper application is illstrated in Figure~9 of CP89.
 
   gen : Class → Generator
   gen (child c κ)  = wrap (child c κ) ⍄ gen κ
-  gen origin       = λ σ → from λ m → inr ⊥
+  gen origin       = λ σ → ⊥
 
   behave : Instance → ⟨ Behavior ⟩
   behave ρ = fix (gen (class ρ))
@@ -350,8 +350,8 @@ so they can be defined in Agda without an explicit least fixed-point:
 
   send′ n ρ = lookup′ n (class ρ) ρ
 
-  lookup′ zero κ ρ         = from λ m → inr ⊥
-  lookup′ n origin ρ       = from λ m → inr ⊥
+  lookup′ zero κ ρ         = ⊥
+  lookup′ n origin ρ       = ⊥
   lookup′ n (child c κ) ρ  = from λ m → maybe′  (λ e → inl (do′ n ⟦ e ⟧ ρ (child c κ)))
                                                 (to (lookup′ n κ ρ ) m)
                                                 (methods (child c κ) m)
@@ -365,7 +365,7 @@ so they can be defined in Agda without an explicit least fixed-point:
                                                    [  ( λ σ →  [  ( λ φ →  to φ (to (do′ n ⟦ e₂ ⟧ ρ κ) α) ) ,
                                                                   ( λ _ →  ⊥ )
                                                                ]⊥ (to σ m) ) ,
-                                                      ( λ ν →  ⊥ )
+                                                      ( λ ν →  from (inr ν) )
                                                    ]⊥ (to (to (do′ n ⟦ e₁ ⟧ ρ κ ) α))
   do′ n        ⟦ appl f e₁     ⟧ ρ κ            = from λ α → apply⟦ f ⟧ (to (do′ n ⟦ e₁ ⟧ ρ κ) α)
 \end{code}
