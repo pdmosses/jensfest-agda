@@ -13,8 +13,6 @@ open import Axiom.Extensionality.Propositional using (Extensionality)  -- functi
 open import Data.Maybe.Base    using (Maybe; maybe′; just; nothing)
 open import Data.Nat.Base      using (ℕ; zero; suc; _≤_)       -- natural numbers
 open import Data.Product.Base  using (_×_; _,_; proj₁; proj₂)  -- A × B is Cartesian product
-open import Data.Sum.Base      using (_⊎_; inj₁; inj₂; [_,_])  -- A ⊎ B is disjoint union
-open import Data.Unit.Base     using (⊤; tt)                   -- tt is the only element of the type ⊤
 open import Function           using (Inverse; _↔_; _∘_)       -- A ↔ B is isomorphism between A and B
 open Inverse {{ ... }}         using (to; from)                -- to : A → B; from : B → A
 import Relation.Binary.PropositionalEquality as Eq
@@ -44,7 +42,6 @@ module Inheritance.Equivalence
     {Value     : Domain}  -- a value is (isomorphic to) a behavior or a number
     {Behavior  : Domain}  -- a behaviour maps a method name to a fun, or to the only element of ?⊥
     {Fun       : Domain}  -- a fun maps an argument value to a value (possibly ⊥)
-    (Fun         : Domain)  -- a fun maps an argument value to a value (possibly ⊥)
     {{isoᵛ       : ⟨ Value ⟩     ↔ ⟨ Behavior +⊥ Number ⟩}}
     {{isoᵇ       : ⟨ Behavior ⟩  ↔ (Key → ⟨ Fun +⊥ ?⊥ ⟩)}}
     {{isoᶠ       : ⟨ Fun ⟩       ↔ (⟨ Value ⟩ → ⟨ Value ⟩)}}
@@ -94,11 +91,11 @@ As a novice user of Agda, I found it difficult to construct the terms representi
 Casper Bach Poulsen provided the two largest ones.
 
 \begin{code}
-  lemma-2 : ∀ κ n ρ → gen κ (send′ n ρ) ≡ ( wrap (child c κ) ⍄ gen κ ) (send′ n ρ)
+  lemma-2 : ∀ c κ n ρ → gen κ (send′ n ρ) ≡ ( wrap (child c κ) ⍄ gen κ ) (send′ n ρ)
   -- lookup′(suc n) κ ρ
 
-  lemma-2 origin n ρ = refl
-  lemma-2 (child c κ) n ρ =
+  lemma-2 _ origin n ρ = refl
+  lemma-2 _ (child c κ) n ρ =
     let π = lookup′(suc n) κ ρ in
     begin
       gen (child c κ) (send′ n ρ)
@@ -106,7 +103,7 @@ Casper Bach Poulsen provided the two largest ones.
       ( wrap (child c κ) ⍄ gen κ ) (send′ n ρ)
     -- ≡⟨⟩
     --   lookup′(suc n) (child c κ) ρ
-    ∎
+    -- ∎
 
       -- ( wrap (child c κ) (send′ n ρ) ( gen κ (send′ n ρ)) ) ⊕ ( gen κ (send′ n ρ) )
   --   ≡⟨ cong (λ X → wrap (child c κ) (send′ n ρ) X ⊕ X) (lemma-2 κ n ρ) ⟩
