@@ -14,7 +14,7 @@ open import Data.Maybe.Base    using (Maybe; maybe′; just; nothing)
 open import Data.Nat.Base      using (ℕ; zero; suc; _≤_)       -- natural numbers
 open import Data.Product.Base  using (_×_; _,_; proj₁; proj₂)  -- A × B is Cartesian product
 open import Function           using (Inverse; _↔_; _∘_)       -- A ↔ B is isomorphism between A and B
-open Inverse {{ ... }}         using (to; from)                -- to : A → B; from : B → A
+open Inverse {{ ... }}         using (to; from; inverseˡ)      -- to : A → B; from : B → A
 import Relation.Binary.PropositionalEquality as Eq
 open Eq                        using (_≡_; refl; trans; sym; cong; cong-app; subst)
 open Eq.≡-Reasoning            -- using (begin_; _≡⟨⟩_; _≡⟨_⟩_; _∎)
@@ -57,13 +57,15 @@ open import Inheritance.Definitions
 module _ 
     {class       : Instance → Class}                        -- "class ρ" is the class of an object
     {methods′    : Class → Key → Maybe Exp}                 -- "methods′ κ m" is the method named m in κ
-    -- {methodless  : (m : Key) → methods origin m ≡ nothing}  -- the root class defines no methods
 
     {ext : Extensionality lzero lzero}          -- function extensionality
-    {D E F : Domain}
-    {[,]⊥-inl : {f : ⟨ D ⟩ → ⟨ F ⟩} {g : ⟨ E ⟩ → ⟨ F ⟩} {x : ⟨ D ⟩} → [ f , g ]⊥ (inl x) ≡ f x}
-    {[,]⊥-inr : {f : ⟨ D ⟩ → ⟨ F ⟩} {g : ⟨ E ⟩ → ⟨ F ⟩} {y : ⟨ E ⟩} → [ f , g ]⊥ (inr y) ≡ g y}
-    {[,]⊥-⊥   : {f : ⟨ D ⟩ → ⟨ F ⟩} {g : ⟨ E ⟩ → ⟨ F ⟩} → [ f , g ]⊥ ⊥ ≡ ⊥}
+    (case-maybe′ : {D E F : Domain} {A : Set}      -- sum-maybe distributes [ f , g ]⊥ over maybe′
+                   {f : ⟨ D ⟩ → ⟨ F ⟩} {g : ⟨ E ⟩ → ⟨ F ⟩} {x : A → ⟨ D ⟩} {y : ⟨ E ⟩} {z : Maybe A} →
+                   [ f , g ]⊥ ( maybe′ ( inl ∘ x ) ( inr(y) ) ( z ) ) ≡ maybe′ ( f ∘ x ) ( g(y) ) ( z ) )
+    -- {D E F : Domain}
+    -- {[,]⊥-inl : {f : ⟨ D ⟩ → ⟨ F ⟩} {g : ⟨ E ⟩ → ⟨ F ⟩} {x : ⟨ D ⟩} → [ f , g ]⊥ (inl x) ≡ f x}
+    -- {[,]⊥-inr : {f : ⟨ D ⟩ → ⟨ F ⟩} {g : ⟨ E ⟩ → ⟨ F ⟩} {y : ⟨ E ⟩} → [ f , g ]⊥ (inr y) ≡ g y}
+    -- {[,]⊥-⊥   : {f : ⟨ D ⟩ → ⟨ F ⟩} {g : ⟨ E ⟩ → ⟨ F ⟩} → [ f , g ]⊥ ⊥ ≡ ⊥}
   where
 
   open Semantics {class} {methods′} -- {methodless}
@@ -91,50 +93,49 @@ As a novice user of Agda, I found it difficult to construct the terms representi
 Casper Bach Poulsen provided the two largest ones.
 
 \begin{code}
-  lemma-2 : ∀ c κ n ρ → gen κ (send′ n ρ) ≡ ( wrap (child c κ) ⍄ gen κ ) (send′ n ρ)
-  -- lookup′(suc n) κ ρ
+  lemma-2 : ∀ κ n ρ → gen κ (send′ n ρ) ≡ lookup′(suc n) κ ρ
 
-  lemma-2 _ origin n ρ = refl
-  lemma-2 _ (child c κ) n ρ =
+  lemma-2 origin n ρ = refl
+  lemma-2 (child c κ) n ρ =
     let π = lookup′(suc n) κ ρ in
     begin
       gen (child c κ) (send′ n ρ)
     ≡⟨⟩
       ( wrap (child c κ) ⍄ gen κ ) (send′ n ρ)
-    -- ≡⟨⟩
-    --   lookup′(suc n) (child c κ) ρ
-    -- ∎
-
-      -- ( wrap (child c κ) (send′ n ρ) ( gen κ (send′ n ρ)) ) ⊕ ( gen κ (send′ n ρ) )
-  --   ≡⟨ cong (λ X → wrap (child c κ) (send′ n ρ) X ⊕ X) (lemma-2 κ n ρ) ⟩
-  --     ( wrap (child c κ) (send′ n ρ) π ) ⊕ π ≡⟨⟩
-  --     from( λ m → 
-  --       [ ( λ φ → inj₁ φ ) ,  ( λ _ → to π m ) ]⊥ (to( wrap (child c κ) (send′ n ρ) π ) m) ) ≡⟨⟩
-  --     from( λ m →
-  --       [ ( λ φ → inj₁ φ ) , ( λ _ → to π m ) ]⊥  
-  --       (to( from( λ m → 
-  --         maybe′ ( λ e → inj₁(eval⟦ e ⟧ (send′ n ρ) π) ) ( inj₂(⊥?) ) (methods (child c κ) m) ) ) m) )
-  --   ≡⟨ cong from(ext λ x → cong (λ X → [ _ , ( λ _ → to π x ) ]⊥ (X x)) (inverseˡ refl)) ⟩
-  --     from( λ m →
-  --       [ ( λ φ → inj₁ φ ) , ( λ _ → to π m ) ]⊥  
-  --       ( maybe′ ( λ e → inj₁(eval⟦ e ⟧ (send′ n ρ) π) ) ( inj₂(⊥?) ) (methods (child c κ) m) ) )
-  --   ≡⟨ cong from (ext λ x → 
-  --           case-maybe′{A = Exp}{x = λ e → eval⟦ e ⟧ (send′ n ρ) π}{y = ⊥?}{z = methods (child c κ) x} ) ⟩
-  --     from( λ m →  maybe′ ( λ e → inj₁(eval⟦ e ⟧ (send′ n ρ) π) ) ( to π m ) ( methods (child c κ) m ) )
-  --   ≡⟨⟩
-  --     from( λ m →
-  --       maybe′ ( λ e → inj₁(eval⟦ e ⟧ (send′ n ρ) (lookup′ (suc n) κ ρ)) ) 
-  --              ( to(lookup′(suc n) κ ρ) m ) 
-  --              ( methods (child c κ) m ) )
-  --    ≡⟨ cong from(ext λ m → 
-  --         cong (λ X → maybe′ X (to(lookup′(suc n) κ ρ) m) (methods (child c κ) m))
-  --              (ext λ e → cong inj₁(sym(lemma-1 n e _ _ _))) ) ⟩
-  --     from( λ m →
-  --       maybe′ ( λ e → inj₁(do′ (suc n) ⟦ e ⟧ ρ (child c κ)) ) 
-  --              ( to(lookup′(suc n) κ ρ) m ) 
-  --              ( methods (child c κ) m ) ) ≡⟨⟩
-  --     lookup′(suc n) (child c κ) ρ
-  --   ∎
+    ≡⟨⟩
+      ( wrap (child c κ) (send′ n ρ) ( gen κ (send′ n ρ)) ) ⊕ ( gen κ (send′ n ρ) )
+    ≡⟨ cong (λ X → wrap (child c κ) (send′ n ρ) X ⊕ X) (lemma-2 κ n ρ) ⟩
+      ( wrap (child c κ) (send′ n ρ) π ) ⊕ π
+    ≡⟨⟩
+      from( λ m → 
+        [ ( λ φ → inl φ ) ,  ( λ _ → to π m ) ]⊥ (to( wrap (child c κ) (send′ n ρ) π ) m) )
+    ≡⟨⟩
+      from( λ m →
+        [ ( λ φ → inl φ ) , ( λ _ → to π m ) ]⊥  
+        (to( from( λ m → 
+          maybe′ ( λ e → inl(eval⟦ e ⟧ (send′ n ρ) π) ) ( inr(⊥) ) (methods (child c κ) m) ) ) m) )
+    ≡⟨ cong from(ext λ x → cong (λ X → [ _ , ( λ _ → to π x ) ]⊥ (X x)) (inverseˡ refl)) ⟩
+      from( λ m →
+        [ ( λ φ → inl φ ) , ( λ _ → to π m ) ]⊥  
+        ( maybe′ ( λ e → inl(eval⟦ e ⟧ (send′ n ρ) π) ) ( inr(⊥) ) (methods (child c κ) m) ) )
+    ≡⟨ cong from (ext λ x → 
+            case-maybe′{A = Exp}{x = λ e → eval⟦ e ⟧ (send′ n ρ) π}{y = ⊥}{z = methods (child c κ) x} ) ⟩
+      from( λ m →  maybe′ ( λ e → inl(eval⟦ e ⟧ (send′ n ρ) π) ) ( to π m ) ( methods (child c κ) m ) )
+    ≡⟨⟩
+      from( λ m →
+        maybe′ ( λ e → inl(eval⟦ e ⟧ (send′ n ρ) (lookup′ (suc n) κ ρ)) ) 
+               ( to(lookup′(suc n) κ ρ) m ) 
+               ( methods (child c κ) m ) )
+     ≡⟨ cong from(ext λ m → 
+          cong (λ X → maybe′ X (to(lookup′(suc n) κ ρ) m) (methods (child c κ) m))
+               (ext λ e → cong inl(sym(lemma-1 n e _ _ _))) ) ⟩
+      from( λ m →
+        maybe′ ( λ e → inl(do′ (suc n) ⟦ e ⟧ ρ (child c κ)) ) 
+               ( to(lookup′(suc n) κ ρ) m ) 
+               ( methods (child c κ) m ) )
+    ≡⟨⟩
+      lookup′(suc n) (child c κ) ρ
+    ∎
 \end{code}
 
 \subsection{Lemma 3}
