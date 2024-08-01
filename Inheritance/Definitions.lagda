@@ -33,7 +33,9 @@ The Agda definitions given below use the following modules from the standard lib
 \begin{AgdaAlign}
 \begin{code}
 open import Data.Nat.Base      using (ℕ; zero; suc; _≤_)       -- natural numbers
-open import Data.Maybe.Base    using (Maybe; maybe′; just; nothing)
+open import Data.Maybe.Base    renaming (Maybe to _+?; maybe′ to [_,_]?; nothing to ??)
+                                                               -- A +? is disjoint union of A and {??}
+                                                               -- [ f , x ]? is case analysis on A +?
 open import Data.Product.Base  using (_×_; _,_; proj₁; proj₂)  -- A × B is Cartesian product
 open import Function           using (Inverse; _↔_; _∘_)       -- A ↔ B is isomorphism between A and B
 \end{code}
@@ -145,18 +147,17 @@ variable
   φ    : ⟨ Fun ⟩
 \end{code}
 %
-In CP89, the inheritance hierarchy is required to be a finite tree.
-Here, "Class" is defined as an inductive type;
-the function "parent" maps each subclass to its superclass.
+In CP89, the inheritance hierarchy is assumed to be a finite tree.
+Here, "Class" is defined as an inductive type:
 %
 \begin{code}
 data Class : Set where
   child   : Name → Class → Class  -- a subclass
-  origin  : Class                 -- the root of the tree
+  origin  : Class                 -- the root class
 variable κ : Class
 \end{code}
 %
-The syntax of method expressions is defined by the inductive type "Exp".
+The syntax of method expressions is defined by the inductive type "Exp":
 %
 \begin{code}
 data Exp : Set where
@@ -168,17 +169,22 @@ data Exp : Set where
 variable e : Exp
 \end{code}
 %
-The parameters of the following module are available in all the subsequent semantic definitions.
+The type D′ is needed only for the method lookup semantics:
+%
+D′ = (Instance → ⟨ Behavior ⟩) × (Class → Instance → ⟨ Behavior ⟩) × (Exp → Instance → Class → ⟨ Fun ⟩)
+\end{code}
+%
+The parameters of the following module are available in all the subsequent semantic definitions:
 %
 \begin{code}
 module Semantics
     {class       : Instance → Class}         -- "class ρ" is the class of an object
-    {methods′    : Class → Key → Maybe Exp}  -- "methods′ κ m" is the method named m in κ
+    {methods′    : Class → Key → (Exp +?)}   -- "methods′ κ m" is the method named m in κ
   where
 
-  methods : Class → Key → Maybe Exp          -- "methods κ m" has no methods when κ is the root class
+  methods : Class → Key → (Exp +?)           -- "methods κ m" has no methods when κ is the root class
   methods (child c κ) m = methods′ (child c κ) m
-  methods origin m      = nothing
+  methods origin m      = ??
 \end{code}
 
 \subsection{Method Lookup Semantics}
@@ -189,11 +195,13 @@ Agda supports mutual recursion, but functions defined in Agda are supposed to be
 and the mutual recursion required here can be non-terminating, 
 These functions are therefore defined in Agda as the least fixed point of the following non-recursive function g
 (as in the proof of Proposition~3 in CP89):
+
+The type D′ is needed only for the method lookup semantics.
+
+TODO : Why isn't the previous definition of D′ already in scope here?
 %
 \begin{code}
-  D′ = (Instance → ⟨ Behavior ⟩) ×
-       (Class → Instance → ⟨ Behavior ⟩) ×
-       (Exp → Instance → Class → ⟨ Fun ⟩)
+  D′ = (Instance → ⟨ Behavior ⟩) × (Class → Instance → ⟨ Behavior ⟩) × (Exp → Instance → Class → ⟨ Fun ⟩)
   g′ : D′ → D′
   g′ (s , l , d⟦_⟧) = (send , lookup , do⟦_⟧) where
 \end{code}
@@ -215,9 +223,9 @@ which does not define any methods:
 %
 \begin{code}
     lookup : Class → Instance → ⟨ Behavior ⟩
-    lookup (child c κ) ρ  = from λ m →  maybe′  (λ e → inl (d⟦ e ⟧ ρ (child c κ)))
-                                                (to (l κ ρ) m)
-                                                (methods (child c κ) m)
+    lookup (child c κ) ρ  = from λ m →  [  ( λ e → inl (d⟦ e ⟧ ρ (child c κ)) ) ,
+                                           ( to (l κ ρ) m )
+                                        ]? (methods (child c κ) m)
     lookup origin ρ       = ⊥
 \end{code}
 %
@@ -248,8 +256,8 @@ The following definitions correspond to making the above definitions mutually re
 using an auxilary domain G′ whose type of elements ⟨ G′ ⟩ is isomorphic to the type D′:
 %
 \begin{code}
-  module _
-      (G′ : Domain)
+  module MethodLookup
+      {G′ : Domain}
       {{ isoᵍ : ⟨ G′ ⟩ ↔ D′ }}
     where
     γ : ⟨ G′ ⟩ → ⟨ G′ ⟩
@@ -311,9 +319,9 @@ Wrapper application is illstrated in Figure~9 of CP89.
   w ⍄ p = λ σ → (w σ (p σ)) ⊕ (p σ)
 
   wrap : Class → Wrapper
-  wrap κ = λ σ → λ π → from λ m → maybe′  (λ e →  inl (eval⟦ e ⟧ σ π))
-                                          (inr ⊥)
-                                          (methods κ m)
+  wrap κ = λ σ → λ π → from λ m →  [  ( λ e →  inl (eval⟦ e ⟧ σ π) ) ,
+                                      ( inr ⊥ )
+                                   ]? (methods κ m)
 
   gen : Class → Generator
   gen (child c κ)  = wrap (child c κ) ⍄ gen κ
@@ -352,9 +360,9 @@ so they can be defined in Agda without an explicit least fixed-point:
 
   lookup′ zero κ ρ         = ⊥
   lookup′ n origin ρ       = ⊥
-  lookup′ n (child c κ) ρ  = from λ m → maybe′  (λ e → inl (do′ n ⟦ e ⟧ ρ (child c κ)))
-                                                (to (lookup′ n κ ρ ) m)
-                                                (methods (child c κ) m)
+  lookup′ n (child c κ) ρ  = from λ m → [  ( λ e → inl (do′ n ⟦ e ⟧ ρ (child c κ)) ) ,
+                                           ( to (lookup′ n κ ρ ) m )
+                                        ]? (methods (child c κ) m)
 
   do′ zero     ⟦ e             ⟧ ρ κ            = from λ α → ⊥
   do′ (suc n)  ⟦ self          ⟧ ρ κ            = from λ α → from (inl (send′ n ρ))
