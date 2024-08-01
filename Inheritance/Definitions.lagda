@@ -33,6 +33,7 @@ The Agda definitions given below use the following modules from the standard lib
 \begin{AgdaAlign}
 \begin{code}
 open import Data.Nat.Base      using (ℕ; zero; suc; _≤_)       -- natural numbers
+open import Data.Maybe.Base    using (Maybe; maybe′; just; nothing)
 open import Data.Product.Base  using (_×_; _,_; proj₁; proj₂)  -- A × B is Cartesian product
 open import Data.Sum.Base      using (_⊎_; inj₁; inj₂; [_,_])  -- A ⊎ B is disjoint union
 open import Data.Unit.Base     using (⊤; tt)                   -- tt is the only element of the type ⊤
@@ -149,9 +150,9 @@ data Class : Set where
   origin  : Class                 -- the root of the tree
 variable κ : Class
 
-parent : Class → (Class ⊎ ⊤)
-parent (child _ κ)  = inj₁ κ
-parent origin       = inj₂ tt
+-- parent : Class → (Class ⊎ ⊤)
+-- parent (child _ κ)  = inj₁ κ
+-- parent origin       = inj₂ tt
 \end{code}
 %
 The syntax of method expressions is defined by the inductive type "Exp".
@@ -171,9 +172,13 @@ The parameters of the following module are available in all the subsequent seman
 \begin{code}
 module Semantics
     {class       : Instance → Class}                        -- "class ρ" is the class of an object
-    {methods     : Class → Key → (Exp ⊎ ⊤)}                 -- "methods κ m" is the method named m in κ
-    {methodless  : (m : Key) → methods origin m ≡ inj₂ tt}  -- the root class defines no methods
+    {methods′    : Class → Key → Maybe Exp}                 -- "methods′ κ m" is the method named m in κ
+    -- {methodless  : (m : Key) → methods origin m ≡ nothing}  -- the root class defines no methods
   where
+
+  methods : Class → Key → Maybe Exp
+  methods (child c κ) m = methods′ (child c κ) m
+  methods origin m      = nothing
 \end{code}
 
 \subsection{Method Lookup Semantics}
@@ -186,11 +191,11 @@ These functions are therefore defined in Agda as the least fixed point of the fo
 (as in the proof of Proposition~3 in CP89):
 %
 \begin{code}
-  D = (Instance → ⟨ Behavior ⟩) ×
-      (Class → Instance → ⟨ Behavior ⟩) ×
-      (Exp → Instance → Class → ⟨ Fun ⟩)
-  g : D → D
-  g (s , l , d⟦_⟧) = (send , lookup , do⟦_⟧) where
+  D′ = (Instance → ⟨ Behavior ⟩) ×
+       (Class → Instance → ⟨ Behavior ⟩) ×
+       (Exp → Instance → Class → ⟨ Fun ⟩)
+  g′ : D′ → D′
+  g′ (s , l , d⟦_⟧) = (send , lookup , do⟦_⟧) where
 \end{code}
 %
 The behavior of "send ρ" is to use "lookup" (to be supplied as the argument l of g above)
@@ -210,10 +215,10 @@ which is assumed not to define any methods:
 %
 \begin{code}
     lookup : Class → Instance → ⟨ Behavior ⟩
-    lookup (child c κ) ρ  = from λ m →  [  ( λ e → inl (d⟦ e ⟧ ρ (child c κ)) ) ,
-                                           ( λ _ → to (l κ ρ) m )
-                                        ] (methods (child c κ) m)
-    lookup origin ρ       = ⊥
+    lookup (child c κ) ρ  = from λ m →  maybe′  (λ e → inl (d⟦ e ⟧ ρ (child c κ)))
+                                                (to (l κ ρ) m)
+                                                (methods (child c κ) m)
+    lookup origin ρ       = from λ m →  ⊥
 \end{code}
 %
 When applied to a value α, the value returned by the function "do⟦ e ⟧ ρ κ" may be
@@ -240,15 +245,15 @@ that function is applied to the value of e₂;
 otherwise the value of the call is undefined.
 
 The following definitions correspond to making the above definitions mutually recursive,
-using an auxilary domain G whose type of elements ⟨ G ⟩ is isomorphic to the type D:
+using an auxilary domain G′ whose type of elements ⟨ G′ ⟩ is isomorphic to the type D′:
 %
 \begin{code}
   module _
-      (G : Domain)
-      {{ isoᵍ : ⟨ G ⟩ ↔ D }}
+      (G′ : Domain)
+      {{ isoᵍ : ⟨ G′ ⟩ ↔ D′ }}
     where
-    γ : ⟨ G ⟩ → ⟨ G ⟩
-    γ = from ∘ g ∘ to
+    γ : ⟨ G′ ⟩ → ⟨ G′ ⟩
+    γ = from ∘ g′ ∘ to
 
     send     = proj₁ (to (fix γ))
     lookup   = proj₁ (proj₂ (to (fix γ)))
@@ -306,13 +311,13 @@ Wrapper application is illstrated in Figure~9 of CP89.
   w ⍄ p = λ σ → (w σ (p σ)) ⊕ (p σ)
 
   wrap : Class → Wrapper
-  wrap κ = λ σ → λ π → from λ m →  [  ( λ e →  inl (eval⟦ e ⟧ σ π) ) ,
-                                      ( λ _ →  inr ⊥ )
-                                   ] (methods κ m)
+  wrap κ = λ σ → λ π → from λ m → maybe′  (λ e →  inl (eval⟦ e ⟧ σ π))
+                                          (inr ⊥)
+                                          (methods κ m)
 
   gen : Class → Generator
   gen (child c κ)  = wrap (child c κ) ⍄ gen κ
-  gen origin       = λ σ → ⊥
+  gen origin       = λ σ → from λ m → inr ⊥
 
   behave : Instance → ⟨ Behavior ⟩
   behave ρ = fix (gen (class ρ))
@@ -345,11 +350,11 @@ so they can be defined in Agda without an explicit least fixed-point:
 
   send′ n ρ = lookup′ n (class ρ) ρ
 
-  lookup′ zero κ ρ         = ⊥
-  lookup′ n origin ρ       = ⊥
-  lookup′ n (child c κ) ρ  = from λ m →  [  ( λ e → inl (do′ n ⟦ e ⟧ ρ (child c κ)) ) ,
-                                            ( λ _ → to (lookup′ n κ ρ ) m )
-                                         ] (methods (child c κ) m)
+  lookup′ zero κ ρ         = from λ m → inr ⊥
+  lookup′ n origin ρ       = from λ m → inr ⊥
+  lookup′ n (child c κ) ρ  = from λ m → maybe′  (λ e → inl (do′ n ⟦ e ⟧ ρ (child c κ)))
+                                                (to (lookup′ n κ ρ ) m)
+                                                (methods (child c κ) m)
 
   do′ zero     ⟦ e             ⟧ ρ κ            = from λ α → ⊥
   do′ (suc n)  ⟦ self          ⟧ ρ κ            = from λ α → from (inl (send′ n ρ))
