@@ -79,16 +79,48 @@ which is specified concisely in Agda using the rewrite feature.
 
 \begin{code}
   lemma-1 : ∀ n e ρ c κ →
-    do′ (suc n) ⟦ e ⟧ ρ (child c κ) ≡ eval⟦ e ⟧ ( send′ n ρ ) ( lookup′ (suc n) κ ρ )
+    do′ (suc n) ⟦ e ⟧ ρ (child c κ) ≡  eval⟦ e ⟧ (send′ n ρ) (lookup′ (suc n) κ ρ)
 
-  lemma-1 n self            ρ c κ = refl
-  lemma-1 n super           ρ c κ = refl
-  lemma-1 n arg             ρ c κ = refl
-  lemma-1 n (call e₁ m e₂)  ρ c κ 
-      rewrite lemma-1 n e₁  ρ c κ 
-      rewrite lemma-1 n e₂  ρ c κ = refl
-  lemma-1 n (appl f e₁)     ρ c κ 
-      rewrite lemma-1 n e₁  ρ c κ = refl
+  lemma-1 n self ρ c κ =              begin
+                                          do′ (suc n) ⟦ self ⟧ ρ (child c κ)
+                                        ≡⟨⟩
+                                          ( from λ α → from (inl (send′ n ρ)) )
+                                        ≡⟨⟩
+                                          eval⟦ self ⟧ (send′ n ρ) (lookup′ (suc n) κ ρ)
+                                      ∎
+  lemma-1 n super ρ c (child c′ κ) =  begin
+                                          do′ (suc n) ⟦ super ⟧ ρ (child c (child c′ κ))
+                                        ≡⟨⟩
+                                          ( from λ α → from (inl (lookup′ (suc n) (child c′ κ) ρ)) )
+                                        ≡⟨⟩
+                                          eval⟦ super ⟧ (send′ n ρ) (lookup′ (suc n) (child c′ κ) ρ)
+                                      ∎
+  lemma-1 n super ρ c origin =        begin
+                                          do′ (suc n) ⟦ super ⟧ ρ (child c origin)
+                                        ≡⟨⟩
+                                          ( from λ α → from (inl ⊥ ) )
+                                        ≡⟨⟩
+                                          eval⟦ super ⟧ (send′ n ρ) (lookup′ (suc n) origin ρ)
+                                      ∎
+  lemma-1 n arg ρ c κ =               begin
+                                          do′ (suc n) ⟦ arg ⟧ ρ (child c κ)
+                                        ≡⟨⟩
+                                          ( from λ α → α )
+                                        ≡⟨⟩
+                                          eval⟦ arg ⟧ (send′ n ρ) (lookup′ (suc n) κ ρ)
+                                      ∎
+  lemma-1 n (call e₁ m e₂) ρ c κ      rewrite (lemma-1 n e₁ ρ c κ)
+                                      rewrite (lemma-1 n e₂ ρ c κ)
+                                   =  refl
+  lemma-1 n (appl f e₁) ρ c κ      =  begin 
+                                          do′ (suc n) ⟦ appl f e₁ ⟧ ρ (child c κ)
+                                        ≡⟨⟩
+                                          ( from λ α → apply⟦ f ⟧ (to (do′ (suc n) ⟦ e₁ ⟧ ρ (child c κ)) α) )
+                                        ≡⟨ cong from (ext λ α → cong (λ X → apply⟦ f ⟧ ((to X) α)) (lemma-1 n e₁ ρ c κ)) ⟩ 
+                                          ( from λ α → apply⟦ f ⟧ (to (eval⟦ e₁ ⟧ (send′ n ρ) (lookup′ (suc n) κ ρ)) α) )
+                                        ≡⟨⟩
+                                          eval⟦ appl f e₁ ⟧ (send′ n ρ) (lookup′ (suc n) κ ρ)
+                                      ∎
 \end{code}
 
 \subsection{Lemma 2}
