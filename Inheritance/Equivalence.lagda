@@ -7,6 +7,7 @@ using the definitions presented in \ref{sec:semantic-definitions}.
 Development of Agda proofs of the remaining results is left to future work.
 
 \begin{code}
+{-# OPTIONS --safe #-}
 open import Data.Maybe.Base    renaming (Maybe to _+?; maybe′ to [_,_]?; nothing to ??)
                                                                -- A +? is disjoint union of A and {??}
                                                                -- [ f , x ]? is case analysis on A +?

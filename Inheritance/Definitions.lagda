@@ -32,6 +32,7 @@ The Agda definitions given below use the following modules from the standard lib
 %
 \begin{AgdaAlign}
 \begin{code}
+{-# OPTIONS --safe #-}
 open import Data.Nat.Base      using (ℕ; zero; suc; _≤_)       -- natural numbers
 open import Data.Maybe.Base    renaming (Maybe to _+?; maybe′ to [_,_]?; nothing to ??)
                                                                -- A +? is disjoint union of A and {??}
