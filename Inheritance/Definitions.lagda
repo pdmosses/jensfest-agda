@@ -171,6 +171,7 @@ variable e : Exp
 %
 The type D′ is needed only for the method lookup semantics:
 %
+\begin{code}
 D′ = (Instance → ⟨ Behavior ⟩) × (Class → Instance → ⟨ Behavior ⟩) × (Exp → Instance → Class → ⟨ Fun ⟩)
 \end{code}
 %
@@ -180,9 +181,11 @@ The parameters of the following module are available in all the subsequent seman
 module Semantics
     {class       : Instance → Class}         -- "class ρ" is the class of an object
     {methods′    : Class → Key → (Exp +?)}   -- "methods′ κ m" is the method named m in κ
+    {G′ : Domain}                            -- G′ is needed only for the method lookup semantics
+    {{ isoᵍ : ⟨ G′ ⟩ ↔ D′ }}
   where
 
-  methods : Class → Key → (Exp +?)           -- "methods κ m" has no methods when κ is the root class
+  methods : Class → Key → (Exp +?)           -- "methods origin" overrides "methods′ origin"
   methods (child c κ) m = methods′ (child c κ) m
   methods origin m      = ??
 \end{code}
@@ -195,13 +198,8 @@ Agda supports mutual recursion, but functions defined in Agda are supposed to be
 and the mutual recursion required here can be non-terminating, 
 These functions are therefore defined in Agda as the least fixed point of the following non-recursive function g
 (as in the proof of Proposition~3 in CP89):
-
-The type D′ is needed only for the method lookup semantics.
-
-TODO : Why isn't the previous definition of D′ already in scope here?
 %
 \begin{code}
-  D′ = (Instance → ⟨ Behavior ⟩) × (Class → Instance → ⟨ Behavior ⟩) × (Exp → Instance → Class → ⟨ Fun ⟩)
   g′ : D′ → D′
   g′ (s , l , d⟦_⟧) = (send , lookup , do⟦_⟧) where
 \end{code}
@@ -256,16 +254,12 @@ The following definitions correspond to making the above definitions mutually re
 using an auxilary domain G′ whose type of elements ⟨ G′ ⟩ is isomorphic to the type D′:
 %
 \begin{code}
-  module MethodLookup
-      {G′ : Domain}
-      {{ isoᵍ : ⟨ G′ ⟩ ↔ D′ }}
-    where
-    γ : ⟨ G′ ⟩ → ⟨ G′ ⟩
-    γ = from ∘ g′ ∘ to
+  γ : ⟨ G′ ⟩ → ⟨ G′ ⟩
+  γ = from ∘ g′ ∘ to
 
-    send     = proj₁ (to (fix γ))
-    lookup   = proj₁ (proj₂ (to (fix γ)))
-    do⟦_⟧    = proj₂ (proj₂ (to (fix γ)))
+  send     = proj₁ (to (fix γ))
+  lookup   = proj₁ (proj₂ (to (fix γ)))
+  do⟦_⟧    = proj₂ (proj₂ (to (fix γ)))
 \end{code}
 
 That completes the definition of the method lookup semantics.
