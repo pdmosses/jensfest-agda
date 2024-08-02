@@ -354,10 +354,10 @@ so they can be defined in Agda without an explicit least fixed-point:
   send′ n ρ = lookup′ n (class ρ) ρ
 
   lookup′ zero κ ρ         = ⊥
-  lookup′ n origin ρ       = ⊥
   lookup′ n (child c κ) ρ  = from λ m → [  ( λ e → inl (do′ n ⟦ e ⟧ ρ (child c κ)) ) ,
                                            ( to (lookup′ n κ ρ ) m )
                                         ]? (methods (child c κ) m)
+  lookup′ n origin ρ       = ⊥
 
   do′ zero     ⟦ e             ⟧ ρ κ            = from λ α → ⊥
   do′ (suc n)  ⟦ self          ⟧ ρ κ            = from λ α → from (inl (send′ n ρ))
