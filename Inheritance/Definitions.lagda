@@ -359,7 +359,7 @@ so they can be defined in Agda without an explicit least fixed-point:
                                         ]? (methods (child c κ) m)
   lookup′ n origin ρ       = ⊥
 
-  do′ zero     ⟦ e             ⟧ ρ κ            = from λ α → ⊥
+  do′ zero     ⟦ e             ⟧ ρ κ            = ⊥
   do′ (suc n)  ⟦ self          ⟧ ρ κ            = from λ α → from (inl (send′ n ρ))
   do′ n        ⟦ super         ⟧ ρ origin       = from λ α → ⊥
   do′ n        ⟦ super         ⟧ ρ (child c κ)  = from λ α → from (inl (lookup′ n κ ρ))
