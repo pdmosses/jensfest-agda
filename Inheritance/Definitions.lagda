@@ -13,10 +13,9 @@ fixed points of generators and wrappers.
 
 See the cited publication for motivation of inheritance and its fixed-point analysis.
 Apart from commenting on some differences from the original semantics,
-the explanations given below focus on how various features are modeled as functions;
-they are necessarily brief, and assume familiarity with the basic concepts of inheritance.
+the explanations given below focus on how various features are modeled as functions.
 
-Readers who are not familiar with Agda notation may find it helpful to browse the Agda Wikipedia page%
+Readers who are not familiar with Agda may find it helpful to browse the Agda Wikipedia page%
 \footnote{\url{https://en.wikipedia.org/wiki/Agda_(programming_language)}}
 before proceeding.
 
@@ -37,7 +36,7 @@ open import Data.Nat.Base      using ( ℕ; zero; suc; _≤_ )     -- natural nu
 open import Data.Maybe.Base    renaming (  Maybe to _+?;       -- A +? is disjoint union of A and {??}
                                            nothing to ??;      -- ?? represents absence of an A value
                                            maybe′ to [_,_]? )  -- [ f , x ]? is case analysis on A +?
-open import Data.Product.Base  using (_×_; _,_; proj₁; proj₂)  -- A × B is Cartesian product
+open import Data.Product.Base  using (_×_; _,_; proj₁; proj₂)  -- A × B is Cartesian product, _,_ is pairing
 open import Function           using (Inverse; _↔_; _∘_)       -- A ↔ B is isomorphism between A and B
 \end{code}
 %
@@ -63,43 +62,32 @@ The following notation for Scott domains and their operations is assumed.
 module Inheritance.Definitions
     {Domain  :  Set₁}                                     -- Domain is a type of cpo
     {⟨_⟩     :  Domain → Set}                             -- ⟨ D ⟩ is the type of elements of D
+    {_⊑_     :  {D : Domain} → ⟨ D ⟩ → ⟨ D ⟩ → Set}       -- x ⊑ y is the partial order of D
     {⊥       :  {D : Domain} → ⟨ D ⟩}                     -- ⊥ is the least element of D
-    {fix     :  {D : Domain} → (⟨ D ⟩ → ⟨ D ⟩) → ⟨ D ⟩}   -- fix f is the least fixed-point of f
+    {fix     :  {D : Domain} → (⟨ D ⟩ → ⟨ D ⟩) → ⟨ D ⟩}   -- fix f is the least fixed-point of a continuous function f
     {?⊥      :  Domain}                                   -- ⊥ is the only element of ?⊥
     {_+⊥_    :  Domain → Domain → Domain}                 -- D +⊥ E is the separated sum of D and E
-    {inl     :  {D E : Domain} → ⟨ D ⟩ → ⟨ D +⊥ E ⟩}      -- inl x injects elements x of D into D +⊥ E
-    {inr     :  {D E : Domain} → ⟨ E ⟩ → ⟨ D +⊥ E ⟩}      -- inr y injects elements y of E into D +⊥ E
-    {[_,_]⊥  :                                            -- [ f , g ]⊥ is case analysis for D +⊥ E
-                {D E F : Domain} → (⟨ D ⟩ → ⟨ F ⟩) → (⟨ E ⟩ → ⟨ F ⟩) → ⟨ D +⊥ E ⟩ → ⟨ F ⟩}
+    {inl     :  {D E : Domain} → ⟨ D ⟩ → ⟨ D +⊥ E ⟩}      -- inl injects elements of D into D +⊥ E
+    {inr     :  {D E : Domain} → ⟨ E ⟩ → ⟨ D +⊥ E ⟩}      -- inr injects elements of E into D +⊥ E
+    {[_,_]⊥  :  {D E F : Domain} →                        -- [ f , g ]⊥ is case analysis on D +⊥ E
+                (⟨ D ⟩ → ⟨ F ⟩) → (⟨ E ⟩ → ⟨ F ⟩) → ⟨ D +⊥ E ⟩ → ⟨ F ⟩}
 \end{code}
 %
-To specify denotational semantics properly in Agda,
-the type-theoretic structure of Scott domains has to be made explicit,
-and all functions have to be accompanied by proofs of their continuity.
-The DomainTheory modules from the TypeTopology library define 
-Scott domains as types of dcpos (directed-complete posets),
-and define types of functions that respect that structure.
-
-However, it would be notationally quite burdensome to use those modules:
-every lambda-abstraction has to be proved continuous,
-and every function application has to explicitly discard the continuity proof.
-Such pedantic details significantly undermine simplicity and conciseness
-when defining functions in Agda using lambda-notation.
-This is left to future work.
-
-The compromise adopted here is to leave the structure of domains \emph{implicit},
-and simply \emph{assume} the existence of isomorphisms between domains and their definitions.
-Similarly, all functions defined between the sets of elements of domains are assumed
-to be continuous, as are all abstracted functions.
-The impossibility of discharging these assumptions does not stop Agda from
-type-checking definitions and proofs,
-despite the potential for proving unsound results. 
-
-Functions between domains are ordered pointwise,
-and the least function maps all elements to ⊥;
-Cartesian products of domains are ordered componentwise.
-Unordered types can be regarded as discretely-ordered dcpos,
-and all functions from an unordered type to a domain are then trivially continuous.
+Caveat: When \AgdaRef{D : Domain}, all functions from \AgdaRef{⟨ D ⟩} to \AgdaRef{⟨ D ⟩}
+are elements of the Agda function type \AgdaRef{⟨ D ⟩ → ⟨ D ⟩}.
+The following type could be used to restrict arguments of \AgdaRef{fix} to continuous functions:
+%
+\begin{quote}
+\AgdaRef{{D : Domain} → (f : ⟨ D ⟩ → ⟨ D ⟩) → (is-continuous f) → ⟨ D ⟩}
+\end{quote}
+%
+assuming that \AgdaRef{is-continuous} checks the continuity of its argument.
+The least fixed-point of \AgdaRef{f} would then need to be written \AgdaRef{fix f t}
+where \AgdaRef{t} is a proof term of type \AgdaRef{is-continuous f}.
+In practice, however, \AgdaRef{fix} will be applied only to functions on \AgdaRef{⟨ D ⟩}
+defined by lambda-abstraction and application, which ensures their continuity.
+As the proof-term argument of \AgdaRef{fix} is also irrelevant for checking the types of functions on domains,
+it is simply omitted.
 
 \subsection{Method Systems}
 
@@ -109,7 +97,7 @@ A method system corresponds to a snapshot in the execution of an object-oriented
 
 In CP89, the ingredients of method systems are assumed to be elements of flat domains;
 however, the least elements of these domains are irrelevant,
-and it is simpler to use ordinary Agda types instead of flat domains:
+and it is simpler to declare them as ordinary Agda types instead of domains:
 %
 \begin{code}
     {Instance   : Set}  -- objects
@@ -119,10 +107,12 @@ and it is simpler to use ordinary Agda types instead of flat domains:
 \end{code}
 %
 Both the operational and the denotational semantics of method systems in CP89 involve
-the mutually-recursive domains "Value", "Behavior", and "Fun".
-These domains cannot be defined (safely) as Agda types, due to a negative polarity.
-However, the intended instantiation of the type "Domain" as a Scott domain
-ensures the existence of isomorphisms between the types of elements of such domains:
+the mutually-recursive domains \AgdaRef{Value}, \AgdaRef{Behavior}, and \AgdaRef{Fun}.
+These domains cannot be defined (safely) as Agda types, due to the positivity check on recursive definitions.
+Scott domain theory ensures the existence of isomorphisms between the types of elements of these domains
+when the elements of \AgdaRef{⟨ Value ⟩ → ⟨ Value ⟩} are restricted to continuous functions.
+However, this restriction is irrelevant for checking the types of functions on domains,
+so it is simply omitted.
 %
 \begin{code}
     {Number    : Domain}  -- the domain of numbers is unconstrained
@@ -132,11 +122,6 @@ ensures the existence of isomorphisms between the types of elements of such doma
     {{isoᵛ     : ⟨ Value ⟩     ↔ ⟨ Behavior +⊥ Number ⟩}}
     {{isoᵇ     : ⟨ Behavior ⟩  ↔ (Key → ⟨ Fun +⊥ ?⊥ ⟩)}}
     {{isoᶠ     : ⟨ Fun ⟩       ↔ (⟨ Value ⟩ → ⟨ Value ⟩)}}
-\end{code}
-%
-A semantic function for applying primitive functions to values is needed:
-%
-\begin{code}
     {apply⟦_⟧  : Primitive → ⟨ Value ⟩ → ⟨ Value ⟩}
   where
 variable
@@ -149,8 +134,17 @@ variable
   φ    : ⟨ Fun ⟩
 \end{code}
 %
+In the operational and denotational semantics of method systems in CP89,
+elements $f$ of the flat domain \textbf{Primitive} are treated
+as if they are elements of the function domain \textbf{Fun}.
+When checking the corresponding part of the Agda formulation,
+the Agda type checker reported this as an error.
+The semantic function \AgdaRef{apply⟦_⟧} declared above is assumed to map
+elements of \AgdaRef{Primitive} to functions on \AgdaRef{⟨ Value ⟩},
+and its use fixed the error.
+
 In CP89, the inheritance hierarchy is assumed to be a finite tree.
-Here, "Class" is defined as an inductive type:
+Here, "Class" is defined as an inductive datatype that includes all finite trees:
 %
 \begin{code}
 data Class : Set where
@@ -159,34 +153,25 @@ data Class : Set where
 variable κ : Class
 \end{code}
 %
-The syntax of method expressions is defined by the inductive type "Exp":
+The syntax of method expressions is defined by the inductive datatype "Exp":
 %
 \begin{code}
 data Exp : Set where
-  self   : Exp                    -- the behavior of the current object
-  super  : Exp                    -- the behavior in the superclass of the object
-  arg    : Exp                    -- the single argument of the method expression
-  call   : Exp → Key → Exp → Exp  -- "call e₁ m e₂" calls method m of object e₁ with argument e₂
-  appl   : Primitive → Exp → Exp  -- "appl f e₁" applies the unary function f to the value of e₁
+  self   : Exp                    -- refers to the behavior of the current object
+  super  : Exp                    -- refers to the behavior in the superclass of the object
+  arg    : Exp                    -- denotes the single argument of the method expression
+  call   : Exp → Key → Exp → Exp  -- "call e₁ m e₂" denotes calling method m of object e₁ with argument e₂
+  appl   : Primitive → Exp → Exp  -- "appl f e₁" denotes applying the primitive f to the value of e₁
 variable e : Exp
 \end{code}
 %
-The type D′ is needed only for the method lookup semantics:
-%
-\begin{code}
-D′ = (Instance → ⟨ Behavior ⟩) × (Class → Instance → ⟨ Behavior ⟩) × (Exp → Instance → Class → ⟨ Fun ⟩)
-\end{code}
-%
-The parameters of the following module are available in all the subsequent semantic definitions:
+The parameters of the Semantics module are available in all the subsequent definitions:
 %
 \begin{code}
 module Semantics
     {class       : Instance → Class}         -- "class ρ" is the class of an object
     {methods′    : Class → Key → (Exp +?)}   -- "methods′ κ m" is the method named m in κ
-    {G′ : Domain}                            -- G′ is needed only for the method lookup semantics
-    {{ isoᵍ : ⟨ G′ ⟩ ↔ D′ }}
   where
-
   methods : Class → Key → (Exp +?)           -- "methods origin" overrides "methods′ origin"
   methods (child c κ) m = methods′ (child c κ) m
   methods origin m      = ??
@@ -198,20 +183,26 @@ The method lookup semantics uses mutually-recursive functions "send", "lookup", 
 Agda supports mutual recursion, but functions defined in Agda are supposed to be total,%
 \footnote{Agda can also be used in an unsafe mode that allows partial functions to be defined.}
 and the mutual recursion required here can be non-terminating, 
-These functions are therefore defined in Agda as the least fixed point of the following non-recursive function g
-(as in the proof of Proposition~3 in CP89):
+These functions are therefore defined in Agda as the least fixed-point of the following non-recursive function g′
+(as in the proof of Proposition~3 in CP89) on a domain G′:
 %
 \begin{code}
-  g′ : D′ → D′
-  g′ (s , l , d⟦_⟧) = (send , lookup , do⟦_⟧) where
+  D′ = (Instance → ⟨ Behavior ⟩) × (Class → Instance → ⟨ Behavior ⟩) × (Exp → Instance → Class → ⟨ Fun ⟩)
+
+  module _
+      {G′ : Domain}
+      {{ isoᵍ : ⟨ G′ ⟩ ↔ D′ }}
+    where
+    g′ : D′ → D′
+    g′ (s , l , d⟦_⟧) = (send , lookup , do⟦_⟧) where
 \end{code}
 %
 The behavior of "send ρ" is to use "lookup" (to be supplied as the argument l of g above)
 to obtain the behavior of ρ using the class of ρ itself:
 %
 \begin{code}
-    send : Instance → ⟨ Behavior ⟩
-    send ρ = l (class ρ) ρ
+      send : Instance → ⟨ Behavior ⟩
+      send ρ = l (class ρ) ρ
 \end{code}
 %
 The behavior of "lookup κ ρ" for a subclass κ depends on whether it is called with a method m defined by κ:
@@ -219,32 +210,32 @@ if so, it uses "do⟦ e ⟧" (via argument d⟦ ⟧ of g) to execute the corresp
 if not, it recursively looks up m in the superclass of κ.%
 \footnote{The isomorphisms "to" and "from" and the injection "inl" can be ignored.}
 The behavior is undefined when κ is the root of the inheritance hierarchy,
-which does not define any methods:
+which has been defined to have no methods:
 %
 \begin{code}
-    lookup : Class → Instance → ⟨ Behavior ⟩
-    lookup (child c κ) ρ  = from λ m →  [  ( λ e → inl (d⟦ e ⟧ ρ (child c κ)) ) ,
-                                           ( to (l κ ρ) m )
-                                        ]? (methods (child c κ) m)
-    lookup origin ρ       = ⊥
+      lookup : Class → Instance → ⟨ Behavior ⟩
+      lookup (child c κ) ρ  = from λ m →  [  ( λ e → inl (d⟦ e ⟧ ρ (child c κ)) ) ,
+                                             ( to (l κ ρ) m )
+                                          ]? (methods (child c κ) m)
+      lookup origin ρ       = ⊥
 \end{code}
 %
-When applied to a value α, the value returned by the function "do⟦ e ⟧ ρ κ" may be
+When applied to a value α, the value returned by the function "to (do⟦ e ⟧ ρ κ)" may be
 a behavior, a number, or undefined:
 %
 \begin{code}
-    do⟦_⟧ : Exp → Instance → Class → ⟨ Fun ⟩
-    do⟦ self          ⟧ ρ κ            = from λ α → from (inl (s ρ))
-    do⟦ super         ⟧ ρ (child c κ)  = from λ α → from (inl (l κ ρ))
-    do⟦ super         ⟧ ρ origin       = from λ α → ⊥
-    do⟦ arg           ⟧ ρ κ            = from λ α → α
-    do⟦ call e₁ m e₂  ⟧ ρ κ            = from λ α →
-                                          [  ( λ σ →  [  ( λ φ →  to φ (to (d⟦ e₂ ⟧ ρ κ) α) ) ,
-                                                         ( λ _ →  ⊥ )
-                                                      ]⊥ (to σ m) ) ,
-                                             ( λ ν →  from (inr ν) )
-                                          ]⊥ (to (to (d⟦ e₁ ⟧ ρ κ) α))
-    do⟦ appl f e₁     ⟧ ρ κ            = from λ α → apply⟦ f ⟧ (to (d⟦ e₁ ⟧ ρ κ) α)
+      do⟦_⟧ : Exp → Instance → Class → ⟨ Fun ⟩
+      do⟦ self          ⟧ ρ κ            = from λ α → from (inl (s ρ))
+      do⟦ super         ⟧ ρ (child c κ)  = from λ α → from (inl (l κ ρ))
+      do⟦ super         ⟧ ρ origin       = from λ α → ⊥
+      do⟦ arg           ⟧ ρ κ            = from λ α → α
+      do⟦ call e₁ m e₂  ⟧ ρ κ            = from λ α →
+                                            [  ( λ σ →  [  ( λ φ →  to φ (to (d⟦ e₂ ⟧ ρ κ) α) ) ,
+                                                           ( λ _ →  ⊥ )
+                                                        ]⊥ (to σ m) ) ,
+                                               ( λ ν →  from (inr ν) ) -- TODO: ⊥
+                                            ]⊥ (to (to (d⟦ e₁ ⟧ ρ κ) α))
+      do⟦ appl f e₁     ⟧ ρ κ            = from λ α → apply⟦ f ⟧ (to (d⟦ e₁ ⟧ ρ κ) α)
 \end{code}
 %
 The only complicated case is for calling method m of object e₁ with argument e₂.
@@ -252,18 +243,17 @@ When the value of e₁ is a behavior σ that maps m to a function φ,
 that function is applied to the value of e₂;
 otherwise the value of the call is undefined.
 
-The following definitions correspond to making the above definitions mutually recursive,
-using an auxilary domain G′ whose type of elements ⟨ G′ ⟩ is isomorphic to the type D′:
+The following definitions correspond to making the above definitions mutually recursive:
 %
 \begin{code}
-  γ : ⟨ G′ ⟩ → ⟨ G′ ⟩
-  γ = from ∘ g′ ∘ to
+    γ : ⟨ G′ ⟩ → ⟨ G′ ⟩
+    γ = from ∘ g′ ∘ to
 
-  send     = proj₁ (to (fix γ))
-  lookup   = proj₁ (proj₂ (to (fix γ)))
-  do⟦_⟧    = proj₂ (proj₂ (to (fix γ)))
+    send     = proj₁ (to (fix γ))
+    lookup   = proj₁ (proj₂ (to (fix γ)))
+    do⟦_⟧    = proj₂ (proj₂ (to (fix γ)))
 \end{code}
-
+%
 That completes the definition of the method lookup semantics.
 
 \subsection{Denotational Semantics}
@@ -281,12 +271,12 @@ The evaluation of the other method expressions is similar to their method lookup
                                 [  ( λ σ′ →  [  ( λ φ →  to φ (to (eval⟦ e₂ ⟧ σ π) α) ) ,
                                                 ( λ _ →  ⊥ )
                                              ]⊥ (to σ′ m) ) ,
-                                   ( λ ν →   from (inr ν) )
+                                   ( λ ν →   from (inr ν) ) -- TODO: ⊥
                                 ]⊥ (to (to (eval⟦ e₁ ⟧ σ π) α))
   eval⟦ appl f e₁     ⟧ σ π  = from λ α → apply⟦ f ⟧ (to (eval⟦ e₁ ⟧ σ π) α)
 \end{code}
 %
-The evaluation function is obviously total,
+The recursively-defined function eval⟦ ⟧ is obviously total,
 so there is no need for an explicit fixed point in its Agda definition.
 
 According to the conceptual analysis of inheritance in CP89,
@@ -325,53 +315,6 @@ Wrapper application is illstrated in Figure~9 of CP89.
 
   behave : Instance → ⟨ Behavior ⟩
   behave ρ = fix (gen (class ρ))
-\end{code}
-
-\subsection{Intermediate Semantics}
-
-The intermediate semantics of method expressions given in CP89
-is a step-indexed variant of the method lookup semantics.
-It takes an extra argument n ranging over ℕ (the natural numbers),
-which acts as sufficient `fuel' for up to n-1 uses of "self":
-when n is zero, the intermediate semantics is the undefined behavior (⊥).
-One of the lemmas proved in CP89 shows that the intermediate semantics at n
-corresponds to the n'th approximation to the denotational semantics.
-
-Cases of Agda definitions are sequential:
-below, putting a case for \AgdaInductiveConstructor{zero}
-before the corresponding case for \AgdaBound{n}
-implies that \AgdaBound{n} is positive in the latter.
-
-The functions used to specify the intermediate semantics are mutually recursive,
-in the same way as in the method lookup semantics.
-Here, however, the finiteness of the fuel argument ensures that the functions are total,
-so they can be defined in Agda without an explicit least fixed-point:
-%
-\begin{code}
-  send′    : ℕ → Instance → ⟨ Behavior ⟩
-  lookup′  : ℕ → Class → Instance → ⟨ Behavior ⟩
-  do′_⟦_⟧  : ℕ → Exp → Instance → Class → ⟨ Fun ⟩
-
-  send′ n ρ = lookup′ n (class ρ) ρ
-
-  lookup′ zero κ ρ         = ⊥
-  lookup′ n (child c κ) ρ  = from λ m → [  ( λ e → inl (do′ n ⟦ e ⟧ ρ (child c κ)) ) ,
-                                           ( to (lookup′ n κ ρ ) m )
-                                        ]? (methods (child c κ) m)
-  lookup′ n origin ρ       = ⊥
-
-  do′ zero     ⟦ e             ⟧ ρ κ            = ⊥
-  do′ (suc n)  ⟦ self          ⟧ ρ κ            = from λ α → from (inl (send′ n ρ))
-  do′ n        ⟦ super         ⟧ ρ origin       = from λ α → ⊥
-  do′ n        ⟦ super         ⟧ ρ (child c κ)  = from λ α → from (inl (lookup′ n κ ρ))
-  do′ n        ⟦ arg           ⟧ ρ κ            = from λ α → α
-  do′ n        ⟦ call e₁ m e₂  ⟧ ρ κ            = from λ α → 
-                                                   [  ( λ σ →  [  ( λ φ →  to φ (to (do′ n ⟦ e₂ ⟧ ρ κ) α) ) ,
-                                                                  ( λ _ →  ⊥ )
-                                                               ]⊥ (to σ m) ) ,
-                                                      ( λ ν →  from (inr ν) )
-                                                   ]⊥ (to (to (do′ n ⟦ e₁ ⟧ ρ κ ) α))
-  do′ n        ⟦ appl f e₁     ⟧ ρ κ            = from λ α → apply⟦ f ⟧ (to (do′ n ⟦ e₁ ⟧ ρ κ) α)
 \end{code}
 \end{AgdaAlign}
 %

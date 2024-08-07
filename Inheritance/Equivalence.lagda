@@ -2,10 +2,11 @@
 \section{Equivalence}
 \label{sec:proofs}
 
-This section presents the verified Agda proofs of the first three lemmas from CP89,
+This section presents the verified Agda proofs of all four lemmas from CP89,
 using the definitions presented in \ref{sec:semantic-definitions}.
 Development of Agda proofs of the remaining results is left to future work.
 
+\begin{AgdaAlign}
 \begin{code}
 {-# OPTIONS --safe #-}
 open import Data.Maybe.Base    renaming (Maybe to _+?; maybe′ to [_,_]?; nothing to ??)
@@ -53,19 +54,65 @@ module Inheritance.Equivalence
   where
 
 open import Inheritance.Definitions
-    {Domain} {⟨_⟩} {⊥} {fix} {?⊥} {_+⊥_} {inl} {inr} {[_,_]⊥}
+    {Domain} {⟨_⟩} {_⊑_} {⊥} {fix} {?⊥} {_+⊥_} {inl} {inr} {[_,_]⊥}
     {Instance} {Name} {Key} {Primitive} {Number} {Value} {Behavior} {Fun}
     {{isoᵛ}} {{isoᵇ}} {{isoᶠ}} {apply⟦_⟧}
 
 module _ 
     {class       : Instance → Class}         -- "class ρ" is the class of an object
     {methods′    : Class → Key → (Exp +?)}   -- "methods′ κ m" is the method named m in κ
-    {G′ : Domain}
-    {{ isoᵍ : ⟨ G′ ⟩ ↔ D′ }}
 
     {ext : Extensionality lzero lzero}       -- function extensionality
   where
-  open Semantics {class} {methods′} {G′} {{isoᵍ}}
+  open Semantics {class} {methods′}
+\end{code}
+
+
+\subsection{Intermediate Semantics}
+
+The intermediate semantics of method expressions given in CP89
+is a step-indexed variant of the method lookup semantics.
+It takes an extra argument n ranging over ℕ (the natural numbers),
+which acts as sufficient `fuel' for up to n-1 uses of "self":
+when n is zero, the intermediate semantics is the undefined behavior (⊥).
+One of the lemmas proved in CP89 shows that the intermediate semantics at n
+corresponds to the n'th approximation to the denotational semantics.
+
+Cases of Agda definitions are sequential:
+below, putting a case for \AgdaInductiveConstructor{zero}
+before the corresponding case for \AgdaBound{n}
+implies that \AgdaBound{n} is positive in the latter.
+
+The functions used to specify the intermediate semantics are mutually recursive,
+in the same way as in the method lookup semantics.
+Here, however, the finiteness of the fuel argument ensures that the functions are total,
+so they can be defined in Agda without an explicit least fixed-point:
+%
+\begin{code}
+  send′    : ℕ → Instance → ⟨ Behavior ⟩
+  lookup′  : ℕ → Class → Instance → ⟨ Behavior ⟩
+  do′_⟦_⟧  : ℕ → Exp → Instance → Class → ⟨ Fun ⟩
+
+  send′ n ρ = lookup′ n (class ρ) ρ
+
+  lookup′ zero κ ρ         = ⊥
+  lookup′ n (child c κ) ρ  = from λ m → [  ( λ e → inl (do′ n ⟦ e ⟧ ρ (child c κ)) ) ,
+                                           ( to (lookup′ n κ ρ ) m )
+                                        ]? (methods (child c κ) m)
+  lookup′ n origin ρ       = ⊥
+
+  do′ zero     ⟦ e             ⟧ ρ κ            = ⊥
+  do′ (suc n)  ⟦ self          ⟧ ρ κ            = from λ α → from (inl (send′ n ρ))
+  do′ n        ⟦ super         ⟧ ρ origin       = from λ α → ⊥
+  do′ n        ⟦ super         ⟧ ρ (child c κ)  = from λ α → from (inl (lookup′ n κ ρ))
+  do′ n        ⟦ arg           ⟧ ρ κ            = from λ α → α
+  do′ n        ⟦ call e₁ m e₂  ⟧ ρ κ            = from λ α → 
+                                                   [  ( λ σ →  [  ( λ φ →  to φ (to (do′ n ⟦ e₂ ⟧ ρ κ) α) ) ,
+                                                                  ( λ _ →  ⊥ )
+                                                               ]⊥ (to σ m) ) ,
+                                                      ( λ ν →  from (inr ν) )
+                                                   ]⊥ (to (to (do′ n ⟦ e₁ ⟧ ρ κ ) α))
+  do′ n        ⟦ appl f e₁     ⟧ ρ κ            = from λ α → apply⟦ f ⟧ (to (do′ n ⟦ e₁ ⟧ ρ κ) α)
 \end{code}
 
 \subsection{Lemma 1}
@@ -309,19 +356,24 @@ begin
 \subsection{Statements of Remaining Results}
 
 \begin{code}
-    interpret : Instance → ⟨ Behavior ⟩
-    interpret ρ = lub (λ n → send′ n ρ)
+    module _
+        {G′ : Domain}
+        {{ isoᵍ : ⟨ G′ ⟩ ↔ D′ }}
+      where
 
-    proposition-1 : ∀ ρ → interpret ρ ≡ behave ρ
-    proposition-1 ρ = {!   !}
+      interpret : Instance → ⟨ Behavior ⟩
+      interpret ρ = lub (λ n → send′ n ρ)
 
-    proposition-2 : ∀ ρ → behave ρ ⊑ send ρ
-    proposition-2 ρ = {!   !}
+      proposition-1 : ∀ ρ → interpret ρ ≡ behave ρ
+      proposition-1 ρ = {!   !}
 
-    proposition-3 : ∀ ρ → send ρ ⊑ interpret ρ
-    proposition-3 ρ = {!   !}
+      proposition-2 : ∀ ρ → behave ρ ⊑ send ρ
+      proposition-2 ρ = {!   !}
 
-    theorem-1 : ∀ ρ → send ρ ≡ behave ρ
-    theorem-1 ρ = {!   !}
+      proposition-3 : ∀ ρ → send ρ ⊑ interpret ρ
+      proposition-3 ρ = {!   !}
+
+      theorem-1 : ∀ ρ → send ρ ≡ behave ρ
+      theorem-1 ρ = {!   !}
 \end{code} 
 \end{AgdaAlign} 
