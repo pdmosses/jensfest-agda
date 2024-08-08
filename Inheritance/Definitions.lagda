@@ -224,7 +224,7 @@ which has been defined to have no methods:
 \end{code}
 %
 When applied to a value α, the value returned by the function "to (do⟦ e ⟧ ρ κ)" may be
-a behavior, a number, or undefined:
+a behavior, a number, or undefined (⊥):
 %
 \begin{code}
       do⟦_⟧ : Exp → Instance → Class → ⟨ Fun ⟩
