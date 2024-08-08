@@ -64,7 +64,7 @@ module Inheritance.Definitions
     {⟨_⟩     :  Domain → Set}                             -- ⟨ D ⟩ is the type of elements of D
     {_⊑_     :  {D : Domain} → ⟨ D ⟩ → ⟨ D ⟩ → Set}       -- x ⊑ y is the partial order of D
     {⊥       :  {D : Domain} → ⟨ D ⟩}                     -- ⊥ is the least element of D
-    {fix     :  {D : Domain} → (⟨ D ⟩ → ⟨ D ⟩) → ⟨ D ⟩}   -- fix f is the least fixed-point of a continuous function f
+    {fix     :  {D : Domain} → (⟨ D ⟩ → ⟨ D ⟩) → ⟨ D ⟩}   -- fix f is the least fixed-point of f
     {?⊥      :  Domain}                                   -- ⊥ is the only element of ?⊥
     {_+⊥_    :  Domain → Domain → Domain}                 -- D +⊥ E is the separated sum of D and E
     {inl     :  {D E : Domain} → ⟨ D ⟩ → ⟨ D +⊥ E ⟩}      -- inl injects elements of D into D +⊥ E
@@ -140,7 +140,7 @@ elements $f$ of the flat domain \textbf{Primitive} are treated
 as if they are elements of the function domain \textbf{Fun}.
 When checking the corresponding part of the Agda formulation,
 the Agda type checker reported this as an error.
-The semantic function \AgdaRef{apply⟦_⟧} declared above is assumed to map
+The semantic function \AgdaRef{apply⟦ ⟧} declared above is assumed to map
 elements of \AgdaRef{Primitive} to functions on \AgdaRef{⟨ Value ⟩},
 and its use fixed the error.
 
@@ -163,8 +163,8 @@ data Exp : Set where
   self   : Exp                    -- refers to the behavior of the current object
   super  : Exp                    -- refers to the behavior in the superclass of the object
   arg    : Exp                    -- denotes the single argument of the method expression
-  call   : Exp → Key → Exp → Exp  -- "call e₁ m e₂" denotes calling method m of object e₁ with argument e₂
-  appl   : Primitive → Exp → Exp  -- "appl f e₁" denotes applying the primitive f to the value of e₁
+  call   : Exp → Key → Exp → Exp  -- "call e₁ m e₂" denotes calling method m of e₁ with argument e₂
+  appl   : Primitive → Exp → Exp  -- "appl f e₁" denotes applying f to e₁
 variable e : Exp
 \end{code}
 %
@@ -190,7 +190,9 @@ These functions are therefore defined in Agda as the least fixed-point of the fo
 (as in the proof of Proposition~3 in CP89) on a domain Gᵍ:
 %
 \begin{code}
-  Dᵍ = (Instance → ⟨ Behavior ⟩) × (Class → Instance → ⟨ Behavior ⟩) × (Exp → Instance → Class → ⟨ Fun ⟩)
+  Dᵍ =  (Instance → ⟨ Behavior ⟩) ×
+        (Class → Instance → ⟨ Behavior ⟩) ×
+        (Exp → Instance → Class → ⟨ Fun ⟩)
 
   module _
       {Gᵍ : Domain}
