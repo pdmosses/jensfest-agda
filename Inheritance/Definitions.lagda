@@ -176,8 +176,8 @@ module Semantics
     {methods′    : Class → Key → (Exp +?)}   -- "methods′ κ m" is the method named m in κ
   where
   methods : Class → Key → (Exp +?)           -- "methods origin" overrides "methods′ origin"
-  methods (child c κ) m = methods′ (child c κ) m
-  methods origin m      = ??
+  methods (child c κ) m  = methods′ (child c κ) m
+  methods origin m       = ??
 \end{code}
 
 \subsection{Method Lookup Semantics}
