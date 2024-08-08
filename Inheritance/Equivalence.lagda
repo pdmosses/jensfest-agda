@@ -9,11 +9,11 @@ Development of Agda proofs of the remaining results is left to future work.
 \begin{AgdaAlign}
 \begin{code}
 {-# OPTIONS --safe #-}
-open import Data.Maybe.Base    renaming (Maybe to _+?; maybe′ to [_,_]?; nothing to ??)
-                                                               -- A +? is disjoint union of A and {??}
-                                                               -- [ f , x ]? is case analysis on A +?
-open import Data.Nat.Base      using (ℕ; zero; suc; _≤_)       -- natural numbers
-open import Data.Product.Base  using (_×_; _,_; proj₁; proj₂)  -- A × B is Cartesian product
+open import Data.Nat.Base      using ( ℕ; zero; suc; _≤_ )     -- natural numbers
+open import Data.Maybe.Base    renaming (  Maybe to _+?;       -- A +? is disjoint union of A and {??}
+                                           nothing to ??;      -- ?? represents absence of an A value
+                                           maybe′ to [_,_]? )  -- [ f , x ]? is case analysis on A +?
+open import Data.Product.Base  using (_×_; _,_; proj₁; proj₂)  -- A × B is Cartesian product, _,_ is pairing
 open import Function           using (Inverse; _↔_; _∘_)       -- A ↔ B is isomorphism between A and B
 open Inverse {{ ... }}         using (to; from; inverseˡ)      -- to : A → B; from : B → A
 
@@ -110,7 +110,7 @@ so they can be defined in Agda without an explicit least fixed-point:
                                                    [  ( λ σ →  [  ( λ φ →  to φ (to (do′ n ⟦ e₂ ⟧ ρ κ) α) ) ,
                                                                   ( λ _ →  ⊥ )
                                                                ]⊥ (to σ m) ) ,
-                                                      ( λ ν →  from (inr ν) )
+                                                      ( λ ν →  ⊥ )
                                                    ]⊥ (to (to (do′ n ⟦ e₁ ⟧ ρ κ ) α))
   do′ n        ⟦ appl f e₁     ⟧ ρ κ            = from λ α → apply⟦ f ⟧ (to (do′ n ⟦ e₁ ⟧ ρ κ) α)
 \end{code}
