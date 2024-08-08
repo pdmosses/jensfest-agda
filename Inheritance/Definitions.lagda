@@ -236,7 +236,7 @@ a behavior, a number, or undefined:
                                             [  ( λ σ →  [  ( λ φ →  to φ (to (d⟦ e₂ ⟧ ρ κ) α) ) ,
                                                            ( λ _ →  ⊥ )
                                                         ]⊥ (to σ m) ) ,
-                                               ( λ ν →  ⊥ ) -- TODO: ⊥
+                                               ( λ ν →  ⊥ )
                                             ]⊥ (to (to (d⟦ e₁ ⟧ ρ κ) α))
       do⟦ appl f e₁     ⟧ ρ κ            = from λ α → apply⟦ f ⟧ (to (d⟦ e₁ ⟧ ρ κ) α)
 \end{code}
@@ -274,7 +274,7 @@ The evaluation of the other method expressions is similar to their method lookup
                                 [  ( λ σ′ →  [  ( λ φ →  to φ (to (eval⟦ e₂ ⟧ σ π) α) ) ,
                                                 ( λ _ →  ⊥ )
                                              ]⊥ (to σ′ m) ) ,
-                                   ( λ ν →   ⊥ ) -- TODO: ⊥
+                                   ( λ ν →   ⊥ )
                                 ]⊥ (to (to (eval⟦ e₁ ⟧ σ π) α))
   eval⟦ appl f e₁     ⟧ σ π  = from λ α → apply⟦ f ⟧ (to (eval⟦ e₁ ⟧ σ π) α)
 \end{code}
