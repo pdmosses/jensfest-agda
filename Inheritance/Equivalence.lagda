@@ -357,8 +357,8 @@ begin
 
 \begin{code}
     module _
-        {G′ : Domain}
-        {{ isoᵍ : ⟨ G′ ⟩ ↔ D′ }}
+        {Gᵍ : Domain}
+        {{ isoᵍ : ⟨ Gᵍ ⟩ ↔ Dᵍ }}
       where
 
       interpret : Instance → ⟨ Behavior ⟩

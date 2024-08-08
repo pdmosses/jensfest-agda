@@ -81,13 +81,13 @@ The following type could be used to restrict arguments of \AgdaRef{fix} to conti
 \AgdaRef{{D : Domain} → (f : ⟨ D ⟩ → ⟨ D ⟩) → (is-continuous f) → ⟨ D ⟩}
 \end{quote}
 %
-assuming that \AgdaRef{is-continuous} checks the continuity of its argument.
+where \AgdaRef{is-continuous} checks the continuity of its argument.
 The least fixed-point of \AgdaRef{f} would then need to be written \AgdaRef{fix f t}
-where \AgdaRef{t} is a proof term of type \AgdaRef{is-continuous f}.
+with a proof term \AgdaRef{t : is-continuous f}.
 In practice, however, \AgdaRef{fix} will be applied only to functions on \AgdaRef{⟨ D ⟩}
 defined by lambda-abstraction and application, which ensures their continuity.
-As the proof-term argument of \AgdaRef{fix} is also irrelevant for checking the types of functions on domains,
-it is simply omitted.
+As the proof-term argument of \AgdaRef{fix} is also irrelevant
+for checking the types of functions on domains, it is simply omitted.
 
 \subsection{Method Systems}
 
@@ -108,7 +108,8 @@ and it is simpler to declare them as ordinary Agda types instead of domains:
 %
 Both the operational and the denotational semantics of method systems in CP89 involve
 the mutually-recursive domains \AgdaRef{Value}, \AgdaRef{Behavior}, and \AgdaRef{Fun}.
-These domains cannot be defined (safely) as Agda types, due to the positivity check on recursive definitions.
+These domains cannot be defined (safely) as Agda types,
+due to the positivity check on recursive definitions.
 Scott domain theory ensures the existence of isomorphisms between the types of elements of these domains
 when the elements of \AgdaRef{⟨ Value ⟩ → ⟨ Value ⟩} are restricted to continuous functions.
 However, this restriction is irrelevant for checking the types of functions on domains,
@@ -144,7 +145,9 @@ elements of \AgdaRef{Primitive} to functions on \AgdaRef{⟨ Value ⟩},
 and its use fixed the error.
 
 In CP89, the inheritance hierarchy is assumed to be a finite tree.
-Here, "Class" is defined as an inductive datatype that includes all finite trees:
+Here, "Class" is defined as the datatype of all finite trees.
+This also avoids the need for the partial \textit{parent} function,
+and for a predicate for testing whether a class is the root of the hierarchy.
 %
 \begin{code}
 data Class : Set where
@@ -183,18 +186,18 @@ The method lookup semantics uses mutually-recursive functions "send", "lookup", 
 Agda supports mutual recursion, but functions defined in Agda are supposed to be total,%
 \footnote{Agda can also be used in an unsafe mode that allows partial functions to be defined.}
 and the mutual recursion required here can be non-terminating, 
-These functions are therefore defined in Agda as the least fixed-point of the following non-recursive function g′
-(as in the proof of Proposition~3 in CP89) on a domain G′:
+These functions are therefore defined in Agda as the least fixed-point of the following non-recursive function g
+(as in the proof of Proposition~3 in CP89) on a domain Gᵍ:
 %
 \begin{code}
-  D′ = (Instance → ⟨ Behavior ⟩) × (Class → Instance → ⟨ Behavior ⟩) × (Exp → Instance → Class → ⟨ Fun ⟩)
+  Dᵍ = (Instance → ⟨ Behavior ⟩) × (Class → Instance → ⟨ Behavior ⟩) × (Exp → Instance → Class → ⟨ Fun ⟩)
 
   module _
-      {G′ : Domain}
-      {{ isoᵍ : ⟨ G′ ⟩ ↔ D′ }}
+      {Gᵍ : Domain}
+      {{ isoᵍ : ⟨ Gᵍ ⟩ ↔ Dᵍ }}
     where
-    g′ : D′ → D′
-    g′ (s , l , d⟦_⟧) = (send , lookup , do⟦_⟧) where
+    g : Dᵍ → Dᵍ
+    g (s , l , d⟦_⟧) = (send , lookup , do⟦_⟧) where
 \end{code}
 %
 The behavior of "send ρ" is to use "lookup" (to be supplied as the argument l of g above)
@@ -246,8 +249,8 @@ otherwise the value of the call is undefined.
 The following definitions correspond to making the above definitions mutually recursive:
 %
 \begin{code}
-    γ : ⟨ G′ ⟩ → ⟨ G′ ⟩
-    γ = from ∘ g′ ∘ to
+    γ : ⟨ Gᵍ ⟩ → ⟨ Gᵍ ⟩
+    γ = from ∘ g ∘ to
 
     send     = proj₁ (to (fix γ))
     lookup   = proj₁ (proj₂ (to (fix γ)))
