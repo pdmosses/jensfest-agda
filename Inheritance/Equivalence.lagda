@@ -1,14 +1,6 @@
-
-\section{Equivalence}
-\label{sec:proofs}
-
-This section presents the verified Agda proofs of all four lemmas from CP89,
-using the definitions presented in \ref{sec:semantic-definitions}.
-Development of Agda proofs of the remaining results is left to future work.
-
 \begin{AgdaAlign}
-\begin{code}
-{-# OPTIONS --safe #-}
+\begin{code}[hide]
+{-# OPTIONS --allow-unsolved-metas #-}
 open import Data.Nat.Base      using ( ℕ; zero; suc; _≤_ )     -- natural numbers
 open import Data.Maybe.Base    renaming (  Maybe to _+?;       -- A +? is disjoint union of A and {??}
                                            nothing to ??;      -- ?? represents absence of an A value
@@ -110,15 +102,15 @@ The Agda proofs exhibit the equational reasoning steps of the original proofs in
 This checks the correctness not only of the lemmas, but also of the steps themselves.
 
 The Agda standard library defines notation for equational reasoning:
-x ≡ y asserts the equality of x and y;
-begin starts a proof;
-≡⟨⟩ adds a step that Agda can check automatically ;
-≡⟨ t ⟩ adds a step with an explicit proof term t;
-and ∎ concludes a proof.
-
-The proofs of the lemmas use the following additional modules from the standard library:
+\AgdaRef{x ≡ y} asserts the equality of \AgdaRef{x} and \AgdaRef{y};
+\AgdaRef{begin} starts a proof;
+\AgdaRef{≡⟨⟩} adds a step that Agda can check automatically;
+\AgdaRef{≡⟨ t ⟩} adds a step with an explicit proof term \AgdaRef{t};
+and \AgdaRef{∎} concludes a proof.
 %
-\begin{code}
+%The proofs of the lemmas use the following additional modules from the standard library:
+%
+\begin{code}[hide]
   import Relation.Binary.PropositionalEquality as Eq
   open Eq                        using (_≡_; refl; trans; sym; cong; cong-app; subst)
   open Eq.≡-Reasoning            -- using (begin_; _≡⟨⟩_; _≡⟨_⟩_; _∎)
@@ -138,40 +130,27 @@ in CP89, the use of $\textit{parent}(κ)$ as an argument of type \textbf{Class}
 leaves this restriction implicit.
 %
 \begin{code}
-    lemma-1 : ∀ n e ρ c κ →
-      do′ (suc n) ⟦ e ⟧ ρ (child c κ) ≡  eval⟦ e ⟧ (send′ n ρ) (lookup′ (suc n) κ ρ)
+    lemma-1 : ∀ n e ρ c κ → do′ (suc n) ⟦ e ⟧ ρ (child c κ) ≡ eval⟦ e ⟧ (send′ n ρ) (lookup′ (suc n) κ ρ)
 
     lemma-1 n self ρ c κ =
-      begin
-        do′ (suc n) ⟦ self ⟧ ρ (child c κ)
-      ≡⟨⟩
-        ( from λ α → from (inl (send′ n ρ)) )
-      ≡⟨⟩
-        eval⟦ self ⟧ (send′ n ρ) (lookup′ (suc n) κ ρ)
+      begin  do′ (suc n) ⟦ self ⟧ ρ (child c κ)
+      ≡⟨⟩    ( from λ α → from (inl (send′ n ρ)) )
+      ≡⟨⟩    eval⟦ self ⟧ (send′ n ρ) (lookup′ (suc n) κ ρ)
       ∎
     lemma-1 n super ρ c (child c′ κ) =
-      begin
-        do′ (suc n) ⟦ super ⟧ ρ (child c (child c′ κ))
-      ≡⟨⟩
-        ( from λ α → from (inl (lookup′ (suc n) (child c′ κ) ρ)) )
-      ≡⟨⟩
-        eval⟦ super ⟧ (send′ n ρ) (lookup′ (suc n) (child c′ κ) ρ)
+      begin  do′ (suc n) ⟦ super ⟧ ρ (child c (child c′ κ))
+      ≡⟨⟩    ( from λ α → from (inl (lookup′ (suc n) (child c′ κ) ρ)) )
+      ≡⟨⟩    eval⟦ super ⟧ (send′ n ρ) (lookup′ (suc n) (child c′ κ) ρ)
       ∎
     lemma-1 n super ρ c origin =
-      begin
-        do′ (suc n) ⟦ super ⟧ ρ (child c origin)
-      ≡⟨⟩
-        ( from λ α → from (inl ⊥ ) )
-      ≡⟨⟩
-        eval⟦ super ⟧ (send′ n ρ) (lookup′ (suc n) origin ρ)
+      begin  do′ (suc n) ⟦ super ⟧ ρ (child c origin)
+      ≡⟨⟩    ( from λ α → from (inl ⊥ ) )
+      ≡⟨⟩    eval⟦ super ⟧ (send′ n ρ) (lookup′ (suc n) origin ρ)
       ∎
     lemma-1 n arg ρ c κ =
-      begin
-        do′ (suc n) ⟦ arg ⟧ ρ (child c κ)
-      ≡⟨⟩
-        ( from λ α → α )
-      ≡⟨⟩
-        eval⟦ arg ⟧ (send′ n ρ) (lookup′ (suc n) κ ρ)
+      begin  do′ (suc n) ⟦ arg ⟧ ρ (child c κ)
+      ≡⟨⟩    ( from λ α → α )
+      ≡⟨⟩    eval⟦ arg ⟧ (send′ n ρ) (lookup′ (suc n) κ ρ)
       ∎
 \end{code}
 %
@@ -182,8 +161,7 @@ to make the semantics type-correct.
 Using rewrite below concisely hides the intermediate proof steps.
 %
 \begin{code}
-    lemma-1 n (call e₁ m e₂) ρ c κ rewrite (lemma-1 n e₁ ρ c κ) rewrite (lemma-1 n e₂ ρ c κ) =
-      refl
+    lemma-1 n (call e₁ m e₂) ρ c κ rewrite (lemma-1 n e₁ ρ c κ) rewrite (lemma-1 n e₂ ρ c κ) = refl
 \end{code}
 %
 The inductive case for applying a primitive function is relatively simple,
@@ -191,20 +169,18 @@ and concludes the proof of Lemma 1.
 %
 \begin{code}
     lemma-1 n (appl f e₁) ρ c κ =
-      begin 
-        do′ (suc n) ⟦ appl f e₁ ⟧ ρ (child c κ)
-      ≡⟨⟩
-        ( from λ α → apply⟦ f ⟧ (to (do′ (suc n) ⟦ e₁ ⟧ ρ (child c κ)) α) )
+      begin  do′ (suc n) ⟦ appl f e₁ ⟧ ρ (child c κ)
+      ≡⟨⟩    ( from λ α → apply⟦ f ⟧ (to (do′ (suc n) ⟦ e₁ ⟧ ρ (child c κ)) α) )
       ≡⟨ use-induction ⟩ 
-        ( from λ α → apply⟦ f ⟧ (to (eval⟦ e₁ ⟧ (send′ n ρ) (lookup′ (suc n) κ ρ)) α) )
-      ≡⟨⟩
-        eval⟦ appl f e₁ ⟧ (send′ n ρ) (lookup′ (suc n) κ ρ)
+             ( from λ α → apply⟦ f ⟧ (to (eval⟦ e₁ ⟧ (send′ n ρ) (lookup′ (suc n) κ ρ)) α) )
+      ≡⟨⟩    eval⟦ appl f e₁ ⟧ (send′ n ρ) (lookup′ (suc n) κ ρ)
       ∎
-      where
-        use-induction =
-          cong from 
-            (ext λ α → cong (λ X → apply⟦ f ⟧ ((to X) α)) (lemma-1 n e₁ ρ c κ))
+      where use-induction =
+             cong from (ext λ α → cong (λ X → apply⟦ f ⟧ ((to X) α)) (lemma-1 n e₁ ρ c κ))
 \end{code}
+\end{AgdaAlign}
+
+\endinput
 
 \subsection{Lemma 2}
 
@@ -214,7 +190,7 @@ as the corresponding proof in CP89.%
 representing the context for some of the steps;
 Casper Bach Poulsen provided the two largest ones.}
 
-\begin{code}
+\begin{code}[hide]
     module _
         {[,]⊥-elim : -- [,]⊥-elim eliminates an application of [ f , g ]⊥
           {D E F : Domain} {A : Set}
@@ -222,10 +198,12 @@ Casper Bach Poulsen provided the two largest ones.}
           {x : A → ⟨ D ⟩} {y : ⟨ E ⟩} {z : A +?} →
             [ f , g ]⊥ ( [ ( inl ∘ x ) , ( inr y ) ]? z ) ≡ [ ( f ∘ x ) , ( g y ) ]? z}
       where
-
+\end{code}
+\begin{code}
       lemma-2 : ∀ κ n ρ →
         gen κ (send′ n ρ) ≡ lookup′ (suc n) κ ρ
-
+\end{code}
+\begin{code}[hide]
       lemma-2 origin n ρ =
         begin
           gen origin (send′ n ρ)
@@ -290,16 +268,16 @@ Casper Bach Poulsen provided the two largest ones.}
                   (ext λ e → cong inl (sym (lemma-1 n e _ _ _))))
 \end{code}
 
-\subsection{Lemma 3}
+% \subsection{Lemma 3}
 
 \begin{code}
       iter : {D : Domain} → ℕ → (⟨ D ⟩ → ⟨ D ⟩) → ⟨ D ⟩
       iter zero g     = ⊥
       iter (suc n) g  = g (iter n g)
 
-      lemma-3 : ∀ n ρ → 
-        iter n (gen (class ρ)) ≡ send′ n ρ
-
+      lemma-3 : ∀ n ρ → iter n (gen (class ρ)) ≡ send′ n ρ
+\end{code}
+\begin{code}[hide]
       lemma-3 zero ρ =
         begin
           iter zero (gen (class ρ))
@@ -324,9 +302,9 @@ Casper Bach Poulsen provided the two largest ones.}
           use-induction = cong (λ X → gen (class ρ) X) (lemma-3 n ρ)
 \end{code}
 
-\subsection{Lemma 4}
+% \subsection{Lemma 4}
 
-\begin{code}
+\begin{code}[hide]
       module _
           {⊥-is-least : {D : Domain} {x : ⟨ D ⟩} →
             ⊥ ⊑ x}
@@ -346,22 +324,27 @@ Casper Bach Poulsen provided the two largest ones.}
         iter-is-chain zero g = ⊥-is-least
         iter-is-chain (suc n) g =
           is-assumed-monotone g (iter n g) (iter (suc n) g) (iter-is-chain n g)
-
-        lemma-4-send′ : ∀ n ρ → send′ n ρ ⊑ send′ (suc n) ρ
+\end{code}
+\begin{code}
+        lemma-4-send′    : ∀ n ρ → send′ n ρ ⊑ send′ (suc n) ρ
+\end{code}
+\begin{code}[hide]
         lemma-4-send′ n ρ 
           rewrite sym (lemma-3 n ρ)
           rewrite sym (lemma-3 (suc n) ρ) =
             iter-is-chain n (gen (class ρ))
-
-        lemma-4-lookup′ : ∀ n κ ρ → lookup′ n κ ρ ⊑ lookup′ (suc n) κ ρ
+\end{code}
+\begin{code}
+        lemma-4-lookup′  : ∀ n κ ρ → lookup′ n κ ρ ⊑ lookup′ (suc n) κ ρ
+\end{code}
+\begin{code}[hide]
         lemma-4-lookup′ zero κ ρ = ⊥-is-least
         lemma-4-lookup′ (suc n) κ ρ
           rewrite sym (lemma-2 κ n ρ)
           rewrite sym (lemma-2 κ (suc n) ρ) =
             is-assumed-monotone (gen κ) (send′ n ρ) (send′ (suc n) ρ) (lemma-4-send′ n ρ)
 
-        lemma-4-do′ : ∀ n e ρ c κ →
-          do′ (suc n) ⟦ e ⟧ ρ (child c κ) ⊑ do′ (suc (suc n)) ⟦ e ⟧ ρ (child c κ)
+        lemma-4-do′      : ∀ n e ρ c κ → do′ (suc n) ⟦ e ⟧ ρ (child c κ) ⊑ do′ (suc (suc n)) ⟦ e ⟧ ρ (child c κ)
         lemma-4-do′ n e ρ c κ                -- do′ (suc n) ⟦ e ⟧ ρ (child c κ) ⊑ do′ (suc (suc n)) ⟦ e ⟧ ρ (child c κ)
           rewrite (lemma-1 (suc n) e ρ c κ)  -- eval⟦ e ⟧ (send′ (suc n) ρ) (lookup′ (suc (suc n))  κ ρ)
           rewrite (lemma-1 n e ρ c κ)        -- eval⟦ e ⟧ (send′ n       ρ) (lookup′ (suc n)        κ ρ)
@@ -372,40 +355,38 @@ Casper Bach Poulsen provided the two largest ones.}
                 (lemma-4-lookup′ (suc n) κ ρ))
 \end{code}
 
-In poset reasoning style, it would be:
+%  In poset reasoning style, it would be:
 
-begin
-  do′ (suc n) ⟦ e ⟧ ρ κ
-≡⟨ lemma-1 (suc n) e ρ c κ ⟩
-  eval⟦ e ⟧ (send′ n ρ)       (lookup′ (suc n) κ ρ)
-⊑⟨ is-assumed-monotone (eval⟦ e ⟧) (send′ n ρ) (send′ (suc n) ρ)
-     (lemma-4-send′ n ρ) ⟩
-  eval⟦ e ⟧ (send′ (suc n) ρ) (lookup′ (suc n) κ ρ)
-⊑⟨ is-assumed-monotone (eval⟦ e ⟧ (send′ (suc n) ρ)) (lookup′ (suc n) κ ρ) (lookup′ (suc (suc n)) κ ρ)
-     (lemma-4-lookup′ (suc n) κ ρ) ⟩
-  eval⟦ e ⟧ (send′ (suc n) ρ) (lookup′ (suc (suc n)) κ ρ)
-≡⟨ sym (lemma-1 (suc (suc n)) e ρ c κ) ⟩
-  do′ (suc (suc n)) ⟦ e ⟧ ρ κ
-∎
+%  begin
+%    do′ (suc n) ⟦ e ⟧ ρ κ
+%  ≡⟨ lemma-1 (suc n) e ρ c κ ⟩
+%    eval⟦ e ⟧ (send′ n ρ)       (lookup′ (suc n) κ ρ)
+%  ⊑⟨ is-assumed-monotone (eval⟦ e ⟧) (send′ n ρ) (send′ (suc n) ρ)
+%       (lemma-4-send′ n ρ) ⟩
+%    eval⟦ e ⟧ (send′ (suc n) ρ) (lookup′ (suc n) κ ρ)
+%  ⊑⟨ is-assumed-monotone (eval⟦ e ⟧ (send′ (suc n) ρ)) (lookup′ (suc n) κ ρ) (lookup′ (suc (suc n)) κ ρ)
+%       (lemma-4-lookup′ (suc n) κ ρ) ⟩
+%    eval⟦ e ⟧ (send′ (suc n) ρ) (lookup′ (suc (suc n)) κ ρ)
+%  ≡⟨ sym (lemma-1 (suc (suc n)) e ρ c κ) ⟩
+%    do′ (suc (suc n)) ⟦ e ⟧ ρ κ
+%  ∎
 
-\subsection{Statements of Remaining Results}
+\subsection{Remaining Results}
 
-\begin{code}
+\begin{code}[hide]
         module _
             {Gᵍ : Domain}
             {{ isoᵍ : ⟨ Gᵍ ⟩ ↔ Dᵍ }}
           where
-
+\end{code}
+\begin{code}
           interpret : Instance → ⟨ Behavior ⟩
           interpret ρ = lub (λ n → send′ n ρ)
 
-          proposition-1 : ∀ ρ → interpret ρ ≡ behave ρ
-
-          proposition-2 : ∀ ρ → behave ρ ⊑ send ρ
-
-          proposition-3 : ∀ ρ → send ρ ⊑ interpret ρ
-
-          theorem-1 : ∀ ρ → send ρ ≡ behave ρ
+          proposition-1 :  ∀ ρ → interpret ρ ≡ behave ρ
+          proposition-2 :  ∀ ρ → behave ρ ⊑ send ρ
+          proposition-3 :  ∀ ρ → send ρ ⊑ interpret ρ
+          theorem-1 :      ∀ ρ → send ρ ≡ behave ρ
 \end{code}
 \begin{code}[hide]
           proposition-1 ρ = {!   !}
@@ -413,4 +394,3 @@ begin
           proposition-3 ρ = {!   !}
           theorem-1 ρ = {!   !}
 \end{code}
-\end{AgdaAlign} 
