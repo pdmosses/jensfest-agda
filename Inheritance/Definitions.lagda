@@ -7,7 +7,7 @@ The Agda definitions given below use the following modules from the standard lib
 \begin{AgdaAlign}
 \begin{code}
 {-# OPTIONS --safe #-}
-open import Data.Nat.Base      using ( ℕ; zero; suc; _≤_ )     -- natural numbers
+open import Data.Nat.Base      using ( ℕ; zero; suc; _≤_ )     -- natural numbers zero ≤ suc zero ≤ ...
 open import Data.Maybe.Base    renaming (  Maybe to _+?;       -- A +? is disjoint union of A and {??}
                                            nothing to ??;      -- ?? represents absence of an A value
                                            maybe′ to [_,_]? )  -- [ f , x ]? is case analysis on A +?
@@ -29,23 +29,25 @@ open Inverse {{ ... }}         using (to; from)                -- to : A → B; 
 \subsection{Scott Domains}
 \label{sec:semantic-definitions:scott-domains}
 
-The following notation for Scott domains and their operations is assumed.
+The parameters of the following module declare notation for Scott domains and the associated operations.
+(For simplicity, the declarations are not universe-polymorphic.)
 %
 \begin{code}
 module Inheritance.Definitions
-    {Domain  :  Set₁}                                     -- Domain is a type of cpo
-    {⟨_⟩     :  Domain → Set}                             -- ⟨ D ⟩ is the type of elements of D
-    {_⊑_     :  {D : Domain} → ⟨ D ⟩ → ⟨ D ⟩ → Set}       -- x ⊑ y is the partial order of D
-    {⊥       :  {D : Domain} → ⟨ D ⟩}                     -- ⊥ is the least element of D
-    {fix     :  {D : Domain} → (⟨ D ⟩ → ⟨ D ⟩) → ⟨ D ⟩}   -- fix f is the least fixed-point of f
+    ( Domain  :  Set₁ )                                       -- Domain is a type of cpo
+    ( ⟨_⟩     :  Domain → Set )                               -- ⟨ D ⟩ is the type of elements of D
+    ( _⊑_     :  {D : Domain} → ⟨ D ⟩ → ⟨ D ⟩ → Set )         -- x ⊑ y is the partial order of D
+    ( ⊥       :  {D : Domain} → ⟨ D ⟩ )                       -- ⊥ is the least element of D
+    ( lub     :  {D : Domain} → (δ : ℕ → ⟨ D ⟩) → ⟨ D ⟩ )     -- least upper bound of chains δ
+    ( fix     :  {D : Domain} → ( ⟨ D ⟩ → ⟨ D ⟩ ) → ⟨ D ⟩ )   -- fix f is the least fixed-point of f
 
-    {?⊥      :  Domain}                                   -- ⊥ is the only element of ?⊥
-    {_+⊥_    :  Domain → Domain → Domain}                 -- D +⊥ E is the separated sum of D and E
+    ( ?⊥      :  Domain )                                     -- ⊥ is the only element of ?⊥
+    ( _+⊥_    :  Domain → Domain → Domain )                   -- D +⊥ E is the separated sum of D and E
 
-    {inl     :  {D E : Domain} → ⟨ D ⟩ → ⟨ D +⊥ E ⟩}      -- inl injects elements of D into D +⊥ E
-    {inr     :  {D E : Domain} → ⟨ E ⟩ → ⟨ D +⊥ E ⟩}      -- inr injects elements of E into D +⊥ E
-    {[_,_]⊥  :  {D E F : Domain} →                        -- [ f , g ]⊥ is case analysis on D +⊥ E
-                (⟨ D ⟩ → ⟨ F ⟩) → (⟨ E ⟩ → ⟨ F ⟩) → ⟨ D +⊥ E ⟩ → ⟨ F ⟩}
+    ( inl     :  {D E : Domain} → ⟨ D ⟩ → ⟨ D +⊥ E ⟩ )        -- inl injects elements of D into D +⊥ E
+    ( inr     :  {D E : Domain} → ⟨ E ⟩ → ⟨ D +⊥ E ⟩ )        -- inr injects elements of E into D +⊥ E
+    ( [_,_]⊥  :  {D E F : Domain} →                           -- [ f , g ]⊥ is case analysis on D +⊥ E
+                   ( ⟨ D ⟩ → ⟨ F ⟩ ) → ( ⟨ E ⟩ → ⟨ F ⟩ ) → ⟨ D +⊥ E ⟩ → ⟨ F ⟩ )
 \end{code}
 %
 Regarding the type of \AgdaRef{fix} declared above,
@@ -54,7 +56,7 @@ are elements of the Agda function type \AgdaRef{⟨ D ⟩ → ⟨ D ⟩}.
 The following type could be used to restrict arguments of \AgdaRef{fix} to continuous functions:
 %
 \begin{quote}
-\AgdaRef{{D : Domain} → (f : ⟨ D ⟩ → ⟨ D ⟩) → (is-continuous f) → ⟨ D ⟩}
+\AgdaRef{{D : Domain} → ( f : ⟨ D ⟩ → ⟨ D ⟩ ) → (is-continuous f) → ⟨ D ⟩}
 \end{quote}
 %
 where \AgdaRef{is-continuous} checks the continuity of its argument.
@@ -76,30 +78,30 @@ however, the least elements of these domains are irrelevant,
 and it is simpler to declare them as ordinary Agda types instead of domains:
 %
 \begin{code}
-    {Instance   : Set}  -- objects
-    {Name       : Set}  -- class names
-    {Key        : Set}  -- method names
-    {Primitive  : Set}  -- function names
+    ( Instance   : Set )  -- objects
+    ( Name       : Set )  -- class names
+    ( Key        : Set )  -- method names
+    ( Primitive  : Set )  -- function names
 \end{code}
 %
 Both the operational and the denotational semantics of method systems in CP89 involve
 the mutually-recursive domains \AgdaRef{Value}, \AgdaRef{Behavior}, and \AgdaRef{Fun}.
 These domains cannot be defined (safely) as Agda types,
-due to the positivity check on recursive definitions.
+due to the termination check on recursive type definitions.
 Scott domain theory ensures the existence of isomorphisms between the types of elements of these domains
 when the elements of \AgdaRef{⟨ Value ⟩ → ⟨ Value ⟩} are restricted to continuous functions.
 However, this restriction is irrelevant for checking the types of functions on domains,
 so it is simply omitted.
 %
 \begin{code}
-    {Number    : Domain}  -- the domain of numbers is unconstrained
-    {Value     : Domain}  -- a value is (isomorphic to) a behavior or a number
-    {Behavior  : Domain}  -- a behaviour maps a method name to a fun, or to the only element of ?⊥
-    {Fun       : Domain}  -- a fun maps an argument value to a value (possibly ⊥)
-    {{isoᵛ     : ⟨ Value ⟩     ↔ ⟨ Behavior +⊥ Number ⟩}}
-    {{isoᵇ     : ⟨ Behavior ⟩  ↔ (Key → ⟨ Fun +⊥ ?⊥ ⟩)}}
-    {{isoᶠ     : ⟨ Fun ⟩       ↔ (⟨ Value ⟩ → ⟨ Value ⟩)}}
-    {apply⟦_⟧  : Primitive → ⟨ Value ⟩ → ⟨ Value ⟩}
+    ( Number    : Domain )       -- the domain of numbers is unconstrained
+    ( Value     : Domain )       -- a value is (isomorphic to) a behavior or a number
+    ( Behavior  : Domain )       -- a behaviour maps a method name to a fun, or to the only element of ?⊥
+    ( Fun       : Domain )       -- a fun maps an argument value to a value (possibly ⊥)
+    {{ isoᵛ     : ⟨ Value ⟩     ↔  ⟨ Behavior +⊥ Number ⟩     }}
+    {{ isoᵇ     : ⟨ Behavior ⟩  ↔  ( Key → ⟨ Fun +⊥ ?⊥ ⟩ )    }}
+    {{ isoᶠ     : ⟨ Fun ⟩       ↔  ( ⟨ Value ⟩ → ⟨ Value ⟩ )  }}
+    ( apply⟦_⟧  : Primitive → ⟨ Value ⟩ → ⟨ Value ⟩ )
   where
 variable ρ : Instance; m : Key; f : Primitive
 variable ν : ⟨ Number ⟩; α : ⟨ Value ⟩; σ π : ⟨ Behavior ⟩; φ : ⟨ Fun ⟩
@@ -142,8 +144,8 @@ The parameters of the Semantics module are available in all the subsequent defin
 %
 \begin{code}
 module Semantics
-    {class       : Instance → Class}         -- "class ρ" is the class of an object
-    {methods′    : Class → Key → (Exp +?)}   -- "methods′ κ m" is the method named m in κ
+    ( class     : Instance → Class )         -- "class ρ" is the class of an object
+    ( methods′  : Class → Key → (Exp +?) )   -- "methods′ κ m" is the method named m in κ
   where
   methods : Class → Key → (Exp +?)           -- "methods origin" overrides "methods′ origin"
   methods (child c κ) m  = methods′ (child c κ) m
@@ -155,17 +157,18 @@ module Semantics
 The method lookup semantics uses mutually-recursive functions 
 \AgdaRef{send}, \AgdaRef{lookup}, and \AgdaRef{do⟦ ⟧},
 which can be non-terminating, 
-These functions are therefore defined in Agda as the least fixed-point
-of the following non-recursive function \AgdaRef{g}
-(as in the proof of Proposition~3 in CP89) on a domain \AgdaRef{Gᵍ}:
+They are therefore defined in Agda as the least fixed-point
+of a non-recursive function \AgdaRef{g}
+(as in the proof of Proposition~3 in CP89) on a domain \AgdaRef{Gᵍ}
+that is isomorphic to~\AgdaRef{Dᵍ}:
 %
 \begin{code}
-  Dᵍ =  (Instance → ⟨ Behavior ⟩) ×
-        (Class → Instance → ⟨ Behavior ⟩) ×
-        (Exp → Instance → Class → ⟨ Fun ⟩)
+  Dᵍ =  ( Instance → ⟨ Behavior ⟩ ) ×
+        ( Class → Instance → ⟨ Behavior ⟩ ) ×
+        ( Exp → Instance → Class → ⟨ Fun ⟩ )
 
   module _
-      {Gᵍ : Domain}
+      { Gᵍ : Domain }
       {{ isoᵍ : ⟨ Gᵍ ⟩ ↔ Dᵍ }}
     where
     g : Dᵍ → Dᵍ
@@ -221,8 +224,9 @@ with argument \AgdaRef{e₂}.
 When the value of \AgdaRef{e₁} is a behavior \AgdaRef{σ} that maps \AgdaRef{m} to a function \AgdaRef{φ},
 that function is applied to the value of \AgdaRef{e₂};
 otherwise the value of the call is undefined.
+The undefined cases are not explicit in CP89.
 
-The following definitions correspond to making the above definitions mutually recursive:
+The use of \AgdaRef{fix} below has the effect of making the above definitions mutually recursive:
 %
 \begin{code}
     γ : ⟨ Gᵍ ⟩ → ⟨ Gᵍ ⟩
@@ -260,7 +264,7 @@ The recursively-defined function \AgdaRef{eval⟦ ⟧} is obviously total,
 so there is no need for an explicit fixed point in its Agda definition.
 
 According to the conceptual analysis of inheritance in CP89,
-the behavior of an instance \AgdaRef{ρ} will be defined as the fixed-point
+the behavior of an instance \AgdaRef{ρ} will be defined as the fixed point
 of the generator associated with the class of \AgdaRef{ρ}.
 
 The generator for a subclass is obtained by modifying the generator of its parent class
@@ -271,7 +275,7 @@ and \AgdaRef{super} (\AgdaRef{π}) as arguments.
 The auxiliary operation \AgdaRef{σ₁ ⊕ σ₂} combines its argument behaviors,
 letting the methods of \AgdaRef{σ₁} shadow those of \AgdaRef{σ₂}.
 The operation \AgdaRef{w ⍄ p} combines the wrapper of a subclass with the generator of its parent class.
-Wrapper application is illustrated in Figure~9 of CP89.
+See Figure~9 of CP89 for an illustration of wrapper application.
 %
 \begin{code}
   Generator = ⟨ Behavior ⟩ → ⟨ Behavior ⟩
@@ -299,4 +303,4 @@ Wrapper application is illustrated in Figure~9 of CP89.
 \end{code}
 \end{AgdaAlign}
 %
-That concludes the Agda formulation of the semantic definitions given in CP89.
+That concludes the Agda formulation of the denotational semantics defined in CP89.
