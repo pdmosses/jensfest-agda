@@ -94,10 +94,10 @@ However, this restriction is irrelevant for checking the types of functions on d
 so it is simply omitted.
 %
 \begin{code}
-    ( Number    : Domain )       -- the domain of numbers is unconstrained
-    ( Value     : Domain )       -- a value is (isomorphic to) a behavior or a number
-    ( Behavior  : Domain )       -- a behaviour maps a method name to a fun, or to the only element of ?⊥
-    ( Fun       : Domain )       -- a fun maps an argument value to a value (possibly ⊥)
+    ( Number    : Domain )      -- the domain of numbers is unconstrained
+    ( Value     : Domain )      -- a value is (isomorphic to) a behavior or a number
+    ( Behavior  : Domain )      -- a behaviour maps a method name to a fun, or to the only element of ?⊥
+    ( Fun       : Domain )      -- a fun maps an argument value to a value (possibly ⊥)
     {{ isoᵛ     : ⟨ Value ⟩     ↔  ⟨ Behavior +⊥ Number ⟩     }}
     {{ isoᵇ     : ⟨ Behavior ⟩  ↔  ( Key → ⟨ Fun +⊥ ?⊥ ⟩ )    }}
     {{ isoᶠ     : ⟨ Fun ⟩       ↔  ( ⟨ Value ⟩ → ⟨ Value ⟩ )  }}
