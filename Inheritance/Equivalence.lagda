@@ -87,8 +87,8 @@ implies that \AgdaBound{n} is positive in the latter.
 \begin{code}
   do′ zero     ⟦ e             ⟧ ρ κ            = ⊥
   do′ (suc n)  ⟦ self          ⟧ ρ κ            = from λ α → from (inl (send′ n ρ))
-  do′ n        ⟦ super         ⟧ ρ origin       = from λ α → ⊥
   do′ n        ⟦ super         ⟧ ρ (child c κ)  = from λ α → from (inl (lookup′ n κ ρ))
+  do′ n        ⟦ super         ⟧ ρ origin       = from λ α → ⊥
   do′ n        ⟦ arg           ⟧ ρ κ            = from λ α → α
   do′ n        ⟦ call e₁ m e₂  ⟧ ρ κ            = from λ α → 
                                                    [  ( λ σ →  [  ( λ φ →  to φ (to (do′ n ⟦ e₂ ⟧ ρ κ) α) ) ,
