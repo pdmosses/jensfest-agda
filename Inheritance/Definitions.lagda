@@ -1,8 +1,8 @@
 \subsection{Agda Standard Library Notation}
 \label{sec:semantic-definitions:standard-library}
 
-The Agda definitions given below use the following modules from the standard library.%
-\footnote{\url{https://agda.github.io/agda-stdlib/v2.0/}}
+The Agda definitions given below use the following modules from the standard library (v2.1).%
+\footnote{\url{https://agda.github.io/agda-stdlib/v2.1/}}
 %
 \begin{AgdaAlign}
 \begin{code}
@@ -13,18 +13,13 @@ open import Data.Maybe.Base    renaming (  Maybe to _+?;       -- A +? is disjoi
                                            maybe′ to [_,_]? )  -- [ f , x ]? is case analysis on A +?
 open import Data.Product.Base  using (_×_; _,_; proj₁; proj₂)  -- A × B is Cartesian product, _,_ is pairing
 open import Function           using (Inverse; _↔_; _∘_)       -- A ↔ B is isomorphism between A and B
-\end{code}
-%
-For each instance argument \AgdaRef{\{\{ \}\}} with an isomorphism type \AgdaRef{A ↔ B},
-the following declaration introduces overloaded inverse functions.
-Such isomorphisms are usually left implicit in published semantic definitions,
-but Agda requires them to be made explicit;
-similarly for injections into separated sum domains.
-%
-\begin{code}
 open Inverse {{ ... }}         using (to; from)                -- to : A → B; from : B → A
 \end{code}
-
+%
+The declaration \AgdaRef{open Inverse \{\{ ... \}\}} above introduces overloaded inverse functions
+\AgdaRef{to} and \AgdaRef{from} for each module parameter of the form \AgdaRef{\{\{ i : A ↔ B \}\}}.
+(Such isomorphisms are usually left implicit in published semantic definitionst;
+similarly for injections into separated sum domains.)
 
 \subsection{Scott Domains}
 \label{sec:semantic-definitions:scott-domains}
@@ -34,38 +29,37 @@ The parameters of the following module declare notation for Scott domains and th
 %
 \begin{code}
 module Inheritance.Definitions
-    ( Domain  :  Set₁ )                                       -- Domain is a type of cpo
-    ( ⟨_⟩     :  Domain → Set )                               -- ⟨ D ⟩ is the type of elements of D
-    ( _⊑_     :  {D : Domain} → ⟨ D ⟩ → ⟨ D ⟩ → Set )         -- x ⊑ y is the partial order of D
-    ( ⊥       :  {D : Domain} → ⟨ D ⟩ )                       -- ⊥ is the least element of D
-    ( lub     :  {D : Domain} → (δ : ℕ → ⟨ D ⟩) → ⟨ D ⟩ )     -- least upper bound of chains δ
-    ( fix     :  {D : Domain} → ( ⟨ D ⟩ → ⟨ D ⟩ ) → ⟨ D ⟩ )   -- fix f is the least fixed-point of f
+    ( Domain  :  Set₁ )                                        -- Domain is a type of cpo
+    ( ⟨_⟩     :  Domain → Set )                                -- ⟨ D ⟩ is the type of elements of D
+    ( _⊑_     :  {D : Domain} → ⟨ D ⟩ → ⟨ D ⟩ → Set )          -- x ⊑ y is the partial order of D
+    ( ⊥       :  {D : Domain} → ⟨ D ⟩ )                        -- ⊥ is the least element of D
+    ( lub     :  {D : Domain} → (δ : ℕ → ⟨ D ⟩) → ⟨ D ⟩ )      -- least upper bound of chains δ
+    ( fix     :  {D : Domain} → ( ⟨ D ⟩ → ⟨ D ⟩ ) → ⟨ D ⟩ )    -- fix f is the least fixed-point of f
 
-    ( ?⊥      :  Domain )                                     -- ⊥ is the only element of ?⊥
-    ( _+⊥_    :  Domain → Domain → Domain )                   -- D +⊥ E is the separated sum of D and E
+    ( ?⊥      :  Domain )                                      -- ⊥ is the only element of ?⊥
+    ( _+⊥_    :  Domain → Domain → Domain )                    -- D +⊥ E is the separated sum of D and E
 
-    ( inl     :  {D E : Domain} → ⟨ D ⟩ → ⟨ D +⊥ E ⟩ )        -- inl injects elements of D into D +⊥ E
-    ( inr     :  {D E : Domain} → ⟨ E ⟩ → ⟨ D +⊥ E ⟩ )        -- inr injects elements of E into D +⊥ E
-    ( [_,_]⊥  :  {D E F : Domain} →                           -- [ f , g ]⊥ is case analysis on D +⊥ E
+    ( inl     :  {D E : Domain} → ⟨ D ⟩ → ⟨ D +⊥ E ⟩ )         -- inl injects elements of D into D +⊥ E
+    ( inr     :  {D E : Domain} → ⟨ E ⟩ → ⟨ D +⊥ E ⟩ )         -- inr injects elements of E into D +⊥ E
+    ( [_,_]⊥  :  {D E F : Domain} →                            -- [ f , g ]⊥ is case analysis on D +⊥ E
                    ( ⟨ D ⟩ → ⟨ F ⟩ ) → ( ⟨ E ⟩ → ⟨ F ⟩ ) → ⟨ D +⊥ E ⟩ → ⟨ F ⟩ )
 \end{code}
 %
-Regarding the type of \AgdaRef{fix} declared above,
-\emph{all} functions from \AgdaRef{⟨ D ⟩} to \AgdaRef{⟨ D ⟩}
-are elements of the Agda function type \AgdaRef{⟨ D ⟩ → ⟨ D ⟩}.
-The following type could be used to restrict arguments of \AgdaRef{fix} to continuous functions:
+Regarding the declaration of \AgdaRef{fix} above, the Agda type \AgdaRef{⟨ D ⟩ → ⟨ D ⟩}
+includes \emph{all} functions on \AgdaRef{⟨ D ⟩}.
+The following declaration would restrict arguments of \AgdaRef{fix} to continuous functions:
 %
 \begin{quote}
-\AgdaRef{{D : Domain} → ( f : ⟨ D ⟩ → ⟨ D ⟩ ) → (is-continuous f) → ⟨ D ⟩}
+\AgdaRef{( fix : \{D : Domain\} → ( f : ⟨ D ⟩ → ⟨ D ⟩ ) → (is-continuous f) → ⟨ D ⟩ )}
 \end{quote}
 %
-where \AgdaRef{is-continuous} checks the continuity of its argument.
 The least fixed-point of \AgdaRef{f} would then need to be written \AgdaRef{fix f t}
 with a proof term \AgdaRef{t : is-continuous f}.
 In practice, however, \AgdaRef{fix} will be applied only to functions on \AgdaRef{⟨ D ⟩}
 defined by lambda-abstraction and application, which ensures their continuity.
 Omitting the proof-term argument of \AgdaRef{fix} does not affect
-checking that the function to which it is applied is from some domain \AgdaRef{D} to itself.
+checking that the function to which it is applied is from some domain \AgdaRef{D} to itself;
+similarly for restricting applications of \AgdaRef{lub} to chains \AgdaRef{δ} with \AgdaRef{δ n ⊑ δ(suc n)}.
 
 \subsection{Method Systems}
 
@@ -78,10 +72,10 @@ however, the least elements of these domains are irrelevant,
 and it is simpler to declare them as ordinary Agda types instead of domains:
 %
 \begin{code}
-    ( Instance   : Set )  -- objects
-    ( Name       : Set )  -- class names
-    ( Key        : Set )  -- method names
-    ( Primitive  : Set )  -- function names
+    ( Instance   : Set )        -- objects
+    ( Name       : Set )        -- class names
+    ( Key        : Set )        -- method names
+    ( Primitive  : Set )        -- function names
 \end{code}
 %
 Both the operational and the denotational semantics of method systems in CP89 involve
@@ -91,7 +85,7 @@ due to the termination check on recursive type definitions.
 Scott domain theory ensures the existence of isomorphisms between the types of elements of these domains
 when the elements of \AgdaRef{⟨ Value ⟩ → ⟨ Value ⟩} are restricted to continuous functions.
 However, this restriction is irrelevant for checking the types of functions on domains,
-so it is simply omitted.
+so it is omitted.
 %
 \begin{code}
     ( Number    : Domain )      -- the domain of numbers is unconstrained
@@ -117,8 +111,8 @@ elements of \AgdaRef{Primitive} to functions on \AgdaRef{⟨ Value ⟩},
 and its use fixed the error.
 
 In CP89, the inheritance hierarchy is assumed to be a finite tree.
-Here, \AgdaRef{Class} is defined as the datatype of all finite trees.
-This also avoids the need for the partial \textit{parent} function,
+Below, \AgdaRef{Class} is defined as the datatype of all finite trees.
+Using a datatype avoids the need for the partial \textit{parent} function,
 and for a predicate for testing whether a class is the root of the hierarchy.
 %
 \begin{code}
