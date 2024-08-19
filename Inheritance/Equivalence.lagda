@@ -103,13 +103,29 @@ implies that \AgdaBound{n} is positive in the latter.
 \begin{code}[hide]
   import Relation.Binary.PropositionalEquality as Eq
   open Eq                        using (_≡_; refl; trans; sym; cong; cong-app; subst)
-  open Eq.≡-Reasoning            -- using (begin_; _≡⟨⟩_; _≡⟨_⟩_; _∎)
+  -- open Eq.≡-Reasoning            -- using (begin_; _≡⟨⟩_; _≡⟨_⟩_; _∎)
   -- TODO: The module Eq.≡-Reasoning doesn't export the following: _≡⟨⟩_ _≡⟨_⟩_
+ 
+  open import Relation.Binary.Bundles  using ( Poset )
+  import Relation.Binary.Reasoning.PartialOrder as ⊑-Reasoning
+
   open import Axiom.Extensionality.Propositional using (Extensionality)
   open import Level              renaming (zero to lzero) hiding (suc)
   module _
       ( ext : Extensionality lzero lzero )
+      { D : Domain }
     where
+
+    open Poset ⟨ D ⟩ hiding ( refl ) -- renaming ( _≤_ to _⊑_ )
+    open ⊑-Reasoning ⟨ D ⟩
+
+    -- _⊑⟨_⟩_ : {D : Domain} → (x : ⟨ D ⟩ ) → {y z : ⟨ D ⟩ } → x ⊑ y → y ⊑ z → x ⊑ z
+    -- x ⊑⟨ p ⟩ q = ⊑-is-transitive p q
+    -- _⊑⟨⟩_ : {D : Domain} → (x : ⟨ D ⟩ ) → {y : ⟨ D ⟩ } → x ⊑ y → x ⊑ y
+    -- x ⊑⟨⟩ q = x ⊑⟨ ⊑-is-reflexive ⟩ q
+    -- infixr 2 _⊑⟨_⟩_
+    -- infixr 2 _⊑⟨⟩_
+
 \end{code}
 
 \subsection{Proofs of Lemmas in Agda}
@@ -320,12 +336,9 @@ Casper Bach Poulsen provided the two largest ones.}
 
 \begin{code}
       module _
-          ( ⊥-is-least : {D : Domain} {x : ⟨ D ⟩} →
-              ⊥ ⊑ x )
-          ( ⊑-is-reflexive : {D : Domain} {x y : ⟨ D ⟩} →
-            x ≡ y → x ⊑ y )
-          ( ⊑-is-transitive : {D : Domain} {x y z : ⟨ D ⟩} →
-            x ⊑ y → y ⊑ z → x ⊑ z )
+          ( ⊥-is-least : {D : Domain} {x : ⟨ D ⟩}           → ⊥ ⊑ x )
+          ( ⊑-is-reflexive : {D : Domain} {x : ⟨ D ⟩}       → x ⊑ x )
+          ( ⊑-is-transitive : {D : Domain} {x y z : ⟨ D ⟩}  → x ⊑ y → y ⊑ z → x ⊑ z )
           ( is-assumed-monotone :
             {D E : Domain} (f : ⟨ D ⟩ → ⟨ E ⟩) (x y : ⟨ D ⟩) →
               (x ⊑ y) → (f x ⊑ f y) )
@@ -333,14 +346,6 @@ Casper Bach Poulsen provided the two largest ones.}
             {D E F : Domain} (f : ⟨ D ⟩ → ⟨ E ⟩ → ⟨ F ⟩) (x y : ⟨ D ⟩) →
               (x ⊑ y) → ({z : ⟨ E ⟩} → (f x z ⊑ f y z)) )
         where
-  
-        _⊑⟨_⟩_ : {D : Domain} → (x : ⟨ D ⟩ ) → {y z : ⟨ D ⟩ } → x ⊑ y → y ⊑ z → x ⊑ z
-        x ⊑⟨ p ⟩ q = ⊑-is-transitive p q
-        _⊑⟨⟩_ : {D : Domain} → (x : ⟨ D ⟩ ) → {y : ⟨ D ⟩ } → x ⊑ y → x ⊑ y
-        x ⊑⟨⟩ q = x ⊑⟨ ⊑-is-reflexive refl ⟩ q
-        infixr 2 _⊑⟨_⟩_
-        infixr 2 _⊑⟨⟩_
-
         -- is-chain : {D : Domain} → (δ : ℕ → ⟨ D ⟩) → Set
         -- is-chain δ = ∀ n → (δ n) ⊑ (δ (suc n))
 
@@ -400,7 +405,7 @@ Casper Bach Poulsen provided the two largest ones.}
 %  In poset reasoning style, it would be:
 %
 %  begin
-%    do′ (suc n) ⟦ e ⟧ ρ κ
+%    do′ (suc n) ⟦ e ⟧ ρ (child c κ)
 %  ≡⟨ lemma-1 (suc n) e ρ c κ ⟩
 %    eval⟦ e ⟧ (send′ n ρ)       (lookup′ (suc n) κ ρ)
 %  ⊑⟨ is-assumed-monotone (eval⟦ e ⟧) (send′ n ρ) (send′ (suc n) ρ)
@@ -410,7 +415,7 @@ Casper Bach Poulsen provided the two largest ones.}
 %       (lemma-4-lookup′ (suc n) κ ρ) ⟩
 %    eval⟦ e ⟧ (send′ (suc n) ρ) (lookup′ (suc (suc n)) κ ρ)
 %  ≡⟨ sym (lemma-1 (suc (suc n)) e ρ c κ) ⟩
-%    do′ (suc (suc n)) ⟦ e ⟧ ρ κ
+%    do′ (suc (suc n)) ⟦ e ⟧ ρ (child c κ)
 %  ∎
 
 \subsection{Remaining Results}
