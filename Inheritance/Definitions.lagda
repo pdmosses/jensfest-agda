@@ -126,11 +126,11 @@ The syntax of method expressions is defined by the inductive datatype \AgdaRef{E
 %
 \begin{code}
 data Exp : Set where
-  self   : Exp                    -- refers to the behavior of the current object
-  super  : Exp                    -- refers to the behavior in the superclass of the object
-  arg    : Exp                    -- denotes the single argument of the method expression
-  call   : Exp → Key → Exp → Exp  -- "call e₁ m e₂" denotes calling method m of e₁ with argument e₂
-  appl   : Primitive → Exp → Exp  -- "appl f e₁" denotes applying f to e₁
+  self   : Exp                              -- refers to the behavior of the current object
+  super  : Exp                              -- refers to the behavior in the superclass of the object
+  arg    : Exp                              -- refers to the single argument of the method expression
+  call   : Exp → Key → Exp → Exp            -- "call e₁ m e₂" calls method m of e₁ with argument e₂
+  appl   : Primitive → Exp → Exp            -- "appl f e₁" applies primitive f to e₁
 variable e : Exp
 \end{code}
 %
@@ -138,10 +138,10 @@ The parameters of the Semantics module are available in all the subsequent defin
 %
 \begin{code}
 module Semantics
-    ( class     : Instance → Class )         -- "class ρ" is the class of an object
-    ( methods′  : Class → Key → (Exp +?) )   -- "methods′ κ m" is the method named m in κ
+    ( class     : Instance → Class )        -- "class ρ" is the class of an object
+    ( methods′  : Class → Key → (Exp +?) )  -- "methods′ κ m" is the method named m in κ
   where
-  methods : Class → Key → (Exp +?)           -- "methods origin" overrides "methods′ origin"
+  methods : Class → Key → (Exp +?)          -- "methods origin" overrides "methods′ origin"
   methods (child c κ) m  = methods′ (child c κ) m
   methods origin m       = ??
 \end{code}
