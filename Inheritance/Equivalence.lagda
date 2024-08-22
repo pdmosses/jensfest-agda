@@ -103,7 +103,7 @@ implies that \AgdaBound{n} is positive in the latter.
 \begin{code}[hide]
   import Relation.Binary.PropositionalEquality as Eq
   open Eq                        using (_≡_; refl; trans; sym; cong; cong-app; subst)
-  -- open Eq.≡-Reasoning            -- using (begin_; _≡⟨⟩_; _≡⟨_⟩_; _∎)
+  open Eq.≡-Reasoning            -- using (begin_; _≡⟨⟩_; _≡⟨_⟩_; _∎)
   -- TODO: The module Eq.≡-Reasoning doesn't export the following: _≡⟨⟩_ _≡⟨_⟩_
  
   open import Relation.Binary.Bundles  using ( Poset )
@@ -113,11 +113,7 @@ implies that \AgdaBound{n} is positive in the latter.
   open import Level              renaming (zero to lzero) hiding (suc)
   module _
       ( ext : Extensionality lzero lzero )
-      { D : Domain }
     where
-
-    open Poset ⟨ D ⟩ hiding ( refl ) -- renaming ( _≤_ to _⊑_ )
-    open ⊑-Reasoning ⟨ D ⟩
 
     -- _⊑⟨_⟩_ : {D : Domain} → (x : ⟨ D ⟩ ) → {y z : ⟨ D ⟩ } → x ⊑ y → y ⊑ z → x ⊑ z
     -- x ⊑⟨ p ⟩ q = ⊑-is-transitive p q
