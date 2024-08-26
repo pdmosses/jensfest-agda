@@ -331,7 +331,7 @@ Casper Bach Poulsen provided the two largest ones.}
 \begin{code}
       module _
           ( ⊥-is-least : {D : Domain} {x : ⟨ D ⟩}           → ⊥ ⊑ x )
-          ( ⊑-is-reflexive : {D : Domain} {x : ⟨ D ⟩}       → x ⊑ x )
+          ( ⊑-is-reflexive : {D : Domain} {x y : ⟨ D ⟩}       → x ≡ y → x ⊑ y )
           ( ⊑-is-transitive : {D : Domain} {x y z : ⟨ D ⟩}  → x ⊑ y → y ⊑ z → x ⊑ z )
           ( is-assumed-monotone :
             {D E : Domain} (f : ⟨ D ⟩ → ⟨ E ⟩) (x y : ⟨ D ⟩) →
@@ -340,6 +340,17 @@ Casper Bach Poulsen provided the two largest ones.}
             {D E F : Domain} (f : ⟨ D ⟩ → ⟨ E ⟩ → ⟨ F ⟩) (x y : ⟨ D ⟩) →
               (x ⊑ y) → ({z : ⟨ E ⟩} → (f x z ⊑ f y z)) )
         where
+
+        _⊑⟨_⟩_ : {D : Domain} → (x : ⟨ D ⟩ ) → {y z : ⟨ D ⟩ } → x ⊑ y → y ⊑ z → x ⊑ z
+        x ⊑⟨ p ⟩ q = ⊑-is-transitive p q
+        _≡⊑⟨_⟩_ : {D : Domain} → (x : ⟨ D ⟩ ) → {y z : ⟨ D ⟩ } → x ≡ y → y ⊑ z → x ⊑ z
+        x ≡⊑⟨ p ⟩ q =   ⊑-is-transitive (⊑-is-reflexive p) q
+        _⊑⟨⟩_ : {D : Domain} → (x : ⟨ D ⟩ ) → {y : ⟨ D ⟩ } → x ⊑ y → x ⊑ y
+        x ⊑⟨⟩ q = x ⊑⟨ ⊑-is-reflexive refl ⟩ q
+        infixr 2 _⊑⟨_⟩_
+        infixr 2 _≡⊑⟨_⟩_
+        infixr 2 _⊑⟨⟩_
+
         -- is-chain : {D : Domain} → (δ : ℕ → ⟨ D ⟩) → Set
         -- is-chain δ = ∀ n → (δ n) ⊑ (δ (suc n))
 
