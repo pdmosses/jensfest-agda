@@ -16,50 +16,54 @@ open import Function           using (Inverse; _↔_; _∘_)       -- A ↔ B is
 open Inverse {{ ... }}         using (to; from)                -- to : A → B; from : B → A
 \end{code}
 %
-The declaration \AgdaRef{open Inverse \{\{ ... \}\}} above introduces overloaded inverse functions
-\AgdaRef{to} and \AgdaRef{from} for each module parameter of the form \AgdaRef{\{\{ i : A ↔ B \}\}}.
-(Such isomorphisms are usually left implicit in published semantic definitionst;
-similarly for injections into separated sum domains.)
+The declaration \AgdaRef{open Inverse \{\{ ... \}\}} above introduces overloaded functions
+\AgdaRef{to} and \AgdaRef{from} for each parameter of the form \AgdaRef{\{\{ i : A ↔ B \}\}}.
+The double braces specify instance parameters,
+which are the Agda equivalent of Haskell type class constraints.
+%(Such isomorphisms are usually left implicit in published semantic definitions.)
 
-\subsection{Scott Domains}
-\label{sec:semantic-definitions:scott-domains}
+\subsection{Domains}
 
-The parameters of the following module declare notation for Scott domains and the associated operations.
-(For simplicity, the declarations are not universe-polymorphic.)
+The types and functions declared below will be used when defining the semantics of method systems in Agda.
+An element \AgdaRef{D : Domain} is a type corresponding to a domain used in CP89.
+Such a type \AgdaRef{D} has a type of elements \AgdaRef{⟨ D ⟩} and a distinguished element \AgdaRef{⊥};
+further properties of domains
+(e.g., the existence of limits of ascending chains,
+\AgdaRef{⊥} being the least element,
+and continuity of functions between domains)
+will be needed when proving results about semantic functions.
 %
 \begin{code}
 module Inheritance.Definitions
     ( Domain  :  Set₁ )                                        -- Domain is a type of cpo
     ( ⟨_⟩     :  Domain → Set )                                -- ⟨ D ⟩ is the type of elements of D
-    ( _⊑_     :  {D : Domain} → ⟨ D ⟩ → ⟨ D ⟩ → Set )          -- x ⊑ y is the partial order of D
     ( ⊥       :  {D : Domain} → ⟨ D ⟩ )                        -- ⊥ is the least element of D
-    ( lub     :  {D : Domain} → (δ : ℕ → ⟨ D ⟩) → ⟨ D ⟩ )      -- least upper bound of chains δ
     ( fix     :  {D : Domain} → ( ⟨ D ⟩ → ⟨ D ⟩ ) → ⟨ D ⟩ )    -- fix f is the least fixed-point of f
+\end{code}
+%
+The function \AgdaRef{fix} is supposed to correspond to the least fixed-point operator
+on the space of continuous functions on a domain.
+A continuous function can be represented in Agda as the pair of a function
+\AgdaRef{f : ⟨ D ⟩ → ⟨ D ⟩} and a proof of the continuity of \AgdaRef{f}.
+In practice, however, \AgdaRef{fix} will be applied only to functions on \AgdaRef{⟨ D ⟩}
+defined by lambda-abstraction and application, which ensures their continuity.
+It seems pointless to pass an \emph{assumption} of continuity in an argument,
+as the same assumption can be made wherever it is needed, and its omission does not affect type-checking.
 
-    ( ?⊥      :  Domain )                                      -- ⊥ is the only element of ?⊥
+The following declarations correspond closely to the notation for separated sums of domains in CP89,
+except that the injection functions \AgdaRef{inl} and \AgdaRef{inr} are left implicit there.
+%
+\begin{code}
+    ( ?⊥      :  Domain )                                      -- the only element of ?⊥ is ⊥
     ( _+⊥_    :  Domain → Domain → Domain )                    -- D +⊥ E is the separated sum of D and E
-
     ( inl     :  {D E : Domain} → ⟨ D ⟩ → ⟨ D +⊥ E ⟩ )         -- inl injects elements of D into D +⊥ E
     ( inr     :  {D E : Domain} → ⟨ E ⟩ → ⟨ D +⊥ E ⟩ )         -- inr injects elements of E into D +⊥ E
     ( [_,_]⊥  :  {D E F : Domain} →                            -- [ f , g ]⊥ is case analysis on D +⊥ E
                    ( ⟨ D ⟩ → ⟨ F ⟩ ) → ( ⟨ E ⟩ → ⟨ F ⟩ ) → ⟨ D +⊥ E ⟩ → ⟨ F ⟩ )
 \end{code}
 %
-Regarding the declaration of \AgdaRef{fix} above, the Agda type \AgdaRef{⟨ D ⟩ → ⟨ D ⟩}
-includes \emph{all} functions on \AgdaRef{⟨ D ⟩}.
-The following declaration would restrict arguments of \AgdaRef{fix} to continuous functions:
-%
-\begin{quote}
-\AgdaRef{( fix : \{D : Domain\} → ( f : ⟨ D ⟩ → ⟨ D ⟩ ) → (is-continuous f) → ⟨ D ⟩ )}
-\end{quote}
-%
-The least fixed-point of \AgdaRef{f} would then need to be written \AgdaRef{fix f t}
-with a proof term \AgdaRef{t : is-continuous f}.
-In practice, however, \AgdaRef{fix} will be applied only to functions on \AgdaRef{⟨ D ⟩}
-defined by lambda-abstraction and application, which ensures their continuity.
-Omitting the proof-term argument of \AgdaRef{fix} does not affect
-checking that the function to which it is applied is from some domain \AgdaRef{D} to itself;
-similarly for restricting applications of \AgdaRef{lub} to chains \AgdaRef{δ} with \AgdaRef{δ n ⊑ δ(suc n)}.
+The Cartesian products of types provided by the standard Agda library support products of domains,
+regarding a pair \AgdaRef{(⊥ , ⊥)} as the least element of the product of two domains.  
 
 \subsection{Method Systems}
 
@@ -132,11 +136,7 @@ data Exp : Set where
   call   : Exp → Key → Exp → Exp            -- "call e₁ m e₂" calls method m of e₁ with argument e₂
   appl   : Primitive → Exp → Exp            -- "appl f e₁" applies primitive f to e₁
 variable e : Exp
-\end{code}
-%
-The parameters of the Semantics module are available in all the subsequent definitions:
-%
-\begin{code}
+
 module Semantics
     ( class     : Instance → Class )        -- "class ρ" is the class of an object
     ( methods′  : Class → Key → (Exp +?) )  -- "methods′ κ m" is the method named m in κ
@@ -182,8 +182,8 @@ The behavior of \AgdaRef{lookup κ ρ} for a subclass \AgdaRef{κ}
 depends on whether it is called with a method \AgdaRef{m} defined by \AgdaRef{κ}:
 if so, it uses \AgdaRef{do⟦ e ⟧} (via argument \AgdaRef{d⟦ ⟧} of \AgdaRef{g})
 to execute the corresponding method expression;
-if not, it recursively looks up \AgdaRef{m} in the superclass of {κ}.%
-\footnote{The isomorphisms \AgdaRef{to} and \AgdaRef{from} and the injection \AgdaRef{inl} can be ignored.}
+if not, it recursively looks up \AgdaRef{m} in the superclass of {κ}.
+%\footnote{The isomorphisms \AgdaRef{to} and \AgdaRef{from} can be ignored.}
 The behavior is undefined when \AgdaRef{κ} is the root of the inheritance hierarchy,
 which has been defined to have no methods:
 %
@@ -204,12 +204,11 @@ a behavior, a number, or undefined (\AgdaRef{⊥}):
       do⟦ super         ⟧ ρ (child c κ)  = from λ α → from (inl (l κ ρ))
       do⟦ super         ⟧ ρ origin       = from λ α → ⊥
       do⟦ arg           ⟧ ρ κ            = from λ α → α
-      do⟦ call e₁ m e₂  ⟧ ρ κ            = from λ α →
-                                            [  ( λ σ →  [  ( λ φ →  to φ (to (d⟦ e₂ ⟧ ρ κ) α) ) ,
-                                                           ( λ _ →  ⊥ )
-                                                        ]⊥ (to σ m) ) ,
-                                               ( λ ν →  ⊥ )
-                                            ]⊥ (to (to (d⟦ e₁ ⟧ ρ κ) α))
+      do⟦ call e₁ m e₂  ⟧ ρ κ            = from λ α → [ ( λ σ → [  ( λ φ → to φ (to (d⟦ e₂ ⟧ ρ κ) α) ) ,
+                                                                   ( λ _ → ⊥ )
+                                                                ]⊥ (to σ m) ) ,
+                                                        ( λ ν → ⊥ )
+                                                      ]⊥ (to (to (d⟦ e₁ ⟧ ρ κ) α))
       do⟦ appl f e₁     ⟧ ρ κ            = from λ α → apply⟦ f ⟧ (to (d⟦ e₁ ⟧ ρ κ) α)
 \end{code}
 %
@@ -245,12 +244,11 @@ The evaluation of the other method expressions is similar to their method lookup
   eval⟦ self          ⟧ σ π  = from λ α → from (inl σ)
   eval⟦ super         ⟧ σ π  = from λ α → from (inl π )
   eval⟦ arg           ⟧ σ π  = from λ α → α
-  eval⟦ call e₁ m e₂  ⟧ σ π  = from λ α →
-                                [  ( λ σ′ →  [  ( λ φ →  to φ (to (eval⟦ e₂ ⟧ σ π) α) ) ,
-                                                ( λ _ →  ⊥ )
-                                             ]⊥ (to σ′ m) ) ,
-                                   ( λ ν →   ⊥ )
-                                ]⊥ (to (to (eval⟦ e₁ ⟧ σ π) α))
+  eval⟦ call e₁ m e₂  ⟧ σ π  = from λ α → [ ( λ σ′ → [  ( λ φ → to φ (to (eval⟦ e₂ ⟧ σ π) α) ) ,
+                                                        ( λ _ → ⊥ )
+                                                     ]⊥ (to σ′ m) ) ,
+                                            ( λ ν → ⊥ )
+                                          ]⊥ (to (to (eval⟦ e₁ ⟧ σ π) α))
   eval⟦ appl f e₁     ⟧ σ π  = from λ α → apply⟦ f ⟧ (to (eval⟦ e₁ ⟧ σ π) α)
 \end{code}
 %
@@ -276,17 +274,17 @@ See Figure~9 of CP89 for an illustration of wrapper application.
   Wrapper   = ⟨ Behavior ⟩ → ⟨ Behavior ⟩ → ⟨ Behavior ⟩
   
   _⊕_ : ⟨ Behavior ⟩ → ⟨ Behavior ⟩ → ⟨ Behavior ⟩
-  σ₁ ⊕ σ₂ = from λ m → [  ( λ φ → inl φ ) ,
-                          ( λ _ → to σ₂ m ) 
+  σ₁ ⊕ σ₂ = from λ m → [ ( λ φ → inl φ ) ,
+                         ( λ _ → to σ₂ m ) 
                        ]⊥ (to σ₁ m)
 
   _⍄_ : Wrapper → Generator → Generator
   w ⍄ p = λ σ → (w σ (p σ)) ⊕ (p σ)
 
   wrap : Class → Wrapper
-  wrap κ = λ σ → λ π → from λ m →  [  ( λ e →  inl (eval⟦ e ⟧ σ π) ) ,
-                                      ( inr ⊥ )
-                                   ]? (methods κ m)
+  wrap κ = λ σ → λ π → from λ m → [ ( λ e → inl (eval⟦ e ⟧ σ π) ) ,
+                                    ( inr ⊥ )
+                                  ]? (methods κ m)
 
   gen : Class → Generator
   gen (child c κ)  = wrap (child c κ) ⍄ gen κ

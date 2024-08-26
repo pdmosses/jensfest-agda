@@ -19,7 +19,6 @@ module Inheritance.Equivalence
 
     ( ?⊥      :  Domain )                                     -- ⊥ is the only element of ?⊥
     ( _+⊥_    :  Domain → Domain → Domain )                   -- D +⊥ E is the separated sum of D and E
-
     ( inl     :  {D E : Domain} → ⟨ D ⟩ → ⟨ D +⊥ E ⟩ )        -- inl injects elements of D into D +⊥ E
     ( inr     :  {D E : Domain} → ⟨ E ⟩ → ⟨ D +⊥ E ⟩ )        -- inr injects elements of E into D +⊥ E
     ( [_,_]⊥  :  {D E F : Domain} →                           -- [ f , g ]⊥ is case analysis on D +⊥ E
@@ -40,7 +39,7 @@ module Inheritance.Equivalence
     ( apply⟦_⟧  : Primitive → ⟨ Value ⟩ → ⟨ Value ⟩ )
   where
 open import Inheritance.Definitions
-    ( Domain ) ( ⟨_⟩ ) ( _⊑_ ) ( ⊥ ) (lub ) ( fix ) ( ?⊥ ) ( _+⊥_ ) ( inl ) ( inr ) ( [_,_]⊥ )
+    ( Domain ) ( ⟨_⟩ ) ( ⊥ ) ( fix ) ( ?⊥ ) ( _+⊥_ ) ( inl ) ( inr ) ( [_,_]⊥ )
     ( Instance ) ( Name ) ( Key ) ( Primitive ) ( Number ) ( Value ) ( Behavior ) ( Fun )
     {{ isoᵛ }} {{ isoᵇ }} {{ isoᶠ }} ( apply⟦_⟧ )
 module _ 
@@ -90,12 +89,11 @@ implies that \AgdaBound{n} is positive in the latter.
   do′ n        ⟦ super         ⟧ ρ (child c κ)  = from λ α → from (inl (lookup′ n κ ρ))
   do′ n        ⟦ super         ⟧ ρ origin       = from λ α → ⊥
   do′ n        ⟦ arg           ⟧ ρ κ            = from λ α → α
-  do′ n        ⟦ call e₁ m e₂  ⟧ ρ κ            = from λ α → 
-                                                   [  ( λ σ →  [  ( λ φ →  to φ (to (do′ n ⟦ e₂ ⟧ ρ κ) α) ) ,
-                                                                  ( λ _ →  ⊥ )
-                                                               ]⊥ (to σ m) ) ,
-                                                      ( λ ν →  ⊥ )
-                                                   ]⊥ (to (to (do′ n ⟦ e₁ ⟧ ρ κ ) α))
+  do′ n        ⟦ call e₁ m e₂  ⟧ ρ κ            = from λ α → [ ( λ σ → [ ( λ φ → to φ (to (do′ n ⟦ e₂ ⟧ ρ κ) α) ) ,
+                                                                         ( λ _ →  ⊥ )
+                                                                       ]⊥ (to σ m) ) ,
+                                                               ( λ ν → ⊥ )
+                                                             ]⊥ (to (to (do′ n ⟦ e₁ ⟧ ρ κ ) α))
   do′ n        ⟦ appl f e₁     ⟧ ρ κ            = from λ α → apply⟦ f ⟧ (to (do′ n ⟦ e₁ ⟧ ρ κ) α)
 \end{code}
 %The proofs of the lemmas use the following additional modules from the standard library:
