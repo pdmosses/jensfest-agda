@@ -272,19 +272,12 @@ See Figure~9 of CP89 for an illustration of wrapper application.
 \begin{code}
   Generator = ⟨ Behavior ⟩ → ⟨ Behavior ⟩
   Wrapper   = ⟨ Behavior ⟩ → ⟨ Behavior ⟩ → ⟨ Behavior ⟩
-  
   _⊕_ : ⟨ Behavior ⟩ → ⟨ Behavior ⟩ → ⟨ Behavior ⟩
-  σ₁ ⊕ σ₂ = from λ m → [ ( λ φ → inl φ ) ,
-                         ( λ _ → to σ₂ m ) 
-                       ]⊥ (to σ₁ m)
-
+  σ₁ ⊕ σ₂ = from λ m → [ ( λ φ → inl φ ) , ( λ _ → to σ₂ m ) ]⊥ (to σ₁ m)
   _⍄_ : Wrapper → Generator → Generator
   w ⍄ p = λ σ → (w σ (p σ)) ⊕ (p σ)
-
   wrap : Class → Wrapper
-  wrap κ = λ σ → λ π → from λ m → [ ( λ e → inl (eval⟦ e ⟧ σ π) ) ,
-                                    ( inr ⊥ )
-                                  ]? (methods κ m)
+  wrap κ = λ σ → λ π → from λ m → [ ( λ e → inl (eval⟦ e ⟧ σ π) ) , ( inr ⊥ ) ]? (methods κ m)
 
   gen : Class → Generator
   gen (child c κ)  = wrap (child c κ) ⍄ gen κ
