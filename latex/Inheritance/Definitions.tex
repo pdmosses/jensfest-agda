@@ -84,13 +84,17 @@ which are the Agda equivalent of Haskell type class constraints.
 
 \subsection{Domains}
 
-The types and functions declared below will be used when defining the semantics of method systems in Agda.
+The types and functions declared below as module parameters
+correspond to assumptions about features of Scott domains.
+These will be used when defining the semantics of method systems in Agda.
 An element \AgdaRef{D : Domain} is a type corresponding to a domain used in CP89.
-Such a type \AgdaRef{D} has a type of elements \AgdaRef{⟨ D ⟩} and a distinguished element \AgdaRef{⊥};
+Such a type \AgdaRef{D} has a type of elements \AgdaRef{⟨ D ⟩}
+and a distinguished element \AgdaRef{⊥};
 further properties of domains
-(e.g., the existence of limits of ascending chains,
-\AgdaRef{⊥} being the least element,
-and continuity of functions between domains)
+(e.g., involving the partial order on \AgdaRef{⟨ D ⟩})
+%the existence of limits of ascending chains,
+%\AgdaRef{⊥} being the least element,
+%and continuity of functions between domains)
 will be needed when proving results about semantic functions.
 %
 \begin{code}%
@@ -160,8 +164,8 @@ A continuous function can be represented in Agda as the pair of a function
 \AgdaRef{f : ⟨ D ⟩ → ⟨ D ⟩} and a proof of the continuity of \AgdaRef{f}.
 In practice, however, \AgdaRef{fix} will be applied only to functions on \AgdaRef{⟨ D ⟩}
 defined by lambda-abstraction and application, which ensures their continuity.
-It seems pointless to pass an \emph{assumption} of continuity in an argument,
-as the same assumption can be made wherever it is needed, and its omission does not affect type-checking.
+It seems pointless to pass an \emph{assumption} of continuity as an argument
+– the same assumption can be made wherever it is needed – and its omission does not affect type-checking.
 
 The following declarations correspond closely to the notation for separated sums of domains in CP89,
 except that the injection functions \AgdaRef{inl} and \AgdaRef{inr} are left implicit there.
