@@ -30,10 +30,10 @@ which are the Agda equivalent of Haskell type class constraints.
 \subsection{Domains}
 
 The types and functions declared below as module parameters
-correspond to assumptions about features of Scott domains.
-These will be used when defining the semantics of method systems in Agda.
+correspond to assumptions about various features of Scott domains.
+They are used when defining the semantics of method systems in Agda.
 
-An element \AgdaRef{D : Domain} is a type corresponding to a domain used in CP89.
+An element \AgdaRef{D : Domain} is an Agda type corresponding to a domain used in CP89.
 Such a type \AgdaRef{D} has a type of elements \AgdaRef{⟨ D ⟩}
 and a distinguished element \AgdaRef{⊥};
 further properties of domains
@@ -53,14 +53,15 @@ module Inheritance.Definitions
 %
 The function \AgdaRef{fix} is supposed to correspond to the least fixed point operator
 on the space of continuous functions on a domain.
-A continuous function can be represented in Agda as the pair of a function
-\AgdaRef{f : ⟨ D ⟩ → ⟨ D ⟩} and a proof of the continuity of \AgdaRef{f}.
+To ensure that \AgdaRef{fix} can be applied only to continuous functions,
+it would need to take a proof of continuity as an extra argument.
 
-In practice, however, \AgdaRef{fix} will be applied only to functions on \AgdaRef{⟨ D ⟩}
-defined by lambda-abstraction and application, 
-which ensures that they correspond to continuous functions on domains.
-It seems pointless to pass an \emph{assumption} of continuity as an argument
-– the same assumption can be made wherever it is needed – and its omission does not affect type-checking.
+In practice, however, we intend to apply \AgdaRef{fix} only to functions on \AgdaRef{⟨ D ⟩}
+that are defined by lambda-abstraction and application, 
+and these are \emph{assumed} to correspond to continuous functions on domains.
+It is superfluous to pass an \emph{assumption} of continuity as an explicit argument
+– the same assumption can be made wherever it is needed
+– so we simply omit the extra argument from the type of \AgdaRef{fix}.
 
 \clearpage
 \begin{code}
