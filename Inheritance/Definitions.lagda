@@ -6,14 +6,19 @@ The Agda definitions given below use the following modules from the standard lib
 %
 \begin{AgdaAlign}
 \begin{code}
-{-# OPTIONS --safe #-}
-open import Data.Nat.Base      using ( ℕ; zero; suc; _≤_ )     -- natural numbers zero ≤ suc zero ≤ ...
-open import Data.Maybe.Base    renaming (  Maybe to _+?;       -- A +? is disjoint union of A and {??}
-                                           nothing to ??;      -- ?? represents absence of an A value
-                                           maybe′ to [_,_]? )  -- [ f , x ]? is case analysis on A +?
-open import Data.Product.Base  using (_×_; _,_; proj₁; proj₂)  -- A × B is Cartesian product, _,_ is pairing
-open import Function           using (Inverse; _↔_; _∘_)       -- A ↔ B is isomorphism between A and B
-open Inverse {{ ... }}         using (to; from)                -- to : A → B; from : B → A
+{-# OPTIONS --safe #-}            -- Agda        ~ CP89 notation
+open import Data.Nat.Base
+  using ( ℕ; zero; suc; _≤_ )     -- ℕ             ~ Nat
+open import Data.Maybe.Base
+  renaming ( Maybe to _+?;        -- A +?         ~ A + ?
+             nothing to ??;       -- ??             ~ ⊥?
+             maybe′ to [_,_]? )   -- [ f , x ]?    ~ [f, λ⊥?.x]
+open import Data.Product.Base
+  using (_×_; _,_; proj₁; proj₂)  -- A × B        ~ A × B
+open import Function
+  using (Inverse; _↔_; _∘_)       -- A ↔ B      ~ implicit
+open Inverse {{ ... }}
+  using (to; from)                -- to from     ~ implicit
 \end{code}
 %
 The declaration \AgdaRef{open Inverse \{\{ ... \}\}} above introduces overloaded functions
@@ -27,11 +32,12 @@ which are the Agda equivalent of Haskell type class constraints.
 The types and functions declared below as module parameters
 correspond to assumptions about features of Scott domains.
 These will be used when defining the semantics of method systems in Agda.
+
 An element \AgdaRef{D : Domain} is a type corresponding to a domain used in CP89.
 Such a type \AgdaRef{D} has a type of elements \AgdaRef{⟨ D ⟩}
 and a distinguished element \AgdaRef{⊥};
 further properties of domains
-(e.g., involving the partial order on \AgdaRef{⟨ D ⟩})
+(involving the partial order on \AgdaRef{⟨ D ⟩})
 %the existence of limits of ascending chains,
 %\AgdaRef{⊥} being the least element,
 %and continuity of functions between domains)
@@ -39,33 +45,41 @@ will be needed when proving results about semantic functions.
 %
 \begin{code}
 module Inheritance.Definitions
-    ( Domain  :  Set₁ )                                        -- Domain is a type of cpo
-    ( ⟨_⟩     :  Domain → Set )                                -- ⟨ D ⟩ is the type of elements of D
-    ( ⊥       :  {D : Domain} → ⟨ D ⟩ )                        -- ⊥ is the least element of D
-    ( fix     :  {D : Domain} → ( ⟨ D ⟩ → ⟨ D ⟩ ) → ⟨ D ⟩ )    -- fix f is the least fixed-point of f
+    ( Domain  :  Set₁ )                                     
+    ( ⟨_⟩     :  Domain → Set )                             
+    ( ⊥       :  {D : Domain} → ⟨ D ⟩ )                     
+    ( fix     :  {D : Domain} → ( ⟨ D ⟩ → ⟨ D ⟩ ) → ⟨ D ⟩ ) 
 \end{code}
 %
-The function \AgdaRef{fix} is supposed to correspond to the least fixed-point operator
+The function \AgdaRef{fix} is supposed to correspond to the least fixed point operator
 on the space of continuous functions on a domain.
 A continuous function can be represented in Agda as the pair of a function
 \AgdaRef{f : ⟨ D ⟩ → ⟨ D ⟩} and a proof of the continuity of \AgdaRef{f}.
+
 In practice, however, \AgdaRef{fix} will be applied only to functions on \AgdaRef{⟨ D ⟩}
-defined by lambda-abstraction and application, which ensures their continuity.
+defined by lambda-abstraction and application, 
+which ensures that they correspond to continuous functions on domains.
 It seems pointless to pass an \emph{assumption} of continuity as an argument
 – the same assumption can be made wherever it is needed – and its omission does not affect type-checking.
 
-The following declarations correspond closely to the notation for separated sums of domains in CP89,
-except that the injection functions \AgdaRef{inl} and \AgdaRef{inr} are left implicit there.
-%
+\clearpage
 \begin{code}
-    ( ?⊥      :  Domain )                                      -- the only element of ?⊥ is ⊥
-    ( _+⊥_    :  Domain → Domain → Domain )                    -- D +⊥ E is the separated sum of D and E
-    ( inl     :  {D E : Domain} → ⟨ D ⟩ → ⟨ D +⊥ E ⟩ )         -- inl injects elements of D into D +⊥ E
-    ( inr     :  {D E : Domain} → ⟨ E ⟩ → ⟨ D +⊥ E ⟩ )         -- inr injects elements of E into D +⊥ E
-    ( [_,_]⊥  :  {D E F : Domain} →                            -- [ f , g ]⊥ is case analysis on D +⊥ E
-                   ( ⟨ D ⟩ → ⟨ F ⟩ ) → ( ⟨ E ⟩ → ⟨ F ⟩ ) → ⟨ D +⊥ E ⟩ → ⟨ F ⟩ )
+    ( ?⊥      :  Domain )                             
+    ( _+⊥_    :  Domain → Domain → Domain )           
+    ( inl     :  {D E : Domain} → ⟨ D ⟩ → ⟨ D +⊥ E ⟩ )
+    ( inr     :  {D E : Domain} → ⟨ E ⟩ → ⟨ D +⊥ E ⟩ )
+    ( [_,_]⊥  :  {D E F : Domain} →                   
+                   ( ⟨ D ⟩ → ⟨ F ⟩ ) → ( ⟨ E ⟩ → ⟨ F ⟩ ) →
+                   ⟨ D +⊥ E ⟩ → ⟨ F ⟩ )
 \end{code}
 %
+\AgdaRef{?⊥} here corresponds to the 1-point domain written $?$ in CP89;
+its only element is \AgdaRef{⊥} ($⊥_?$ in CP89).
+\AgdaRef{D +⊥ E} corresponds to the notation $D + E$ for separated sums of domains in CP89.
+The injection functions \AgdaRef{inl} and \AgdaRef{inr} are left implicit in CP89.
+Case analysis \AgdaRef{[ f , g ]⊥} on \AgdaRef{D +⊥ E} is decorated with $⊥$ to avoid confusion with
+the case analysis for ordinary disjoint union of Agda types.
+
 The Cartesian products of types provided by the standard Agda library support products of domains,
 regarding a pair \AgdaRef{(⊥ , ⊥)} as the least element of the product of two domains.  
 
@@ -96,17 +110,17 @@ However, this restriction is irrelevant for checking the types of functions on d
 so it is omitted.
 %
 \begin{code}
-    ( Number    : Domain )      -- the domain of numbers is unconstrained
-    ( Value     : Domain )      -- a value is (isomorphic to) a behavior or a number
-    ( Behavior  : Domain )      -- a behaviour maps a method name to a fun, or to the only element of ?⊥
-    ( Fun       : Domain )      -- a fun maps an argument value to a value (possibly ⊥)
+    ( Number    : Domain )      -- unconstrained
+    ( Value     : Domain )      -- a value is a behavior or a number
+    ( Behavior  : Domain )      -- a behavior maps keys to funs
+    ( Fun       : Domain )      -- a fun maps values to values
     {{ isoᵛ     : ⟨ Value ⟩     ↔  ⟨ Behavior +⊥ Number ⟩     }}
     {{ isoᵇ     : ⟨ Behavior ⟩  ↔  ( Key → ⟨ Fun +⊥ ?⊥ ⟩ )    }}
     {{ isoᶠ     : ⟨ Fun ⟩       ↔  ( ⟨ Value ⟩ → ⟨ Value ⟩ )  }}
     ( apply⟦_⟧  : Primitive → ⟨ Value ⟩ → ⟨ Value ⟩ )
   where
-variable ρ : Instance; m : Key; f : Primitive
-variable ν : ⟨ Number ⟩; α : ⟨ Value ⟩; σ π : ⟨ Behavior ⟩; φ : ⟨ Fun ⟩
+variable ρ : Instance; m : Key; f : Primitive; ν : ⟨ Number ⟩
+variable α : ⟨ Value ⟩; σ π : ⟨ Behavior ⟩; φ : ⟨ Fun ⟩
 \end{code}
 %
 In the operational and denotational semantics of method systems in CP89,
@@ -134,18 +148,18 @@ The syntax of method expressions is defined by the inductive datatype \AgdaRef{E
 %
 \begin{code}
 data Exp : Set where
-  self   : Exp                              -- refers to the behavior of the current object
-  super  : Exp                              -- refers to the behavior in the superclass of the object
-  arg    : Exp                              -- refers to the single argument of the method expression
-  call   : Exp → Key → Exp → Exp            -- "call e₁ m e₂" calls method m of e₁ with argument e₂
-  appl   : Primitive → Exp → Exp            -- "appl f e₁" applies primitive f to e₁
+  self   : Exp                    -- current object behavior
+  super  : Exp                    -- superclass behavior
+  arg    : Exp                    -- argument value
+  call   : Exp → Key → Exp → Exp  -- call method with argument
+  appl   : Primitive → Exp → Exp  -- apply primitive to value
 variable e : Exp
 
 module Semantics
-    ( class     : Instance → Class )        -- "class ρ" is the class of an object
-    ( methods′  : Class → Key → (Exp +?) )  -- "methods′ κ m" is the method named m in κ
+    ( class     : Instance → Class )        -- the class of an object
+    ( methods′  : Class → Key → (Exp +?) )  -- the methods of a class
   where
-  methods : Class → Key → (Exp +?)          -- "methods origin" overrides "methods′ origin"
+  methods : Class → Key → (Exp +?)          -- no root class methods
   methods (child c κ) m  = methods′ (child c κ) m
   methods origin m       = ??
 \end{code}
@@ -155,7 +169,7 @@ module Semantics
 The method lookup semantics uses mutually-recursive functions 
 \AgdaRef{send}, \AgdaRef{lookup}, and \AgdaRef{do⟦ ⟧},
 which can be non-terminating, 
-They are therefore defined in Agda as the least fixed-point
+They are therefore defined in Agda as the least fixed point
 of a non-recursive function \AgdaRef{g}
 (as in the proof of Proposition~3 in CP89) on a domain \AgdaRef{Gᵍ}
 that is isomorphic to~\AgdaRef{Dᵍ}:
@@ -193,10 +207,11 @@ which has been defined to have no methods:
 %
 \begin{code}
       lookup : Class → Instance → ⟨ Behavior ⟩
-      lookup (child c κ) ρ  = from λ m →  [  ( λ e → inl (d⟦ e ⟧ ρ (child c κ)) ) ,
-                                             ( to (l κ ρ) m )
-                                          ]? (methods (child c κ) m)
-      lookup origin ρ       = ⊥
+      lookup (child c κ) ρ = 
+        from λ m →  [  ( λ e → inl (d⟦ e ⟧ ρ (child c κ)) ) ,
+                       ( to (l κ ρ) m )
+                    ]? (methods (child c κ) m)
+      lookup origin ρ = ⊥
 \end{code}
 %
 When applied to a value \AgdaRef{α}, the value returned by the function \AgdaRef{to (do⟦ e ⟧ ρ κ)} may be
@@ -208,12 +223,14 @@ a behavior, a number, or undefined (\AgdaRef{⊥}):
       do⟦ super         ⟧ ρ (child c κ)  = from λ α → from (inl (l κ ρ))
       do⟦ super         ⟧ ρ origin       = from λ α → ⊥
       do⟦ arg           ⟧ ρ κ            = from λ α → α
-      do⟦ call e₁ m e₂  ⟧ ρ κ            = from λ α → [ ( λ σ → [  ( λ φ → to φ (to (d⟦ e₂ ⟧ ρ κ) α) ) ,
-                                                                   ( λ _ → ⊥ )
-                                                                ]⊥ (to σ m) ) ,
-                                                        ( λ ν → ⊥ )
-                                                      ]⊥ (to (to (d⟦ e₁ ⟧ ρ κ) α))
-      do⟦ appl f e₁     ⟧ ρ κ            = from λ α → apply⟦ f ⟧ (to (d⟦ e₁ ⟧ ρ κ) α)
+      do⟦ call e₁ m e₂  ⟧ ρ κ  = 
+        from λ α → [ ( λ σ → [  ( λ φ → to φ (to (d⟦ e₂ ⟧ ρ κ) α) ) ,
+                                ( λ _ → ⊥ )
+                             ]⊥ (to σ m) ) ,
+                     ( λ ν → ⊥ )
+                   ]⊥ (to (to (d⟦ e₁ ⟧ ρ κ) α))
+      do⟦ appl f e₁     ⟧ ρ κ  =
+        from λ α → apply⟦ f ⟧ (to (d⟦ e₁ ⟧ ρ κ) α)
 \end{code}
 %
 The only complicated case is for calling method \AgdaRef{m} of object \AgdaRef{e₁} 
@@ -228,13 +245,12 @@ The use of \AgdaRef{fix} below has the effect of making the above definitions mu
 \begin{code}
     γ : ⟨ Gᵍ ⟩ → ⟨ Gᵍ ⟩
     γ = from ∘ g ∘ to
-
     send     = proj₁ (to (fix γ))
     lookup   = proj₁ (proj₂ (to (fix γ)))
     do⟦_⟧    = proj₂ (proj₂ (to (fix γ)))
 \end{code}
 %
-That completes the definition of the method lookup semantics.
+That concludes the Agda definition of the method lookup semantics.
 
 \subsection{Denotational Semantics}
 
@@ -245,19 +261,21 @@ The evaluation of the other method expressions is similar to their method lookup
 %
 \begin{code}
   eval⟦_⟧ : Exp → ⟨ Behavior ⟩ → ⟨ Behavior ⟩ → ⟨ Fun ⟩
-  eval⟦ self          ⟧ σ π  = from λ α → from (inl σ)
-  eval⟦ super         ⟧ σ π  = from λ α → from (inl π )
-  eval⟦ arg           ⟧ σ π  = from λ α → α
-  eval⟦ call e₁ m e₂  ⟧ σ π  = from λ α → [ ( λ σ′ → [  ( λ φ → to φ (to (eval⟦ e₂ ⟧ σ π) α) ) ,
-                                                        ( λ _ → ⊥ )
-                                                     ]⊥ (to σ′ m) ) ,
-                                            ( λ ν → ⊥ )
-                                          ]⊥ (to (to (eval⟦ e₁ ⟧ σ π) α))
-  eval⟦ appl f e₁     ⟧ σ π  = from λ α → apply⟦ f ⟧ (to (eval⟦ e₁ ⟧ σ π) α)
+  eval⟦ self          ⟧ σ π = from λ α → from (inl σ)
+  eval⟦ super         ⟧ σ π = from λ α → from (inl π )
+  eval⟦ arg           ⟧ σ π = from λ α → α
+  eval⟦ call e₁ m e₂  ⟧ σ π =
+    from λ α → [ ( λ σ′ → [  ( λ φ → to φ (to (eval⟦ e₂ ⟧ σ π) α) ) ,
+                             ( λ _ → ⊥ )
+                          ]⊥ (to σ′ m) ) ,
+                  ( λ ν → ⊥ )
+               ]⊥ (to (to (eval⟦ e₁ ⟧ σ π) α))
+  eval⟦ appl f e₁     ⟧ σ π =
+    from λ α → apply⟦ f ⟧ (to (eval⟦ e₁ ⟧ σ π) α)
 \end{code}
 %
 The recursively-defined function \AgdaRef{eval⟦ ⟧} is obviously total,
-so there is no need for an explicit fixed point in its Agda definition.
+so there is no need for an explicit fixed point.
 
 According to the conceptual analysis of inheritance in CP89,
 the behavior of an instance \AgdaRef{ρ} will be defined as the fixed point
@@ -276,20 +294,22 @@ See Figure~9 of CP89 for an illustration of wrapper application.
 \begin{code}
   Generator = ⟨ Behavior ⟩ → ⟨ Behavior ⟩
   Wrapper   = ⟨ Behavior ⟩ → ⟨ Behavior ⟩ → ⟨ Behavior ⟩
+
   _⊕_ : ⟨ Behavior ⟩ → ⟨ Behavior ⟩ → ⟨ Behavior ⟩
-  σ₁ ⊕ σ₂ = from λ m → [ ( λ φ → inl φ ) , ( λ _ → to σ₂ m ) ]⊥ (to σ₁ m)
+  σ₁ ⊕ σ₂ = from λ m →
+    [ ( λ φ → inl φ ) , ( λ _ → to σ₂ m ) ]⊥ (to σ₁ m)
   _⍄_ : Wrapper → Generator → Generator
   w ⍄ p = λ σ → (w σ (p σ)) ⊕ (p σ)
   wrap : Class → Wrapper
-  wrap κ = λ σ → λ π → from λ m → [ ( λ e → inl (eval⟦ e ⟧ σ π) ) , ( inr ⊥ ) ]? (methods κ m)
+  wrap κ = λ σ → λ π → from λ m →
+    [ ( λ e → inl (eval⟦ e ⟧ σ π) ), ( inr ⊥ ) ]? (methods κ m)
 
   gen : Class → Generator
   gen (child c κ)  = wrap (child c κ) ⍄ gen κ
   gen origin       = λ σ → ⊥
-
   behave : Instance → ⟨ Behavior ⟩
   behave ρ = fix (gen (class ρ))
-\end{code}
-\end{AgdaAlign}
+\end{code}%
+\end{AgdaAlign}%
 %
-That concludes the Agda formulation of the denotational semantics defined in CP89.
+That concludes the Agda definition of the denotational semantics.

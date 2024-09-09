@@ -71,16 +71,15 @@
 \AgdaField{from}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaFunction{inverseˡ}\AgdaSymbol{)}%
 \>[63]\AgdaComment{--\ to\ :\ A\ →\ B;\ from\ :\ B\ →\ A}\<%
-\end{code}
-%
-The following module has the same parameters as \AgdaRef{Inheritance.Definitions}.
-%
-%\AgdaNoSpaceAroundCode{}%
+\end{code}%
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{Inheritance.Equivalence}%
-\>[45]\AgdaComment{--\ parameters\ elided}\<%
+\AgdaModule{Inheritance.Equivalence}\<%
 \end{code}%
+%
+The imports and parameters of this module are the same as those of \AgdaRef{Inheritance.Definitions},
+and elided here.
+%
 \newcommand{\EquivalenceParameters}{
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -403,7 +402,6 @@ The following module has the same parameters as \AgdaRef{Inheritance.Definitions
 \AgdaOperator{\AgdaBound{⟩}}\AgdaSpace{}%
 \AgdaSymbol{)}\<%
 \end{code}}%
-%\AgdaSpaceAroundCode{}%
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{2}}]%
 \>[2]\AgdaKeyword{where}\<%
@@ -427,8 +425,10 @@ The following module has the same parameters as \AgdaRef{Inheritance.Definitions
 \AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaSpace{}%
 \AgdaBound{?⊥}\AgdaSpace{}%
-\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaSpace{}%
+\AgdaSymbol{)}\<%
+\\
+%
+\>[4]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{\AgdaUnderscore{}+⊥\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaSpace{}%
@@ -453,8 +453,10 @@ The following module has the same parameters as \AgdaRef{Inheritance.Definitions
 \AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaSpace{}%
 \AgdaBound{Primitive}\AgdaSpace{}%
-\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaSpace{}%
+\AgdaSymbol{)}\<%
+\\
+%
+\>[4]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaBound{Number}\AgdaSpace{}%
 \AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaSpace{}%
@@ -481,6 +483,8 @@ The following module has the same parameters as \AgdaRef{Inheritance.Definitions
 \AgdaOperator{\AgdaBound{apply⟦\AgdaUnderscore{}⟧}}\AgdaSpace{}%
 \AgdaSymbol{)}\<%
 \\
+%
+\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}\<%
 \\
@@ -491,8 +495,7 @@ The following module has the same parameters as \AgdaRef{Inheritance.Definitions
 \AgdaBound{Instance}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaDatatype{Class}\AgdaSpace{}%
-\AgdaSymbol{)}%
-\>[45]\AgdaComment{--\ "class\ ρ"\ is\ the\ class\ of\ an\ object}\<%
+\AgdaSymbol{)}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -504,8 +507,7 @@ The following module has the same parameters as \AgdaRef{Inheritance.Definitions
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaDatatype{Exp}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{+?}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{)}%
-\>[45]\AgdaComment{--\ "methods′\ κ\ m"\ is\ the\ method\ named\ m\ in\ κ}\<%
+\AgdaSymbol{)}\<%
 \\
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaKeyword{where}\<%
@@ -593,8 +595,8 @@ so they can be defined in Agda without an explicit least fixed-point:
 \>[2]\AgdaFunction{lookup′}\AgdaSpace{}%
 \AgdaInductiveConstructor{zero}\AgdaSpace{}%
 \AgdaBound{κ}\AgdaSpace{}%
-\AgdaBound{ρ}%
-\>[27]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{ρ}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{⊥}\<%
 \\
 %
@@ -603,14 +605,16 @@ so they can be defined in Agda without an explicit least fixed-point:
 \AgdaCatchallClause{\AgdaSymbol{(}}\AgdaCatchallClause{\AgdaInductiveConstructor{child}}\AgdaSpace{}%
 \AgdaCatchallClause{\AgdaBound{c}}\AgdaSpace{}%
 \AgdaCatchallClause{\AgdaBound{κ}}\AgdaCatchallClause{\AgdaSymbol{)}}\AgdaSpace{}%
-\AgdaCatchallClause{\AgdaBound{ρ}}%
-\>[27]\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaField{from}\AgdaSpace{}%
+\AgdaCatchallClause{\AgdaBound{ρ}}\AgdaSpace{}%
+\AgdaSymbol{=}\<%
+\\
+\>[2][@{}l@{\AgdaIndent{0}}]%
+\>[4]\AgdaField{from}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{m}\AgdaSpace{}%
 \AgdaSymbol{→}%
-\>[357I]\AgdaOperator{\AgdaFunction{[}}%
-\>[43]\AgdaSymbol{(}\AgdaSpace{}%
+\>[356I]\AgdaOperator{\AgdaFunction{[}}%
+\>[357I]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{e}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -627,8 +631,8 @@ so they can be defined in Agda without an explicit least fixed-point:
 \AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{,}}\<%
 \\
-%
-\>[43]\AgdaSymbol{(}\AgdaSpace{}%
+\>[.][@{}l@{}]\<[357I]%
+\>[17]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaField{to}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{lookup′}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSpace{}%
@@ -638,8 +642,8 @@ so they can be defined in Agda without an explicit least fixed-point:
 \AgdaBound{m}\AgdaSpace{}%
 \AgdaSymbol{)}\<%
 \\
-\>[.][@{}l@{}]\<[357I]%
-\>[40]\AgdaOperator{\AgdaFunction{]?}}\AgdaSpace{}%
+\>[.][@{}l@{}]\<[356I]%
+\>[15]\AgdaOperator{\AgdaFunction{]?}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{methods}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{child}\AgdaSpace{}%
 \AgdaBound{c}\AgdaSpace{}%
@@ -650,8 +654,8 @@ so they can be defined in Agda without an explicit least fixed-point:
 \>[2]\AgdaCatchallClause{\AgdaFunction{lookup′}}\AgdaSpace{}%
 \AgdaCatchallClause{\AgdaBound{n}}\AgdaSpace{}%
 \AgdaCatchallClause{\AgdaInductiveConstructor{origin}}\AgdaSpace{}%
-\AgdaCatchallClause{\AgdaBound{ρ}}%
-\>[27]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaCatchallClause{\AgdaBound{ρ}}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{⊥}\<%
 \end{code}
 %
@@ -666,22 +670,24 @@ implies that \AgdaBound{n} is positive in the latter.
 \AgdaInductiveConstructor{zero}%
 \>[15]\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
 \AgdaBound{e}%
-\>[31]\AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
+\>[23]\AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
 \AgdaBound{ρ}\AgdaSpace{}%
-\AgdaBound{κ}%
-\>[48]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{κ}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{⊥}\<%
 \\
+%
+\\[\AgdaEmptyExtraSkip]%
 %
 \>[2]\AgdaOperator{\AgdaFunction{do′}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{suc}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSymbol{)}%
 \>[15]\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
 \AgdaInductiveConstructor{self}%
-\>[31]\AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
+\>[23]\AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
 \AgdaBound{ρ}\AgdaSpace{}%
-\AgdaBound{κ}%
-\>[48]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{κ}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaField{from}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{α}\AgdaSpace{}%
@@ -693,17 +699,21 @@ implies that \AgdaBound{n} is positive in the latter.
 \AgdaBound{ρ}\AgdaSymbol{))}\<%
 \\
 %
+\\[\AgdaEmptyExtraSkip]%
+%
 \>[2]\AgdaCatchallClause{\AgdaOperator{\AgdaFunction{do′}}}\AgdaSpace{}%
-\AgdaCatchallClause{\AgdaBound{n}}%
-\>[15]\AgdaCatchallClause{\AgdaOperator{\AgdaFunction{⟦}}}\AgdaSpace{}%
-\AgdaCatchallClause{\AgdaInductiveConstructor{super}}%
-\>[31]\AgdaCatchallClause{\AgdaOperator{\AgdaFunction{⟧}}}\AgdaSpace{}%
+\AgdaCatchallClause{\AgdaBound{n}}\AgdaSpace{}%
+\AgdaCatchallClause{\AgdaOperator{\AgdaFunction{⟦}}}\AgdaSpace{}%
+\AgdaCatchallClause{\AgdaInductiveConstructor{super}}\AgdaSpace{}%
+\AgdaCatchallClause{\AgdaOperator{\AgdaFunction{⟧}}}\AgdaSpace{}%
 \AgdaCatchallClause{\AgdaBound{ρ}}\AgdaSpace{}%
 \AgdaCatchallClause{\AgdaSymbol{(}}\AgdaCatchallClause{\AgdaInductiveConstructor{child}}\AgdaSpace{}%
 \AgdaCatchallClause{\AgdaBound{c}}\AgdaSpace{}%
-\AgdaCatchallClause{\AgdaBound{κ}}\AgdaCatchallClause{\AgdaSymbol{)}}%
-\>[48]\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaField{from}\AgdaSpace{}%
+\AgdaCatchallClause{\AgdaBound{κ}}\AgdaCatchallClause{\AgdaSymbol{)}}\AgdaSpace{}%
+\AgdaSymbol{=}\<%
+\\
+\>[2][@{}l@{\AgdaIndent{0}}]%
+\>[4]\AgdaField{from}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{α}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -716,13 +726,13 @@ implies that \AgdaBound{n} is positive in the latter.
 \\
 %
 \>[2]\AgdaCatchallClause{\AgdaOperator{\AgdaFunction{do′}}}\AgdaSpace{}%
-\AgdaCatchallClause{\AgdaBound{n}}%
-\>[15]\AgdaCatchallClause{\AgdaOperator{\AgdaFunction{⟦}}}\AgdaSpace{}%
-\AgdaCatchallClause{\AgdaInductiveConstructor{super}}%
-\>[31]\AgdaCatchallClause{\AgdaOperator{\AgdaFunction{⟧}}}\AgdaSpace{}%
+\AgdaCatchallClause{\AgdaBound{n}}\AgdaSpace{}%
+\AgdaCatchallClause{\AgdaOperator{\AgdaFunction{⟦}}}\AgdaSpace{}%
+\AgdaCatchallClause{\AgdaInductiveConstructor{super}}\AgdaSpace{}%
+\AgdaCatchallClause{\AgdaOperator{\AgdaFunction{⟧}}}\AgdaSpace{}%
 \AgdaCatchallClause{\AgdaBound{ρ}}\AgdaSpace{}%
-\AgdaCatchallClause{\AgdaInductiveConstructor{origin}}%
-\>[48]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaCatchallClause{\AgdaInductiveConstructor{origin}}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaField{from}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{α}\AgdaSpace{}%
@@ -731,13 +741,13 @@ implies that \AgdaBound{n} is positive in the latter.
 \\
 %
 \>[2]\AgdaCatchallClause{\AgdaOperator{\AgdaFunction{do′}}}\AgdaSpace{}%
-\AgdaCatchallClause{\AgdaBound{n}}%
-\>[15]\AgdaCatchallClause{\AgdaOperator{\AgdaFunction{⟦}}}\AgdaSpace{}%
+\AgdaCatchallClause{\AgdaBound{n}}\AgdaSpace{}%
+\AgdaCatchallClause{\AgdaOperator{\AgdaFunction{⟦}}}\AgdaSpace{}%
 \AgdaCatchallClause{\AgdaInductiveConstructor{arg}}%
-\>[31]\AgdaCatchallClause{\AgdaOperator{\AgdaFunction{⟧}}}\AgdaSpace{}%
+\>[16]\AgdaCatchallClause{\AgdaOperator{\AgdaFunction{⟧}}}\AgdaSpace{}%
 \AgdaCatchallClause{\AgdaBound{ρ}}\AgdaSpace{}%
-\AgdaCatchallClause{\AgdaBound{κ}}%
-\>[48]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaCatchallClause{\AgdaBound{κ}}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaField{from}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{α}\AgdaSpace{}%
@@ -746,27 +756,29 @@ implies that \AgdaBound{n} is positive in the latter.
 \\
 %
 \>[2]\AgdaCatchallClause{\AgdaOperator{\AgdaFunction{do′}}}\AgdaSpace{}%
-\AgdaCatchallClause{\AgdaBound{n}}%
-\>[15]\AgdaCatchallClause{\AgdaOperator{\AgdaFunction{⟦}}}\AgdaSpace{}%
+\AgdaCatchallClause{\AgdaBound{n}}\AgdaSpace{}%
+\AgdaCatchallClause{\AgdaOperator{\AgdaFunction{⟦}}}\AgdaSpace{}%
 \AgdaCatchallClause{\AgdaInductiveConstructor{call}}\AgdaSpace{}%
 \AgdaCatchallClause{\AgdaBound{e₁}}\AgdaSpace{}%
 \AgdaCatchallClause{\AgdaBound{m}}\AgdaSpace{}%
-\AgdaCatchallClause{\AgdaBound{e₂}}%
-\>[31]\AgdaCatchallClause{\AgdaOperator{\AgdaFunction{⟧}}}\AgdaSpace{}%
+\AgdaCatchallClause{\AgdaBound{e₂}}\AgdaSpace{}%
+\AgdaCatchallClause{\AgdaOperator{\AgdaFunction{⟧}}}\AgdaSpace{}%
 \AgdaCatchallClause{\AgdaBound{ρ}}\AgdaSpace{}%
-\AgdaCatchallClause{\AgdaBound{κ}}%
-\>[48]\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaField{from}\AgdaSpace{}%
+\AgdaCatchallClause{\AgdaBound{κ}}\AgdaSpace{}%
+\AgdaSymbol{=}\<%
+\\
+\>[2][@{}l@{\AgdaIndent{0}}]%
+\>[4]\AgdaField{from}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{α}\AgdaSpace{}%
 \AgdaSymbol{→}%
-\>[454I]\AgdaOperator{\AgdaBound{[}}%
-\>[455I]\AgdaSymbol{(}\AgdaSpace{}%
+\>[466I]\AgdaOperator{\AgdaBound{[}}%
+\>[467I]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{σ}\AgdaSpace{}%
 \AgdaSymbol{→}%
-\>[459I]\AgdaOperator{\AgdaBound{[}}%
-\>[460I]\AgdaSymbol{(}\AgdaSpace{}%
+\>[471I]\AgdaOperator{\AgdaBound{[}}%
+\>[472I]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{φ}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -784,32 +796,32 @@ implies that \AgdaBound{n} is positive in the latter.
 \AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{,}}\<%
 \\
-\>[.][@{}l@{}]\<[460I]%
-\>[73]\AgdaSymbol{(}\AgdaSpace{}%
+\>[.][@{}l@{}]\<[472I]%
+\>[27]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{→}%
-\>[82]\AgdaBound{⊥}\AgdaSpace{}%
+\>[36]\AgdaBound{⊥}\AgdaSpace{}%
 \AgdaSymbol{)}\<%
 \\
-\>[.][@{}l@{}]\<[459I]%
-\>[71]\AgdaOperator{\AgdaBound{]⊥}}\AgdaSpace{}%
+\>[.][@{}l@{}]\<[471I]%
+\>[25]\AgdaOperator{\AgdaBound{]⊥}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{to}\AgdaSpace{}%
 \AgdaBound{σ}\AgdaSpace{}%
 \AgdaBound{m}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{,}}\<%
 \\
-\>[.][@{}l@{}]\<[455I]%
-\>[63]\AgdaSymbol{(}\AgdaSpace{}%
+\>[.][@{}l@{}]\<[467I]%
+\>[17]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{ν}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{⊥}\AgdaSpace{}%
 \AgdaSymbol{)}\<%
 \\
-\>[.][@{}l@{}]\<[454I]%
-\>[61]\AgdaOperator{\AgdaBound{]⊥}}\AgdaSpace{}%
+\>[.][@{}l@{}]\<[466I]%
+\>[15]\AgdaOperator{\AgdaBound{]⊥}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{to}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{to}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaOperator{\AgdaFunction{do′}}\AgdaSpace{}%
@@ -824,16 +836,18 @@ implies that \AgdaBound{n} is positive in the latter.
 \\
 %
 \>[2]\AgdaCatchallClause{\AgdaOperator{\AgdaFunction{do′}}}\AgdaSpace{}%
-\AgdaCatchallClause{\AgdaBound{n}}%
-\>[15]\AgdaCatchallClause{\AgdaOperator{\AgdaFunction{⟦}}}\AgdaSpace{}%
+\AgdaCatchallClause{\AgdaBound{n}}\AgdaSpace{}%
+\AgdaCatchallClause{\AgdaOperator{\AgdaFunction{⟦}}}\AgdaSpace{}%
 \AgdaCatchallClause{\AgdaInductiveConstructor{appl}}\AgdaSpace{}%
 \AgdaCatchallClause{\AgdaBound{f}}\AgdaSpace{}%
-\AgdaCatchallClause{\AgdaBound{e₁}}%
-\>[31]\AgdaCatchallClause{\AgdaOperator{\AgdaFunction{⟧}}}\AgdaSpace{}%
+\AgdaCatchallClause{\AgdaBound{e₁}}\AgdaSpace{}%
+\AgdaCatchallClause{\AgdaOperator{\AgdaFunction{⟧}}}\AgdaSpace{}%
 \AgdaCatchallClause{\AgdaBound{ρ}}\AgdaSpace{}%
-\AgdaCatchallClause{\AgdaBound{κ}}%
-\>[48]\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaField{from}\AgdaSpace{}%
+\AgdaCatchallClause{\AgdaBound{κ}}\AgdaSpace{}%
+\AgdaSymbol{=}\<%
+\\
+\>[2][@{}l@{\AgdaIndent{0}}]%
+\>[4]\AgdaField{from}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{α}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -864,8 +878,10 @@ The proofs of the lemmas use the following additional modules from the standard 
 %
 \>[2]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Relation.Binary.PropositionalEquality.Core}\AgdaSpace{}%
-\AgdaKeyword{using}\AgdaSpace{}%
+\AgdaModule{Relation.Binary.PropositionalEquality.Core}\<%
+\\
+\>[2][@{}l@{\AgdaIndent{0}}]%
+\>[4]\AgdaKeyword{using}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≡\AgdaUnderscore{}}}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaInductiveConstructor{refl}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaFunction{cong}\AgdaSymbol{;}\AgdaSpace{}%
@@ -888,15 +904,19 @@ The proofs of the lemmas use the following additional modules from the standard 
 %
 \>[2]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Axiom.Extensionality.Propositional}\AgdaSpace{}%
-\AgdaKeyword{using}\AgdaSpace{}%
+\AgdaModule{Axiom.Extensionality.Propositional}\<%
+\\
+\>[2][@{}l@{\AgdaIndent{0}}]%
+\>[4]\AgdaKeyword{using}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{Extensionality}\AgdaSymbol{)}\<%
 \\
 %
 \>[2]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Level}\AgdaSpace{}%
-\AgdaKeyword{renaming}\AgdaSpace{}%
+\AgdaModule{Level}\<%
+\\
+\>[2][@{}l@{\AgdaIndent{0}}]%
+\>[4]\AgdaKeyword{renaming}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaPrimitive{zero}\AgdaSpace{}%
 \AgdaSymbol{to}\AgdaSpace{}%
 \AgdaPrimitive{lzero}\AgdaSymbol{)}\AgdaSpace{}%
@@ -904,11 +924,11 @@ The proofs of the lemmas use the following additional modules from the standard 
 \AgdaSymbol{(}\AgdaPrimitive{suc}\AgdaSymbol{)}\<%
 \\
 %
+\\[\AgdaEmptyExtraSkip]%
+%
 \>[2]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\<%
-\\
-\>[2][@{}l@{\AgdaIndent{0}}]%
-\>[6]\AgdaSymbol{(}\AgdaSpace{}%
+\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaBound{ext}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Extensionality}\AgdaSpace{}%
@@ -928,17 +948,15 @@ Its Agda proof exhibits the equational reasoning steps of the original proofs in
 This checks the correctness not only of the stated result, but also of the steps themselves.
 
 The Agda standard library defines notation for equational reasoning:
-\AgdaRef{x ≡ y} asserts the equality of \AgdaRef{x} and \AgdaRef{y};
-\AgdaRef{begin} starts a proof;
-\AgdaRef{≡⟨⟩} adds a step that Agda can check automatically;
-\AgdaRef{≡⟨ t ⟩} adds a step with an explicit proof term \AgdaRef{t};
-and \AgdaRef{∎} concludes a proof.
+\begin{itemize}
+\item \AgdaRef{x ≡ y} asserts the equality of \AgdaRef{x} and \AgdaRef{y};
+\item \AgdaRef{begin} starts a proof;
+\item \AgdaRef{≡⟨⟩} adds a step that Agda can check automatically;
+\item \AgdaRef{≡⟨ t ⟩} adds a step with an explicit proof term \AgdaRef{t};
+and
+\item \AgdaRef{∎} concludes a proof.
+\end{itemize}
 
-The proof of this lemma is a straightforward structural induction.
-The restriction to the class \AgdaRef{child c κ} ensures that it is not the root class;
-in CP89, the use of $\textit{parent}(κ)$ as an argument of type \textbf{Class}
-in the statement of Lemma~1 leaves this restriction implicit.
-%
 \begin{code}%
 %
 \>[4]\AgdaFunction{lemma-1}\AgdaSpace{}%
@@ -949,8 +967,10 @@ in the statement of Lemma~1 leaves this restriction implicit.
 \AgdaBound{ρ}\AgdaSpace{}%
 \AgdaBound{c}\AgdaSpace{}%
 \AgdaBound{κ}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{do′}}\AgdaSpace{}%
+\AgdaSymbol{→}\<%
+\\
+\>[4][@{}l@{\AgdaIndent{0}}]%
+\>[6]\AgdaOperator{\AgdaFunction{do′}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{suc}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
@@ -960,8 +980,10 @@ in the statement of Lemma~1 leaves this restriction implicit.
 \AgdaSymbol{(}\AgdaInductiveConstructor{child}\AgdaSpace{}%
 \AgdaBound{c}\AgdaSpace{}%
 \AgdaBound{κ}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{eval⟦}}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\<%
+\\
+%
+\>[6]\AgdaOperator{\AgdaFunction{eval⟦}}\AgdaSpace{}%
 \AgdaBound{e}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{send′}\AgdaSpace{}%
@@ -972,9 +994,15 @@ in the statement of Lemma~1 leaves this restriction implicit.
 \AgdaBound{n}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{κ}\AgdaSpace{}%
 \AgdaBound{ρ}\AgdaSymbol{)}\<%
-\\
+\end{code}
 %
-\\[\AgdaEmptyExtraSkip]%
+The restriction to the class \AgdaRef{child c κ} ensures that it is not the root class;
+in CP89, the use of $\textit{parent}(κ)$ as an argument of type \textbf{Class}
+in the statement of Lemma~1 leaves this restriction implicit.
+
+The proof of this lemma is a straightforward structural induction.
+
+\begin{code}%
 %
 \>[4]\AgdaFunction{lemma-1}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSpace{}%
@@ -1210,15 +1238,19 @@ Using rewrite below concisely hides the complicated terms needed for the interme
 \AgdaBound{e₂}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{ρ}\AgdaSpace{}%
 \AgdaBound{c}\AgdaSpace{}%
-\AgdaBound{κ}\AgdaSpace{}%
-\AgdaKeyword{rewrite}\AgdaSpace{}%
+\AgdaBound{κ}\<%
+\\
+\>[4][@{}l@{\AgdaIndent{0}}]%
+\>[6]\AgdaKeyword{rewrite}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{lemma-1}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSpace{}%
 \AgdaBound{e₁}\AgdaSpace{}%
 \AgdaBound{ρ}\AgdaSpace{}%
 \AgdaBound{c}\AgdaSpace{}%
-\AgdaBound{κ}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaKeyword{rewrite}\AgdaSpace{}%
+\AgdaBound{κ}\AgdaSymbol{)}\<%
+\\
+%
+\>[6]\AgdaKeyword{rewrite}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{lemma-1}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSpace{}%
 \AgdaBound{e₂}\AgdaSpace{}%
@@ -1245,8 +1277,10 @@ and concludes the proof of Lemma 1.
 \AgdaSymbol{=}\<%
 \\
 \>[4][@{}l@{\AgdaIndent{0}}]%
-\>[6]\AgdaOperator{\AgdaFunction{begin}}%
-\>[13]\AgdaOperator{\AgdaFunction{do′}}\AgdaSpace{}%
+\>[6]\AgdaOperator{\AgdaFunction{begin}}\<%
+\\
+\>[6][@{}l@{\AgdaIndent{0}}]%
+\>[8]\AgdaOperator{\AgdaFunction{do′}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{suc}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
@@ -1260,16 +1294,22 @@ and concludes the proof of Lemma 1.
 \AgdaBound{κ}\AgdaSymbol{)}\<%
 \\
 %
-\>[6]\AgdaFunction{≡⟨⟩}%
-\>[13]\AgdaSymbol{(}\AgdaSpace{}%
-\AgdaField{from}\AgdaSpace{}%
+\>[6]\AgdaFunction{≡⟨⟩}\<%
+\\
+\>[6][@{}l@{\AgdaIndent{0}}]%
+\>[8]\AgdaSymbol{(}%
+\>[781I]\AgdaField{from}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{α}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{apply⟦}}\AgdaSpace{}%
+\AgdaSymbol{→}\<%
+\\
+\>[781I][@{}l@{\AgdaIndent{0}}]%
+\>[12]\AgdaOperator{\AgdaBound{apply⟦}}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{⟧}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaField{to}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{⟧}}\<%
+\\
+\>[12][@{}l@{\AgdaIndent{0}}]%
+\>[14]\AgdaSymbol{(}\AgdaField{to}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaOperator{\AgdaFunction{do′}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{suc}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSymbol{)}\AgdaSpace{}%
@@ -1284,20 +1324,24 @@ and concludes the proof of Lemma 1.
 \AgdaSymbol{)}\<%
 \\
 %
-\>[6]\AgdaFunction{≡⟨}%
-\>[793I]\AgdaFunction{use-induction}\AgdaSpace{}%
+\>[6]\AgdaFunction{≡⟨}\AgdaSpace{}%
+\AgdaFunction{use-induction}\AgdaSpace{}%
 \AgdaFunction{⟩}\<%
 \\
-\>[793I][@{}l@{\AgdaIndent{0}}]%
-\>[13]\AgdaSymbol{(}\AgdaSpace{}%
-\AgdaField{from}\AgdaSpace{}%
+\>[6][@{}l@{\AgdaIndent{0}}]%
+\>[8]\AgdaSymbol{(}%
+\>[801I]\AgdaField{from}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{α}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{apply⟦}}\AgdaSpace{}%
+\AgdaSymbol{→}\<%
+\\
+\>[801I][@{}l@{\AgdaIndent{0}}]%
+\>[12]\AgdaOperator{\AgdaBound{apply⟦}}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{⟧}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaField{to}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{⟧}}\<%
+\\
+\>[12][@{}l@{\AgdaIndent{0}}]%
+\>[14]\AgdaSymbol{(}\AgdaField{to}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaOperator{\AgdaFunction{eval⟦}}\AgdaSpace{}%
 \AgdaBound{e₁}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
@@ -1313,8 +1357,10 @@ and concludes the proof of Lemma 1.
 \AgdaSymbol{)}\<%
 \\
 %
-\>[6]\AgdaFunction{≡⟨⟩}%
-\>[13]\AgdaOperator{\AgdaFunction{eval⟦}}\AgdaSpace{}%
+\>[6]\AgdaFunction{≡⟨⟩}\<%
+\\
+\>[6][@{}l@{\AgdaIndent{0}}]%
+\>[8]\AgdaOperator{\AgdaFunction{eval⟦}}\AgdaSpace{}%
 \AgdaInductiveConstructor{appl}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{e₁}\AgdaSpace{}%
@@ -1332,22 +1378,28 @@ and concludes the proof of Lemma 1.
 \>[6]\AgdaOperator{\AgdaFunction{∎}}\<%
 \\
 %
-\>[6]\AgdaKeyword{where}%
-\>[828I]\AgdaFunction{use-induction}\AgdaSpace{}%
+\>[6]\AgdaKeyword{where}\<%
+\\
+\>[6][@{}l@{\AgdaIndent{0}}]%
+\>[8]\AgdaFunction{use-induction}\AgdaSpace{}%
 \AgdaSymbol{=}\<%
 \\
-\>[828I][@{}l@{\AgdaIndent{0}}]%
-\>[13]\AgdaFunction{cong}\AgdaSpace{}%
+\>[8][@{}l@{\AgdaIndent{0}}]%
+\>[10]\AgdaFunction{cong}\AgdaSpace{}%
 \AgdaField{from}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{ext}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{α}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{cong}\AgdaSpace{}%
+\AgdaSymbol{→}\<%
+\\
+\>[10][@{}l@{\AgdaIndent{0}}]%
+\>[12]\AgdaFunction{cong}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{apply⟦}}\AgdaSpace{}%
+\AgdaSymbol{→}\<%
+\\
+\>[12][@{}l@{\AgdaIndent{0}}]%
+\>[14]\AgdaOperator{\AgdaBound{apply⟦}}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{⟧}}\AgdaSpace{}%
 \AgdaSymbol{((}\AgdaField{to}\AgdaSpace{}%
@@ -1360,7 +1412,7 @@ and concludes the proof of Lemma 1.
 \AgdaBound{c}\AgdaSpace{}%
 \AgdaBound{κ}\AgdaSymbol{))}\<%
 \end{code}
-\end{AgdaAlign}
+\end{AgdaAlign}%
 %
 The proofs of the remaining lemmas are available in the accompanying auxiliary material:
 %
@@ -1380,11 +1432,11 @@ Casper Bach Poulsen provided the two largest ones.}
 \\
 \>[4][@{}l@{\AgdaIndent{0}}]%
 \>[8]\AgdaSymbol{(}%
-\>[852I]\AgdaBound{[,]⊥-elim}\AgdaSpace{}%
+\>[853I]\AgdaBound{[,]⊥-elim}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaComment{--\ [,]⊥-elim\ eliminates\ an\ application\ of\ [\ f\ ,\ g\ ]⊥}\<%
 \\
-\>[852I][@{}l@{\AgdaIndent{0}}]%
+\>[853I][@{}l@{\AgdaIndent{0}}]%
 \>[12]\AgdaSymbol{\{}\AgdaBound{D}\AgdaSpace{}%
 \AgdaBound{E}\AgdaSpace{}%
 \AgdaBound{F}\AgdaSpace{}%
@@ -1809,7 +1861,7 @@ Casper Bach Poulsen provided the two largest ones.}
 \\
 \>[10][@{}l@{\AgdaIndent{0}}]%
 \>[12]\AgdaOperator{\AgdaFunction{[}}%
-\>[1148I]\AgdaSymbol{(}\AgdaSpace{}%
+\>[1149I]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{e}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -1824,7 +1876,7 @@ Casper Bach Poulsen provided the two largest ones.}
 \AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{,}}\<%
 \\
-\>[.][@{}l@{}]\<[1148I]%
+\>[.][@{}l@{}]\<[1149I]%
 \>[14]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaField{to}\AgdaSpace{}%
 \AgdaBound{π}\AgdaSpace{}%
@@ -1849,7 +1901,7 @@ Casper Bach Poulsen provided the two largest ones.}
 \\
 \>[10][@{}l@{\AgdaIndent{0}}]%
 \>[12]\AgdaOperator{\AgdaFunction{[}}%
-\>[1176I]\AgdaSymbol{(}\AgdaSpace{}%
+\>[1177I]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{e}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -1868,7 +1920,7 @@ Casper Bach Poulsen provided the two largest ones.}
 \AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{,}}\<%
 \\
-\>[.][@{}l@{}]\<[1176I]%
+\>[.][@{}l@{}]\<[1177I]%
 \>[14]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaField{to}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{lookup′}\AgdaSpace{}%
@@ -1898,7 +1950,7 @@ Casper Bach Poulsen provided the two largest ones.}
 \\
 \>[10][@{}l@{\AgdaIndent{0}}]%
 \>[12]\AgdaOperator{\AgdaFunction{[}}%
-\>[1213I]\AgdaSymbol{(}\AgdaSpace{}%
+\>[1214I]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{e}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -1916,7 +1968,7 @@ Casper Bach Poulsen provided the two largest ones.}
 \AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{,}}\<%
 \\
-\>[.][@{}l@{}]\<[1213I]%
+\>[.][@{}l@{}]\<[1214I]%
 \>[14]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaField{to}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{lookup′}\AgdaSpace{}%
@@ -2388,10 +2440,10 @@ Casper Bach Poulsen provided the two largest ones.}
 \\
 %
 \>[10]\AgdaSymbol{(}%
-\>[1527I]\AgdaBound{is-assumed-monotone}\AgdaSpace{}%
+\>[1528I]\AgdaBound{is-assumed-monotone}\AgdaSpace{}%
 \AgdaSymbol{:}\<%
 \\
-\>[.][@{}l@{}]\<[1527I]%
+\>[.][@{}l@{}]\<[1528I]%
 \>[12]\AgdaSymbol{\{}\AgdaBound{D}\AgdaSpace{}%
 \AgdaBound{E}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -2427,10 +2479,10 @@ Casper Bach Poulsen provided the two largest ones.}
 \\
 %
 \>[10]\AgdaSymbol{(}%
-\>[1557I]\AgdaBound{is-assumed-monotone-2}\AgdaSpace{}%
+\>[1558I]\AgdaBound{is-assumed-monotone-2}\AgdaSpace{}%
 \AgdaSymbol{:}\<%
 \\
-\>[.][@{}l@{}]\<[1557I]%
+\>[.][@{}l@{}]\<[1558I]%
 \>[12]\AgdaSymbol{\{}\AgdaBound{D}\AgdaSpace{}%
 \AgdaBound{E}\AgdaSpace{}%
 \AgdaBound{F}\AgdaSpace{}%
@@ -2814,13 +2866,15 @@ Casper Bach Poulsen provided the two largest ones.}
 }%
 \begin{code}%
 %
-\>[8]\AgdaFunction{lemma-4-send′}%
-\>[25]\AgdaSymbol{:}\AgdaSpace{}%
+\>[8]\AgdaFunction{lemma-4-send′}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSpace{}%
 \AgdaBound{ρ}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{send′}\AgdaSpace{}%
+\AgdaSymbol{→}\<%
+\\
+\>[8][@{}l@{\AgdaIndent{0}}]%
+\>[10]\AgdaFunction{send′}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSpace{}%
 \AgdaBound{ρ}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{⊑}}\AgdaSpace{}%
@@ -2833,7 +2887,10 @@ Casper Bach Poulsen provided the two largest ones.}
 \newcommand{\LemmaFourSendProof}{
 \begin{code}%
 %
-\>[8]\AgdaComment{--\ lemma-4-send‵′\ :\ ∀\ n\ ρ\ →\ send‵′\ n\ ρ\ ⊑\ send‵′\ (suc\ n)\ ρ}\<%
+\>[8]\AgdaComment{--\ lemma-4-send‵′\ :\ ∀\ n\ ρ\ →\ }\<%
+\\
+%
+\>[8]\AgdaComment{--\ \ \ send‵′\ n\ ρ\ ⊑\ send‵′\ (suc\ n)\ ρ}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -2868,14 +2925,16 @@ Casper Bach Poulsen provided the two largest ones.}
 }%
 \begin{code}%
 %
-\>[8]\AgdaFunction{lemma-4-lookup′}%
-\>[25]\AgdaSymbol{:}\AgdaSpace{}%
+\>[8]\AgdaFunction{lemma-4-lookup′}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSpace{}%
 \AgdaBound{κ}\AgdaSpace{}%
 \AgdaBound{ρ}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{lookup′}\AgdaSpace{}%
+\AgdaSymbol{→}\<%
+\\
+\>[8][@{}l@{\AgdaIndent{0}}]%
+\>[10]\AgdaFunction{lookup′}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSpace{}%
 \AgdaBound{κ}\AgdaSpace{}%
 \AgdaBound{ρ}\AgdaSpace{}%
@@ -2890,7 +2949,10 @@ Casper Bach Poulsen provided the two largest ones.}
 \newcommand{\LemmaFourLookupProof}{
 \begin{code}%
 %
-\>[8]\AgdaComment{--\ lemma-4-lookup′\ :\ ∀\ n\ κ\ ρ\ →\ lookup′\ n\ κ\ ρ\ ⊑\ lookup′\ (suc\ n)\ κ\ ρ}\<%
+\>[8]\AgdaComment{--\ lemma-4-lookup′\ :\ ∀\ n\ κ\ ρ\ →\ }\<%
+\\
+%
+\>[8]\AgdaComment{--\ \ \ lookup′\ n\ κ\ ρ\ ⊑\ lookup′\ (suc\ n)\ κ\ ρ}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -2945,16 +3007,18 @@ Casper Bach Poulsen provided the two largest ones.}
 }%
 \begin{code}%
 %
-\>[8]\AgdaFunction{lemma-4-do′}%
-\>[25]\AgdaSymbol{:}\AgdaSpace{}%
+\>[8]\AgdaFunction{lemma-4-do′}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSpace{}%
 \AgdaBound{e}\AgdaSpace{}%
 \AgdaBound{ρ}\AgdaSpace{}%
 \AgdaBound{c}\AgdaSpace{}%
 \AgdaBound{κ}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{do′}}\AgdaSpace{}%
+\AgdaSymbol{→}\<%
+\\
+\>[8][@{}l@{\AgdaIndent{0}}]%
+\>[10]\AgdaOperator{\AgdaFunction{do′}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{suc}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
@@ -2964,8 +3028,10 @@ Casper Bach Poulsen provided the two largest ones.}
 \AgdaSymbol{(}\AgdaInductiveConstructor{child}\AgdaSpace{}%
 \AgdaBound{c}\AgdaSpace{}%
 \AgdaBound{κ}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{⊑}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{do′}}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{⊑}}\<%
+\\
+%
+\>[10]\AgdaOperator{\AgdaFunction{do′}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{suc}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{suc}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSymbol{))}\AgdaSpace{}%
@@ -2981,7 +3047,13 @@ Casper Bach Poulsen provided the two largest ones.}
 \newcommand{\LemmaFourDoProof}{
 \begin{code}%
 %
-\>[8]\AgdaComment{--\ lemma-4-do′\ :\ ∀\ n\ e\ ρ\ c\ κ\ →\ do′\ (suc\ n)\ ⟦\ e\ ⟧\ ρ\ (child\ c\ κ)\ ⊑\ do′\ (suc\ (suc\ n))\ ⟦\ e\ ⟧\ ρ\ (child\ c\ κ)}\<%
+\>[8]\AgdaComment{--\ lemma-4-do′\ :\ ∀\ n\ e\ ρ\ c\ κ\ →}\<%
+\\
+%
+\>[8]\AgdaComment{--\ \ \ do′\ (suc\ n)\ ⟦\ e\ ⟧\ ρ\ (child\ c\ κ)\ ⊑\ }\<%
+\\
+%
+\>[8]\AgdaComment{--\ \ \ do′\ (suc\ (suc\ n))\ ⟦\ e\ ⟧\ ρ\ (child\ c\ κ)}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -3151,7 +3223,7 @@ When Agda proofs of the remaining propositions and correctness theorem from CP89
 have been developed, they are to be made available on GitHub at
 \url{https://github.com/pdmosses/jensfest-agda}.
 
-\begin{code}[hide]%
+\begin{code}%
 %
 \>[8]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}\<%
@@ -3193,8 +3265,7 @@ have been developed, they are to be made available on GitHub at
 \AgdaOperator{\AgdaBound{⟨}}\AgdaSpace{}%
 \AgdaBound{D}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{⟩}}\AgdaSpace{}%
-\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaComment{--\ least\ upper\ bound\ of\ chain\ δ}\<%
+\AgdaSymbol{)}\<%
 \\
 \>[8][@{}l@{\AgdaIndent{0}}]%
 \>[10]\AgdaKeyword{where}\<%
@@ -3271,9 +3342,8 @@ have been developed, they are to be made available on GitHub at
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaFunction{behave}\AgdaSpace{}%
 \AgdaBound{ρ}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
+\end{code}
+\begin{code}[hide]%
 %
 \>[10]\AgdaFunction{proposition-1}\AgdaSpace{}%
 \AgdaBound{ρ}\AgdaSpace{}%

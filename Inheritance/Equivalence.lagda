@@ -10,14 +10,14 @@ open import Data.Maybe.Base    renaming (  Maybe to _+?;       -- A +? is disjoi
 open import Data.Product.Base  using (_×_; _,_; proj₁; proj₂)  -- A × B is Cartesian product, _,_ is pairing
 open import Function           using (Inverse; _↔_; _∘_)       -- A ↔ B is isomorphism between A and B
 open Inverse {{ ... }}         using (to; from; inverseˡ)      -- to : A → B; from : B → A
-\end{code}
-%
-The following module has the same parameters as \AgdaRef{Inheritance.Definitions}.
-%
-%\AgdaNoSpaceAroundCode{}%
-\begin{code}
-module Inheritance.Equivalence               -- parameters elided
 \end{code}%
+\begin{code}
+module Inheritance.Equivalence
+\end{code}%
+%
+The imports and parameters of this module are the same as those of \AgdaRef{Inheritance.Definitions},
+and elided here.
+%
 \newcommand{\EquivalenceParameters}{
 \begin{code}
     ( Domain  :  Set₁ )                                       -- Domain is a type of cpo
@@ -47,16 +47,18 @@ module Inheritance.Equivalence               -- parameters elided
     {{ isoᶠ     : ⟨ Fun ⟩       ↔  ( ⟨ Value ⟩ → ⟨ Value ⟩ )  }}
     ( apply⟦_⟧  : Primitive → ⟨ Value ⟩ → ⟨ Value ⟩ )
 \end{code}}%
-%\AgdaSpaceAroundCode{}%
 \begin{code}
   where
 open import Inheritance.Definitions
-    ( Domain ) ( ⟨_⟩ ) ( ⊥ ) ( fix ) ( ?⊥ ) ( _+⊥_ ) ( inl ) ( inr ) ( [_,_]⊥ )
-    ( Instance ) ( Name ) ( Key ) ( Primitive ) ( Number ) ( Value ) ( Behavior ) ( Fun )
+    ( Domain ) ( ⟨_⟩ ) ( ⊥ ) ( fix ) ( ?⊥ )
+    ( _+⊥_ ) ( inl ) ( inr ) ( [_,_]⊥ )
+    ( Instance ) ( Name ) ( Key ) ( Primitive )
+    ( Number ) ( Value ) ( Behavior ) ( Fun )
     {{ isoᵛ }} {{ isoᵇ }} {{ isoᶠ }} ( apply⟦_⟧ )
+
 module _ 
-    ( class     : Instance → Class )         -- "class ρ" is the class of an object
-    ( methods′  : Class → Key → (Exp +?) )   -- "methods′ κ m" is the method named m in κ
+    ( class     : Instance → Class )
+    ( methods′  : Class → Key → (Exp +?) )
   where
   open Semantics ( class ) ( methods′ )
 \end{code}
@@ -81,11 +83,12 @@ so they can be defined in Agda without an explicit least fixed-point:
 
   send′ n ρ = lookup′ n (class ρ) ρ
 
-  lookup′ zero κ ρ         = ⊥
-  lookup′ n (child c κ) ρ  = from λ m → [  ( λ e → inl (do′ n ⟦ e ⟧ ρ (child c κ)) ) ,
-                                           ( to (lookup′ n κ ρ ) m )
-                                        ]? (methods (child c κ) m)
-  lookup′ n origin ρ       = ⊥
+  lookup′ zero κ ρ = ⊥
+  lookup′ n (child c κ) ρ =
+    from λ m → [ ( λ e → inl (do′ n ⟦ e ⟧ ρ (child c κ)) ) ,
+                 ( to (lookup′ n κ ρ ) m )
+               ]? (methods (child c κ) m)
+  lookup′ n origin ρ = ⊥
 \end{code}
 %
 Cases of Agda definitions are sequential:
@@ -94,17 +97,22 @@ before the corresponding case for \AgdaBound{n}
 implies that \AgdaBound{n} is positive in the latter.
 %
 \begin{code}
-  do′ zero     ⟦ e             ⟧ ρ κ            = ⊥
-  do′ (suc n)  ⟦ self          ⟧ ρ κ            = from λ α → from (inl (send′ n ρ))
-  do′ n        ⟦ super         ⟧ ρ (child c κ)  = from λ α → from (inl (lookup′ n κ ρ))
-  do′ n        ⟦ super         ⟧ ρ origin       = from λ α → ⊥
-  do′ n        ⟦ arg           ⟧ ρ κ            = from λ α → α
-  do′ n        ⟦ call e₁ m e₂  ⟧ ρ κ            = from λ α → [ ( λ σ → [ ( λ φ → to φ (to (do′ n ⟦ e₂ ⟧ ρ κ) α) ) ,
-                                                                         ( λ _ →  ⊥ )
-                                                                       ]⊥ (to σ m) ) ,
-                                                               ( λ ν → ⊥ )
-                                                             ]⊥ (to (to (do′ n ⟦ e₁ ⟧ ρ κ ) α))
-  do′ n        ⟦ appl f e₁     ⟧ ρ κ            = from λ α → apply⟦ f ⟧ (to (do′ n ⟦ e₁ ⟧ ρ κ) α)
+  do′ zero     ⟦ e     ⟧ ρ κ = ⊥
+
+  do′ (suc n)  ⟦ self  ⟧ ρ κ = from λ α → from (inl (send′ n ρ))
+
+  do′ n ⟦ super ⟧ ρ (child c κ) =
+    from λ α → from (inl (lookup′ n κ ρ))
+  do′ n ⟦ super ⟧ ρ origin = from λ α → ⊥
+  do′ n ⟦ arg   ⟧ ρ κ = from λ α → α
+  do′ n ⟦ call e₁ m e₂ ⟧ ρ κ =
+    from λ α → [ ( λ σ → [ ( λ φ → to φ (to (do′ n ⟦ e₂ ⟧ ρ κ) α) ) ,
+                           ( λ _ →  ⊥ )
+                         ]⊥ (to σ m) ) ,
+                 ( λ ν → ⊥ )
+               ]⊥ (to (to (do′ n ⟦ e₁ ⟧ ρ κ ) α))
+  do′ n ⟦ appl f e₁ ⟧ ρ κ =
+    from λ α → apply⟦ f ⟧ (to (do′ n ⟦ e₁ ⟧ ρ κ) α)
 \end{code}
 %
 The proofs of the lemmas use the following additional modules from the standard library:
@@ -117,14 +125,17 @@ The proofs of the lemmas use the following additional modules from the standard 
 %  -- open ⊑-Reasoning P -- requires ⟨ D ⟩ to be viewed as P.Carrier where P : Poset _ _ _
 %
 \begin{code}
-  open import Relation.Binary.PropositionalEquality.Core using (_≡_; refl; cong; sym)
+  open import Relation.Binary.PropositionalEquality.Core
+    using (_≡_; refl; cong; sym)
   open import Relation.Binary.PropositionalEquality.Properties
   open import Relation.Binary.Reasoning.Syntax
   open ≡-Reasoning
-  open import Axiom.Extensionality.Propositional using (Extensionality)
-  open import Level renaming (zero to lzero) hiding (suc)
-  module _
-      ( ext : Extensionality lzero lzero )
+  open import Axiom.Extensionality.Propositional
+    using (Extensionality)
+  open import Level
+    renaming (zero to lzero) hiding (suc)
+
+  module _ ( ext : Extensionality lzero lzero )
     where
 \end{code}
 
@@ -136,20 +147,28 @@ Its Agda proof exhibits the equational reasoning steps of the original proofs in
 This checks the correctness not only of the stated result, but also of the steps themselves.
 
 The Agda standard library defines notation for equational reasoning:
-\AgdaRef{x ≡ y} asserts the equality of \AgdaRef{x} and \AgdaRef{y};
-\AgdaRef{begin} starts a proof;
-\AgdaRef{≡⟨⟩} adds a step that Agda can check automatically;
-\AgdaRef{≡⟨ t ⟩} adds a step with an explicit proof term \AgdaRef{t};
-and \AgdaRef{∎} concludes a proof.
+\begin{itemize}
+\item \AgdaRef{x ≡ y} asserts the equality of \AgdaRef{x} and \AgdaRef{y};
+\item \AgdaRef{begin} starts a proof;
+\item \AgdaRef{≡⟨⟩} adds a step that Agda can check automatically;
+\item \AgdaRef{≡⟨ t ⟩} adds a step with an explicit proof term \AgdaRef{t};
+and
+\item \AgdaRef{∎} concludes a proof.
+\end{itemize}
 
-The proof of this lemma is a straightforward structural induction.
+\begin{code}
+    lemma-1 : ∀ n e ρ c κ →
+      do′ (suc n) ⟦ e ⟧ ρ (child c κ) ≡
+      eval⟦ e ⟧ (send′ n ρ) (lookup′ (suc n) κ ρ)
+\end{code}
+%
 The restriction to the class \AgdaRef{child c κ} ensures that it is not the root class;
 in CP89, the use of $\textit{parent}(κ)$ as an argument of type \textbf{Class}
 in the statement of Lemma~1 leaves this restriction implicit.
-%
-\begin{code}
-    lemma-1 : ∀ n e ρ c κ → do′ (suc n) ⟦ e ⟧ ρ (child c κ) ≡ eval⟦ e ⟧ (send′ n ρ) (lookup′ (suc n) κ ρ)
 
+The proof of this lemma is a straightforward structural induction.
+
+\begin{code}
     lemma-1 n self ρ c κ =
       begin  do′ (suc n) ⟦ self ⟧ ρ (child c κ)
       ≡⟨⟩    ( from λ α → from (inl (send′ n ρ)) )
@@ -180,7 +199,9 @@ to make the semantics type-correct
 Using rewrite below concisely hides the complicated terms needed for the intermediate proof steps.
 %
 \begin{code}
-    lemma-1 n (call e₁ m e₂) ρ c κ rewrite (lemma-1 n e₁ ρ c κ) rewrite (lemma-1 n e₂ ρ c κ) = refl
+    lemma-1 n (call e₁ m e₂) ρ c κ
+      rewrite (lemma-1 n e₁ ρ c κ)
+      rewrite (lemma-1 n e₂ ρ c κ) = refl
 \end{code}
 %
 The inductive case for applying a primitive function is relatively simple,
@@ -188,16 +209,26 @@ and concludes the proof of Lemma 1.
 %
 \begin{code}
     lemma-1 n (appl f e₁) ρ c κ =
-      begin  do′ (suc n) ⟦ appl f e₁ ⟧ ρ (child c κ)
-      ≡⟨⟩    ( from λ α → apply⟦ f ⟧ (to (do′ (suc n) ⟦ e₁ ⟧ ρ (child c κ)) α) )
+      begin
+        do′ (suc n) ⟦ appl f e₁ ⟧ ρ (child c κ)
+      ≡⟨⟩
+        ( from λ α →
+            apply⟦ f ⟧
+              (to (do′ (suc n) ⟦ e₁ ⟧ ρ (child c κ)) α) )
       ≡⟨ use-induction ⟩ 
-             ( from λ α → apply⟦ f ⟧ (to (eval⟦ e₁ ⟧ (send′ n ρ) (lookup′ (suc n) κ ρ)) α) )
-      ≡⟨⟩    eval⟦ appl f e₁ ⟧ (send′ n ρ) (lookup′ (suc n) κ ρ)
+        ( from λ α →
+            apply⟦ f ⟧
+              (to (eval⟦ e₁ ⟧ (send′ n ρ) (lookup′ (suc n) κ ρ)) α) )
+      ≡⟨⟩
+        eval⟦ appl f e₁ ⟧ (send′ n ρ) (lookup′ (suc n) κ ρ)
       ∎
-      where use-induction =
-             cong from (ext λ α → cong (λ X → apply⟦ f ⟧ ((to X) α)) (lemma-1 n e₁ ρ c κ))
+      where
+        use-induction =
+          cong from (ext λ α →
+            cong (λ X →
+              apply⟦ f ⟧ ((to X) α)) (lemma-1 n e₁ ρ c κ))
 \end{code}
-\end{AgdaAlign}
+\end{AgdaAlign}%
 %
 The proofs of the remaining lemmas are available in the accompanying auxiliary material:
 %
@@ -376,12 +407,14 @@ Casper Bach Poulsen provided the two largest ones.}
 \end{code}
 }%
 \begin{code}
-        lemma-4-send′    : ∀ n ρ → send′ n ρ ⊑ send′ (suc n) ρ
+        lemma-4-send′ : ∀ n ρ →
+          send′ n ρ ⊑ send′ (suc n) ρ
 \end{code}
 %
 \newcommand{\LemmaFourSendProof}{
 \begin{code}
-        -- lemma-4-send‵′ : ∀ n ρ → send‵′ n ρ ⊑ send‵′ (suc n) ρ
+        -- lemma-4-send‵′ : ∀ n ρ → 
+        --   send‵′ n ρ ⊑ send‵′ (suc n) ρ
 
         lemma-4-send′ n ρ 
           rewrite sym (lemma-3 n ρ)
@@ -390,12 +423,14 @@ Casper Bach Poulsen provided the two largest ones.}
 \end{code}
 }%
 \begin{code}
-        lemma-4-lookup′  : ∀ n κ ρ → lookup′ n κ ρ ⊑ lookup′ (suc n) κ ρ
+        lemma-4-lookup′ : ∀ n κ ρ →
+          lookup′ n κ ρ ⊑ lookup′ (suc n) κ ρ
 \end{code}
 %
 \newcommand{\LemmaFourLookupProof}{
 \begin{code}
-        -- lemma-4-lookup′ : ∀ n κ ρ → lookup′ n κ ρ ⊑ lookup′ (suc n) κ ρ
+        -- lemma-4-lookup′ : ∀ n κ ρ → 
+        --   lookup′ n κ ρ ⊑ lookup′ (suc n) κ ρ
 
         lemma-4-lookup′ zero κ ρ = ⊥-is-least
         lemma-4-lookup′ (suc n) κ ρ
@@ -405,12 +440,16 @@ Casper Bach Poulsen provided the two largest ones.}
 \end{code}
 }%
 \begin{code}
-        lemma-4-do′      : ∀ n e ρ c κ → do′ (suc n) ⟦ e ⟧ ρ (child c κ) ⊑ do′ (suc (suc n)) ⟦ e ⟧ ρ (child c κ)
+        lemma-4-do′ : ∀ n e ρ c κ →
+          do′ (suc n) ⟦ e ⟧ ρ (child c κ) ⊑
+          do′ (suc (suc n)) ⟦ e ⟧ ρ (child c κ)
 \end{code}
 %
 \newcommand{\LemmaFourDoProof}{
 \begin{code}
-        -- lemma-4-do′ : ∀ n e ρ c κ → do′ (suc n) ⟦ e ⟧ ρ (child c κ) ⊑ do′ (suc (suc n)) ⟦ e ⟧ ρ (child c κ)
+        -- lemma-4-do′ : ∀ n e ρ c κ →
+        --   do′ (suc n) ⟦ e ⟧ ρ (child c κ) ⊑ 
+        --   do′ (suc (suc n)) ⟦ e ⟧ ρ (child c κ)
 
         lemma-4-do′ n e ρ c κ =
           begin-⊑
@@ -437,11 +476,11 @@ When Agda proofs of the remaining propositions and correctness theorem from CP89
 have been developed, they are to be made available on GitHub at
 \url{https://github.com/pdmosses/jensfest-agda}.
 
-\begin{code}[hide]
+\begin{code}
         module _
             { Gᵍ : Domain }
             {{ isoᵍ : ⟨ Gᵍ ⟩ ↔ Dᵍ }}
-            ( lub   :  {D : Domain} → (δ : ℕ → ⟨ D ⟩) → ⟨ D ⟩ ) -- least upper bound of chain δ
+            ( lub   :  {D : Domain} → (δ : ℕ → ⟨ D ⟩) → ⟨ D ⟩ )
           where
 
           interpret : Instance → ⟨ Behavior ⟩
@@ -451,7 +490,8 @@ have been developed, they are to be made available on GitHub at
           proposition-2 :  ∀ ρ → behave ρ ⊑ send ρ
           proposition-3 :  ∀ ρ → send ρ ⊑ interpret ρ
           theorem-1 :      ∀ ρ → send ρ ≡ behave ρ
-
+\end{code}
+\begin{code}[hide]
           proposition-1 ρ = {!   !}
           proposition-2 ρ = {!   !}
           proposition-3 ρ = {!   !}

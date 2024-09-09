@@ -9,71 +9,82 @@ The Agda definitions given below use the following modules from the standard lib
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{OPTIONS}\AgdaSpace{}%
 \AgdaPragma{--safe}\AgdaSpace{}%
-\AgdaSymbol{\#-\}}\<%
+\AgdaSymbol{\#-\}}%
+\>[34]\AgdaComment{--\ Agda\ \ \ \ \ \ \ \ \textasciitilde{}\ CP89\ notation}\<%
 \\
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Data.Nat.Base}%
-\>[31]\AgdaKeyword{using}\AgdaSpace{}%
+\AgdaModule{Data.Nat.Base}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaKeyword{using}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaSpace{}%
 \AgdaDatatype{ℕ}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaInductiveConstructor{zero}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaInductiveConstructor{suc}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≤\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{)}%
-\>[63]\AgdaComment{--\ natural\ numbers\ zero\ ≤\ suc\ zero\ ≤\ ...}\<%
+\>[34]\AgdaComment{--\ ℕ\ \ \ \ \ \ \ \ \ \ \ \ \ \textasciitilde{}\ Nat}\<%
 \\
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Data.Maybe.Base}%
-\>[31]\AgdaKeyword{renaming}\AgdaSpace{}%
+\AgdaModule{Data.Maybe.Base}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaKeyword{renaming}\AgdaSpace{}%
 \AgdaSymbol{(}%
-\>[43]\AgdaDatatype{Maybe}\AgdaSpace{}%
+\>[14I]\AgdaDatatype{Maybe}\AgdaSpace{}%
 \AgdaSymbol{to}\AgdaSpace{}%
 \AgdaDatatype{\AgdaUnderscore{}+?}\AgdaSymbol{;}%
-\>[63]\AgdaComment{--\ A\ +?\ is\ disjoint\ union\ of\ A\ and\ \{??\}}\<%
+\>[34]\AgdaComment{--\ A\ +?\ \ \ \ \ \ \ \ \ \textasciitilde{}\ A\ +\ ?}\<%
 \\
-%
-\>[43]\AgdaInductiveConstructor{nothing}\AgdaSpace{}%
+\>[.][@{}l@{}]\<[14I]%
+\>[13]\AgdaInductiveConstructor{nothing}\AgdaSpace{}%
 \AgdaSymbol{to}\AgdaSpace{}%
 \AgdaInductiveConstructor{??}\AgdaSymbol{;}%
-\>[63]\AgdaComment{--\ ??\ represents\ absence\ of\ an\ A\ value}\<%
+\>[34]\AgdaComment{--\ ??\ \ \ \ \ \ \ \ \ \ \ \ \ \textasciitilde{}\ ⊥?}\<%
 \\
 %
-\>[43]\AgdaFunction{maybe′}\AgdaSpace{}%
+\>[13]\AgdaFunction{maybe′}\AgdaSpace{}%
 \AgdaSymbol{to}\AgdaSpace{}%
 \AgdaFunction{[\AgdaUnderscore{},\AgdaUnderscore{}]?}\AgdaSpace{}%
 \AgdaSymbol{)}%
-\>[63]\AgdaComment{--\ [\ f\ ,\ x\ ]?\ is\ case\ analysis\ on\ A\ +?}\<%
+\>[34]\AgdaComment{--\ [\ f\ ,\ x\ ]?\ \ \ \ \textasciitilde{}\ [f,\ λ⊥?.x]}\<%
 \\
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Data.Product.Base}%
-\>[31]\AgdaKeyword{using}\AgdaSpace{}%
+\AgdaModule{Data.Product.Base}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaKeyword{using}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}×\AgdaUnderscore{}}}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{\AgdaUnderscore{},\AgdaUnderscore{}}}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaField{proj₁}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaField{proj₂}\AgdaSymbol{)}%
-\>[63]\AgdaComment{--\ A\ ×\ B\ is\ Cartesian\ product,\ \AgdaUnderscore{},\AgdaUnderscore{}\ is\ pairing}\<%
+\>[34]\AgdaComment{--\ A\ ×\ B\ \ \ \ \ \ \ \ \textasciitilde{}\ A\ ×\ B}\<%
 \\
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Function}%
-\>[31]\AgdaKeyword{using}\AgdaSpace{}%
+\AgdaModule{Function}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaKeyword{using}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaRecord{Inverse}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}↔\AgdaUnderscore{}}}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}∘\AgdaUnderscore{}}}\AgdaSymbol{)}%
-\>[63]\AgdaComment{--\ A\ ↔\ B\ is\ isomorphism\ between\ A\ and\ B}\<%
+\>[34]\AgdaComment{--\ A\ ↔\ B\ \ \ \ \ \ \textasciitilde{}\ implicit}\<%
 \\
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaModule{Inverse}\AgdaSpace{}%
 \AgdaSymbol{\{\{}\AgdaSpace{}%
 \AgdaSymbol{...}\AgdaSpace{}%
-\AgdaSymbol{\}\}}%
-\>[31]\AgdaKeyword{using}\AgdaSpace{}%
+\AgdaSymbol{\}\}}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaKeyword{using}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{to}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaField{from}\AgdaSymbol{)}%
-\>[63]\AgdaComment{--\ to\ :\ A\ →\ B;\ from\ :\ B\ →\ A}\<%
+\>[34]\AgdaComment{--\ to\ from\ \ \ \ \ \textasciitilde{}\ implicit}\<%
 \end{code}
 %
 The declaration \AgdaRef{open Inverse \{\{ ... \}\}} above introduces overloaded functions
@@ -87,11 +98,12 @@ which are the Agda equivalent of Haskell type class constraints.
 The types and functions declared below as module parameters
 correspond to assumptions about features of Scott domains.
 These will be used when defining the semantics of method systems in Agda.
+
 An element \AgdaRef{D : Domain} is a type corresponding to a domain used in CP89.
 Such a type \AgdaRef{D} has a type of elements \AgdaRef{⟨ D ⟩}
 and a distinguished element \AgdaRef{⊥};
 further properties of domains
-(e.g., involving the partial order on \AgdaRef{⟨ D ⟩})
+(involving the partial order on \AgdaRef{⟨ D ⟩})
 %the existence of limits of ascending chains,
 %\AgdaRef{⊥} being the least element,
 %and continuity of functions between domains)
@@ -106,8 +118,7 @@ will be needed when proving results about semantic functions.
 \AgdaBound{Domain}%
 \>[14]\AgdaSymbol{:}%
 \>[17]\AgdaPrimitive{Set₁}\AgdaSpace{}%
-\AgdaSymbol{)}%
-\>[63]\AgdaComment{--\ Domain\ is\ a\ type\ of\ cpo}\<%
+\AgdaSymbol{)}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -116,8 +127,7 @@ will be needed when proving results about semantic functions.
 \>[17]\AgdaBound{Domain}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaPrimitive{Set}\AgdaSpace{}%
-\AgdaSymbol{)}%
-\>[63]\AgdaComment{--\ ⟨\ D\ ⟩\ is\ the\ type\ of\ elements\ of\ D}\<%
+\AgdaSymbol{)}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -130,8 +140,7 @@ will be needed when proving results about semantic functions.
 \AgdaOperator{\AgdaBound{⟨}}\AgdaSpace{}%
 \AgdaBound{D}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{⟩}}\AgdaSpace{}%
-\AgdaSymbol{)}%
-\>[63]\AgdaComment{--\ ⊥\ is\ the\ least\ element\ of\ D}\<%
+\AgdaSymbol{)}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -154,30 +163,28 @@ will be needed when proving results about semantic functions.
 \AgdaOperator{\AgdaBound{⟨}}\AgdaSpace{}%
 \AgdaBound{D}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{⟩}}\AgdaSpace{}%
-\AgdaSymbol{)}%
-\>[63]\AgdaComment{--\ fix\ f\ is\ the\ least\ fixed-point\ of\ f}\<%
+\AgdaSymbol{)}\<%
 \end{code}
 %
-The function \AgdaRef{fix} is supposed to correspond to the least fixed-point operator
+The function \AgdaRef{fix} is supposed to correspond to the least fixed point operator
 on the space of continuous functions on a domain.
 A continuous function can be represented in Agda as the pair of a function
 \AgdaRef{f : ⟨ D ⟩ → ⟨ D ⟩} and a proof of the continuity of \AgdaRef{f}.
+
 In practice, however, \AgdaRef{fix} will be applied only to functions on \AgdaRef{⟨ D ⟩}
-defined by lambda-abstraction and application, which ensures their continuity.
+defined by lambda-abstraction and application, 
+which ensures that they correspond to continuous functions on domains.
 It seems pointless to pass an \emph{assumption} of continuity as an argument
 – the same assumption can be made wherever it is needed – and its omission does not affect type-checking.
 
-The following declarations correspond closely to the notation for separated sums of domains in CP89,
-except that the injection functions \AgdaRef{inl} and \AgdaRef{inr} are left implicit there.
-%
+\clearpage
 \begin{code}%
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaBound{?⊥}%
 \>[14]\AgdaSymbol{:}%
 \>[17]\AgdaBound{Domain}\AgdaSpace{}%
-\AgdaSymbol{)}%
-\>[63]\AgdaComment{--\ the\ only\ element\ of\ ?⊥\ is\ ⊥}\<%
+\AgdaSymbol{)}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -188,8 +195,7 @@ except that the injection functions \AgdaRef{inl} and \AgdaRef{inr} are left imp
 \AgdaBound{Domain}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{Domain}\AgdaSpace{}%
-\AgdaSymbol{)}%
-\>[63]\AgdaComment{--\ D\ +⊥\ E\ is\ the\ separated\ sum\ of\ D\ and\ E}\<%
+\AgdaSymbol{)}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -209,8 +215,7 @@ except that the injection functions \AgdaRef{inl} and \AgdaRef{inr} are left imp
 \AgdaOperator{\AgdaBound{+⊥}}\AgdaSpace{}%
 \AgdaBound{E}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{⟩}}\AgdaSpace{}%
-\AgdaSymbol{)}%
-\>[63]\AgdaComment{--\ inl\ injects\ elements\ of\ D\ into\ D\ +⊥\ E}\<%
+\AgdaSymbol{)}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -230,8 +235,7 @@ except that the injection functions \AgdaRef{inl} and \AgdaRef{inr} are left imp
 \AgdaOperator{\AgdaBound{+⊥}}\AgdaSpace{}%
 \AgdaBound{E}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{⟩}}\AgdaSpace{}%
-\AgdaSymbol{)}%
-\>[63]\AgdaComment{--\ inr\ injects\ elements\ of\ E\ into\ D\ +⊥\ E}\<%
+\AgdaSymbol{)}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -242,8 +246,7 @@ except that the injection functions \AgdaRef{inl} and \AgdaRef{inr} are left imp
 \AgdaBound{F}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{Domain}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}%
-\>[63]\AgdaComment{--\ [\ f\ ,\ g\ ]⊥\ is\ case\ analysis\ on\ D\ +⊥\ E}\<%
+\AgdaSymbol{→}\<%
 \\
 \>[17][@{}l@{\AgdaIndent{0}}]%
 \>[19]\AgdaSymbol{(}\AgdaSpace{}%
@@ -265,8 +268,10 @@ except that the injection functions \AgdaRef{inl} and \AgdaRef{inr} are left imp
 \AgdaBound{F}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{⟩}}\AgdaSpace{}%
 \AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{⟨}}\AgdaSpace{}%
+\AgdaSymbol{→}\<%
+\\
+%
+\>[19]\AgdaOperator{\AgdaBound{⟨}}\AgdaSpace{}%
 \AgdaBound{D}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{+⊥}}\AgdaSpace{}%
 \AgdaBound{E}\AgdaSpace{}%
@@ -278,6 +283,13 @@ except that the injection functions \AgdaRef{inl} and \AgdaRef{inr} are left imp
 \AgdaSymbol{)}\<%
 \end{code}
 %
+\AgdaRef{?⊥} here corresponds to the 1-point domain written $?$ in CP89;
+its only element is \AgdaRef{⊥} ($⊥_?$ in CP89).
+\AgdaRef{D +⊥ E} corresponds to the notation $D + E$ for separated sums of domains in CP89.
+The injection functions \AgdaRef{inl} and \AgdaRef{inr} are left implicit in CP89.
+Case analysis \AgdaRef{[ f , g ]⊥} on \AgdaRef{D +⊥ E} is decorated with $⊥$ to avoid confusion with
+the case analysis for ordinary disjoint union of Agda types.
+
 The Cartesian products of types provided by the standard Agda library support products of domains,
 regarding a pair \AgdaRef{(⊥ , ⊥)} as the least element of the product of two domains.  
 
@@ -341,7 +353,7 @@ so it is omitted.
 \>[16]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{Domain}\AgdaSpace{}%
 \AgdaSymbol{)}%
-\>[32]\AgdaComment{--\ the\ domain\ of\ numbers\ is\ unconstrained}\<%
+\>[32]\AgdaComment{--\ unconstrained}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -349,7 +361,7 @@ so it is omitted.
 \>[16]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{Domain}\AgdaSpace{}%
 \AgdaSymbol{)}%
-\>[32]\AgdaComment{--\ a\ value\ is\ (isomorphic\ to)\ a\ behavior\ or\ a\ number}\<%
+\>[32]\AgdaComment{--\ a\ value\ is\ a\ behavior\ or\ a\ number}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -357,7 +369,7 @@ so it is omitted.
 \>[16]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{Domain}\AgdaSpace{}%
 \AgdaSymbol{)}%
-\>[32]\AgdaComment{--\ a\ behaviour\ maps\ a\ method\ name\ to\ a\ fun,\ or\ to\ the\ only\ element\ of\ ?⊥}\<%
+\>[32]\AgdaComment{--\ a\ behavior\ maps\ keys\ to\ funs}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -365,7 +377,7 @@ so it is omitted.
 \>[16]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{Domain}\AgdaSpace{}%
 \AgdaSymbol{)}%
-\>[32]\AgdaComment{--\ a\ fun\ maps\ an\ argument\ value\ to\ a\ value\ (possibly\ ⊥)}\<%
+\>[32]\AgdaComment{--\ a\ fun\ maps\ values\ to\ values}\<%
 \\
 %
 \>[4]\AgdaSymbol{\{\{}\AgdaSpace{}%
@@ -447,14 +459,14 @@ so it is omitted.
 \AgdaBound{Key}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaGeneralizable{f}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{Primitive}\<%
-\\
-\>[0]\AgdaKeyword{variable}\AgdaSpace{}%
+\AgdaBound{Primitive}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaGeneralizable{ν}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{⟨}}\AgdaSpace{}%
 \AgdaBound{Number}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{⟩}}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{⟩}}\<%
+\\
+\>[0]\AgdaKeyword{variable}\AgdaSpace{}%
 \AgdaGeneralizable{α}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{⟨}}\AgdaSpace{}%
@@ -529,19 +541,19 @@ The syntax of method expressions is defined by the inductive datatype \AgdaRef{E
 \>[2]\AgdaInductiveConstructor{self}%
 \>[9]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaDatatype{Exp}%
-\>[44]\AgdaComment{--\ refers\ to\ the\ behavior\ of\ the\ current\ object}\<%
+\>[34]\AgdaComment{--\ current\ object\ behavior}\<%
 \\
 %
 \>[2]\AgdaInductiveConstructor{super}%
 \>[9]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaDatatype{Exp}%
-\>[44]\AgdaComment{--\ refers\ to\ the\ behavior\ in\ the\ superclass\ of\ the\ object}\<%
+\>[34]\AgdaComment{--\ superclass\ behavior}\<%
 \\
 %
 \>[2]\AgdaInductiveConstructor{arg}%
 \>[9]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaDatatype{Exp}%
-\>[44]\AgdaComment{--\ refers\ to\ the\ single\ argument\ of\ the\ method\ expression}\<%
+\>[34]\AgdaComment{--\ argument\ value}\<%
 \\
 %
 \>[2]\AgdaInductiveConstructor{call}%
@@ -553,7 +565,7 @@ The syntax of method expressions is defined by the inductive datatype \AgdaRef{E
 \AgdaDatatype{Exp}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaDatatype{Exp}%
-\>[44]\AgdaComment{--\ "call\ e₁\ m\ e₂"\ calls\ method\ m\ of\ e₁\ with\ argument\ e₂}\<%
+\>[34]\AgdaComment{--\ call\ method\ with\ argument}\<%
 \\
 %
 \>[2]\AgdaInductiveConstructor{appl}%
@@ -563,7 +575,7 @@ The syntax of method expressions is defined by the inductive datatype \AgdaRef{E
 \AgdaDatatype{Exp}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaDatatype{Exp}%
-\>[44]\AgdaComment{--\ "appl\ f\ e₁"\ applies\ primitive\ f\ to\ e₁}\<%
+\>[34]\AgdaComment{--\ apply\ primitive\ to\ value}\<%
 \\
 \>[0]\AgdaKeyword{variable}\AgdaSpace{}%
 \AgdaGeneralizable{e}\AgdaSpace{}%
@@ -583,7 +595,7 @@ The syntax of method expressions is defined by the inductive datatype \AgdaRef{E
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaDatatype{Class}\AgdaSpace{}%
 \AgdaSymbol{)}%
-\>[44]\AgdaComment{--\ "class\ ρ"\ is\ the\ class\ of\ an\ object}\<%
+\>[44]\AgdaComment{--\ the\ class\ of\ an\ object}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -596,7 +608,7 @@ The syntax of method expressions is defined by the inductive datatype \AgdaRef{E
 \AgdaSymbol{(}\AgdaDatatype{Exp}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{+?}}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{)}%
-\>[44]\AgdaComment{--\ "methods′\ κ\ m"\ is\ the\ method\ named\ m\ in\ κ}\<%
+\>[44]\AgdaComment{--\ the\ methods\ of\ a\ class}\<%
 \\
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaKeyword{where}\<%
@@ -610,7 +622,7 @@ The syntax of method expressions is defined by the inductive datatype \AgdaRef{E
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaDatatype{Exp}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{+?}}\AgdaSymbol{)}%
-\>[44]\AgdaComment{--\ "methods\ origin"\ overrides\ "methods′\ origin"}\<%
+\>[44]\AgdaComment{--\ no\ root\ class\ methods}\<%
 \\
 %
 \>[2]\AgdaFunction{methods}\AgdaSpace{}%
@@ -638,7 +650,7 @@ The syntax of method expressions is defined by the inductive datatype \AgdaRef{E
 The method lookup semantics uses mutually-recursive functions 
 \AgdaRef{send}, \AgdaRef{lookup}, and \AgdaRef{do⟦ ⟧},
 which can be non-terminating, 
-They are therefore defined in Agda as the least fixed-point
+They are therefore defined in Agda as the least fixed point
 of a non-recursive function \AgdaRef{g}
 (as in the proof of Proposition~3 in CP89) on a domain \AgdaRef{Gᵍ}
 that is isomorphic to~\AgdaRef{Dᵍ}:
@@ -781,14 +793,16 @@ which has been defined to have no methods:
 \AgdaSymbol{(}\AgdaInductiveConstructor{child}\AgdaSpace{}%
 \AgdaBound{c}\AgdaSpace{}%
 \AgdaBound{κ}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{ρ}%
-\>[28]\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaField{from}\AgdaSpace{}%
+\AgdaBound{ρ}\AgdaSpace{}%
+\AgdaSymbol{=}\<%
+\\
+\>[6][@{}l@{\AgdaIndent{0}}]%
+\>[8]\AgdaField{from}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{m}\AgdaSpace{}%
 \AgdaSymbol{→}%
-\>[42]\AgdaOperator{\AgdaFunction{[}}%
-\>[45]\AgdaSymbol{(}\AgdaSpace{}%
+\>[20]\AgdaOperator{\AgdaFunction{[}}%
+\>[23]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{e}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -804,7 +818,7 @@ which has been defined to have no methods:
 \AgdaOperator{\AgdaFunction{,}}\<%
 \\
 %
-\>[45]\AgdaSymbol{(}\AgdaSpace{}%
+\>[23]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaField{to}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{l}\AgdaSpace{}%
 \AgdaBound{κ}\AgdaSpace{}%
@@ -813,7 +827,7 @@ which has been defined to have no methods:
 \AgdaSymbol{)}\<%
 \\
 %
-\>[42]\AgdaOperator{\AgdaFunction{]?}}\AgdaSpace{}%
+\>[20]\AgdaOperator{\AgdaFunction{]?}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{methods}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{child}\AgdaSpace{}%
 \AgdaBound{c}\AgdaSpace{}%
@@ -823,8 +837,8 @@ which has been defined to have no methods:
 %
 \>[6]\AgdaFunction{lookup}\AgdaSpace{}%
 \AgdaInductiveConstructor{origin}\AgdaSpace{}%
-\AgdaBound{ρ}%
-\>[28]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{ρ}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{⊥}\<%
 \end{code}
 %
@@ -915,8 +929,10 @@ a behavior, a number, or undefined (\AgdaRef{⊥}):
 \>[24]\AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
 \AgdaBound{ρ}\AgdaSpace{}%
 \AgdaBound{κ}%
-\>[41]\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaField{from}\AgdaSpace{}%
+\>[31]\AgdaSymbol{=}\<%
+\\
+\>[6][@{}l@{\AgdaIndent{0}}]%
+\>[8]\AgdaField{from}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{α}\AgdaSpace{}%
 \AgdaSymbol{→}%
@@ -926,7 +942,7 @@ a behavior, a number, or undefined (\AgdaRef{⊥}):
 \AgdaBound{σ}\AgdaSpace{}%
 \AgdaSymbol{→}%
 \>[486I]\AgdaOperator{\AgdaBound{[}}%
-\>[67]\AgdaSymbol{(}\AgdaSpace{}%
+\>[32]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{φ}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -943,15 +959,15 @@ a behavior, a number, or undefined (\AgdaRef{⊥}):
 \AgdaOperator{\AgdaBound{,}}\<%
 \\
 %
-\>[67]\AgdaSymbol{(}\AgdaSpace{}%
+\>[32]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{⊥}\AgdaSpace{}%
 \AgdaSymbol{)}\<%
 \\
 \>[.][@{}l@{}]\<[486I]%
-\>[64]\AgdaOperator{\AgdaBound{]⊥}}\AgdaSpace{}%
+\>[29]\AgdaOperator{\AgdaBound{]⊥}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{to}\AgdaSpace{}%
 \AgdaBound{σ}\AgdaSpace{}%
 \AgdaBound{m}\AgdaSymbol{)}\AgdaSpace{}%
@@ -959,7 +975,7 @@ a behavior, a number, or undefined (\AgdaRef{⊥}):
 \AgdaOperator{\AgdaBound{,}}\<%
 \\
 \>[.][@{}l@{}]\<[482I]%
-\>[56]\AgdaSymbol{(}\AgdaSpace{}%
+\>[21]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{ν}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -967,7 +983,7 @@ a behavior, a number, or undefined (\AgdaRef{⊥}):
 \AgdaSymbol{)}\<%
 \\
 \>[.][@{}l@{}]\<[481I]%
-\>[54]\AgdaOperator{\AgdaBound{]⊥}}\AgdaSpace{}%
+\>[19]\AgdaOperator{\AgdaBound{]⊥}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{to}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{to}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaOperator{\AgdaBound{d⟦}}\AgdaSpace{}%
@@ -985,8 +1001,10 @@ a behavior, a number, or undefined (\AgdaRef{⊥}):
 \>[24]\AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
 \AgdaBound{ρ}\AgdaSpace{}%
 \AgdaBound{κ}%
-\>[41]\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaField{from}\AgdaSpace{}%
+\>[31]\AgdaSymbol{=}\<%
+\\
+\>[6][@{}l@{\AgdaIndent{0}}]%
+\>[8]\AgdaField{from}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{α}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -1033,8 +1051,6 @@ The use of \AgdaRef{fix} below has the effect of making the above definitions mu
 \AgdaField{to}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
 \>[4]\AgdaFunction{send}%
 \>[13]\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaField{proj₁}\AgdaSpace{}%
@@ -1061,7 +1077,7 @@ The use of \AgdaRef{fix} below has the effect of making the above definitions mu
 \AgdaFunction{γ}\AgdaSymbol{)))}\<%
 \end{code}
 %
-That completes the definition of the method lookup semantics.
+That concludes the Agda definition of the method lookup semantics.
 
 \subsection{Denotational Semantics}
 
@@ -1093,8 +1109,8 @@ The evaluation of the other method expressions is similar to their method lookup
 \AgdaInductiveConstructor{self}%
 \>[22]\AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
 \AgdaBound{σ}\AgdaSpace{}%
-\AgdaBound{π}%
-\>[29]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{π}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaField{from}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{α}\AgdaSpace{}%
@@ -1108,8 +1124,8 @@ The evaluation of the other method expressions is similar to their method lookup
 \AgdaInductiveConstructor{super}%
 \>[22]\AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
 \AgdaBound{σ}\AgdaSpace{}%
-\AgdaBound{π}%
-\>[29]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{π}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaField{from}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{α}\AgdaSpace{}%
@@ -1124,8 +1140,8 @@ The evaluation of the other method expressions is similar to their method lookup
 \AgdaInductiveConstructor{arg}%
 \>[22]\AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
 \AgdaBound{σ}\AgdaSpace{}%
-\AgdaBound{π}%
-\>[29]\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{π}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaField{from}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{α}\AgdaSpace{}%
@@ -1140,19 +1156,21 @@ The evaluation of the other method expressions is similar to their method lookup
 \AgdaBound{e₂}%
 \>[22]\AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
 \AgdaBound{σ}\AgdaSpace{}%
-\AgdaBound{π}%
-\>[29]\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaField{from}\AgdaSpace{}%
+\AgdaBound{π}\AgdaSpace{}%
+\AgdaSymbol{=}\<%
+\\
+\>[2][@{}l@{\AgdaIndent{0}}]%
+\>[4]\AgdaField{from}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{α}\AgdaSpace{}%
 \AgdaSymbol{→}%
-\>[624I]\AgdaOperator{\AgdaBound{[}}%
-\>[625I]\AgdaSymbol{(}\AgdaSpace{}%
+\>[626I]\AgdaOperator{\AgdaBound{[}}%
+\>[627I]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{σ′}\AgdaSpace{}%
 \AgdaSymbol{→}%
-\>[629I]\AgdaOperator{\AgdaBound{[}}%
-\>[56]\AgdaSymbol{(}\AgdaSpace{}%
+\>[631I]\AgdaOperator{\AgdaBound{[}}%
+\>[29]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{φ}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -1169,31 +1187,31 @@ The evaluation of the other method expressions is similar to their method lookup
 \AgdaOperator{\AgdaBound{,}}\<%
 \\
 %
-\>[56]\AgdaSymbol{(}\AgdaSpace{}%
+\>[29]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{⊥}\AgdaSpace{}%
 \AgdaSymbol{)}\<%
 \\
-\>[.][@{}l@{}]\<[629I]%
-\>[53]\AgdaOperator{\AgdaBound{]⊥}}\AgdaSpace{}%
+\>[.][@{}l@{}]\<[631I]%
+\>[26]\AgdaOperator{\AgdaBound{]⊥}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{to}\AgdaSpace{}%
 \AgdaBound{σ′}\AgdaSpace{}%
 \AgdaBound{m}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{,}}\<%
 \\
-\>[.][@{}l@{}]\<[625I]%
-\>[44]\AgdaSymbol{(}\AgdaSpace{}%
+\>[627I][@{}l@{\AgdaIndent{0}}]%
+\>[18]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{ν}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{⊥}\AgdaSpace{}%
 \AgdaSymbol{)}\<%
 \\
-\>[.][@{}l@{}]\<[624I]%
-\>[42]\AgdaOperator{\AgdaBound{]⊥}}\AgdaSpace{}%
+\>[.][@{}l@{}]\<[626I]%
+\>[15]\AgdaOperator{\AgdaBound{]⊥}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{to}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{to}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaOperator{\AgdaFunction{eval⟦}}\AgdaSpace{}%
@@ -1210,9 +1228,11 @@ The evaluation of the other method expressions is similar to their method lookup
 \AgdaBound{e₁}%
 \>[22]\AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
 \AgdaBound{σ}\AgdaSpace{}%
-\AgdaBound{π}%
-\>[29]\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaField{from}\AgdaSpace{}%
+\AgdaBound{π}\AgdaSpace{}%
+\AgdaSymbol{=}\<%
+\\
+\>[2][@{}l@{\AgdaIndent{0}}]%
+\>[4]\AgdaField{from}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{α}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -1229,7 +1249,7 @@ The evaluation of the other method expressions is similar to their method lookup
 \end{code}
 %
 The recursively-defined function \AgdaRef{eval⟦ ⟧} is obviously total,
-so there is no need for an explicit fixed point in its Agda definition.
+so there is no need for an explicit fixed point.
 
 According to the conceptual analysis of inheritance in CP89,
 the behavior of an instance \AgdaRef{ρ} will be defined as the fixed point
@@ -1273,6 +1293,8 @@ See Figure~9 of CP89 for an illustration of wrapper application.
 \AgdaOperator{\AgdaBound{⟩}}\<%
 \\
 %
+\\[\AgdaEmptyExtraSkip]%
+%
 \>[2]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⊕\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{⟨}}\AgdaSpace{}%
@@ -1295,8 +1317,10 @@ See Figure~9 of CP89 for an illustration of wrapper application.
 \AgdaField{from}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{m}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{[}}\AgdaSpace{}%
+\AgdaSymbol{→}\<%
+\\
+\>[2][@{}l@{\AgdaIndent{0}}]%
+\>[4]\AgdaOperator{\AgdaBound{[}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{φ}\AgdaSpace{}%
@@ -1363,8 +1387,10 @@ See Figure~9 of CP89 for an illustration of wrapper application.
 \AgdaField{from}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{m}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
+\AgdaSymbol{→}\<%
+\\
+\>[2][@{}l@{\AgdaIndent{0}}]%
+\>[4]\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{e}\AgdaSpace{}%
@@ -1375,8 +1401,7 @@ See Figure~9 of CP89 for an illustration of wrapper application.
 \AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
 \AgdaBound{σ}\AgdaSpace{}%
 \AgdaBound{π}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{,}}\AgdaSpace{}%
+\AgdaSymbol{)}\AgdaOperator{\AgdaFunction{,}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaSpace{}%
 \AgdaBound{inr}\AgdaSpace{}%
 \AgdaBound{⊥}\AgdaSpace{}%
@@ -1419,8 +1444,6 @@ See Figure~9 of CP89 for an illustration of wrapper application.
 \AgdaBound{⊥}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
 \>[2]\AgdaFunction{behave}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{Instance}\AgdaSpace{}%
@@ -1437,7 +1460,7 @@ See Figure~9 of CP89 for an illustration of wrapper application.
 \AgdaSymbol{(}\AgdaFunction{gen}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{class}\AgdaSpace{}%
 \AgdaBound{ρ}\AgdaSymbol{))}\<%
-\end{code}
-\end{AgdaAlign}
+\end{code}%
+\end{AgdaAlign}%
 %
-That concludes the Agda formulation of the denotational semantics defined in CP89.
+That concludes the Agda definition of the denotational semantics.
