@@ -114,7 +114,9 @@ implies that \AgdaRef{n} is positive in the latter.
   do′ n ⟦ appl f e₁ ⟧ ρ κ =
     from λ α → apply⟦ f ⟧ (to (do′ n ⟦ e₁ ⟧ ρ κ) α)
 \end{code}
-%
+
+\subsection{Proofs of Lemmas in Agda}
+
 The proofs of the lemmas use the following additional modules from the standard library:
 %
 %  -- TODO: use Reasoning.PartialOrder instead of ≡-Reasoning
@@ -138,8 +140,6 @@ The proofs of the lemmas use the following additional modules from the standard 
   module _ ( ext : Extensionality lzero lzero )
     where
 \end{code}
-
-\subsection{Proofs of Lemmas in Agda}
 
 Lemma~1 establishes a significant fact about the relationship
 between the denotational semantics and the intermediate semantics of method systems.
@@ -230,7 +230,7 @@ and concludes the proof of Lemma 1.
 \end{code}
 \end{AgdaAlign}%
 %
-The proofs of the remaining lemmas are available in the accompanying auxiliary material:
+The Agda proofs of the remaining lemmas are available in the accompanying auxiliary material.
 %
 \newcommand{\LemmaTwo}{
 \subsection*{Lemma 2}
@@ -473,7 +473,7 @@ Casper Bach Poulsen provided the two largest ones.}
 \subsection{Remaining Results}
 
 When Agda proofs of the remaining propositions and correctness theorem from CP89
-have been developed, they are to be made available on GitHub at
+have been developed, they are to be made available at
 \url{https://github.com/pdmosses/jensfest-agda}.
 
 \begin{code}
