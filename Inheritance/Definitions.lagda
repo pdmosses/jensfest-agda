@@ -23,7 +23,7 @@ open Inverse {{ ... }}
 %
 The declaration \AgdaRef{open Inverse \{\{ ... \}\}} above introduces overloaded functions
 \AgdaRef{to} and \AgdaRef{from} for each parameter of the form \AgdaRef{\{\{ i : A ↔ B \}\}}.
-The double braces specify instance parameters,
+The double braces specify so-called instance parameters,
 which are the Agda equivalent of Haskell type class constraints.
 %(Such isomorphisms are usually left implicit in published semantic definitions.)
 
@@ -35,13 +35,13 @@ They are used when defining the semantics of method systems in Agda.
 
 An element \AgdaRef{D : Domain} is an Agda type corresponding to a domain used in CP89.
 Such a type \AgdaRef{D} has a type of elements \AgdaRef{⟨ D ⟩}
-and a distinguished element \AgdaRef{⊥};
-further properties of domains
-(involving the partial order on \AgdaRef{⟨ D ⟩})
+and a distinguished element \AgdaRef{⊥}.
+Further assumptions about domains
 %the existence of limits of ascending chains,
 %\AgdaRef{⊥} being the least element,
 %and continuity of functions between domains)
-will be needed when proving results about semantic functions.
+will be made in Section~\ref{sec:equivalence}, when proving results that
+involve the partial order on \AgdaRef{⟨ D ⟩}.
 %
 \begin{code}
 module Inheritance.Definitions
@@ -78,8 +78,8 @@ It is superfluous to pass an \emph{assumption} of continuity as an explicit argu
 its only element is \AgdaRef{⊥} ($⊥_?$ in CP89).
 \AgdaRef{D +⊥ E} corresponds to the notation $D + E$ for separated sums of domains in CP89.
 The injection functions \AgdaRef{inl} and \AgdaRef{inr} are left implicit in CP89.
-Case analysis \AgdaRef{[ f , g ]⊥} on \AgdaRef{D +⊥ E} is decorated with $⊥$ to avoid confusion with
-the case analysis for ordinary disjoint union of Agda types.
+(Case analysis \AgdaRef{[ f , g ]⊥} on \AgdaRef{D +⊥ E} is decorated with $⊥$ to avoid confusion with
+the case analysis for ordinary disjoint union of Agda types.)
 
 The Cartesian products of types provided by the standard Agda library support products of domains,
 regarding a pair \AgdaRef{(⊥ , ⊥)} as the least element of the product of two domains.  
@@ -102,7 +102,15 @@ and it is simpler to declare them as ordinary Agda types instead of domains:
 \end{code}
 %
 Both the operational and the denotational semantics of method systems in CP89 involve
-the mutually-recursive domains \AgdaRef{Value}, \AgdaRef{Behavior}, and \AgdaRef{Fun}.
+the mutually-recursive domains \AgdaRef{Value}, \AgdaRef{Behavior}, and \AgdaRef{Fun}:
+%
+\begin{code}
+    ( Number    : Domain )      -- unspecified
+    ( Value     : Domain )      -- a value is a behavior or a number
+    ( Behavior  : Domain )      -- a behavior maps keys to funs
+    ( Fun       : Domain )      -- a fun maps values to values
+\end{code}
+%
 These domains cannot be defined (safely) as Agda types,
 due to the termination check on recursive type definitions.
 Scott domain theory ensures the existence of isomorphisms between the types of elements of these domains
@@ -111,10 +119,6 @@ However, this restriction is irrelevant for checking the types of functions on d
 so it is omitted.
 %
 \begin{code}
-    ( Number    : Domain )      -- unconstrained
-    ( Value     : Domain )      -- a value is a behavior or a number
-    ( Behavior  : Domain )      -- a behavior maps keys to funs
-    ( Fun       : Domain )      -- a fun maps values to values
     {{ isoᵛ     : ⟨ Value ⟩     ↔  ⟨ Behavior +⊥ Number ⟩     }}
     {{ isoᵇ     : ⟨ Behavior ⟩  ↔  ( Key → ⟨ Fun +⊥ ?⊥ ⟩ )    }}
     {{ isoᶠ     : ⟨ Fun ⟩       ↔  ( ⟨ Value ⟩ → ⟨ Value ⟩ )  }}
@@ -131,7 +135,7 @@ When checking the corresponding part of the Agda formulation,
 the Agda type checker reported this as an error.
 The semantic function \AgdaRef{apply⟦ ⟧} declared above is assumed to map
 elements of \AgdaRef{Primitive} to functions on \AgdaRef{⟨ Value ⟩},
-and its use fixed the error.
+and using it fixed the error.
 
 In CP89, the inheritance hierarchy is assumed to be a finite tree.
 Below, \AgdaRef{Class} is defined as the datatype of all finite trees.
@@ -151,7 +155,7 @@ The syntax of method expressions is defined by the inductive datatype \AgdaRef{E
 data Exp : Set where
   self   : Exp                    -- current object behavior
   super  : Exp                    -- superclass behavior
-  arg    : Exp                    -- argument value
+  arg    : Exp                    -- method argument value
   call   : Exp → Key → Exp → Exp  -- call method with argument
   appl   : Primitive → Exp → Exp  -- apply primitive to value
 variable e : Exp
@@ -279,7 +283,7 @@ The recursively-defined function \AgdaRef{eval⟦ ⟧} is obviously total,
 so there is no need for an explicit fixed point.
 
 According to the conceptual analysis of inheritance in CP89,
-the behavior of an instance \AgdaRef{ρ} will be defined as the fixed point
+the behavior of an instance \AgdaRef{ρ} is the fixed point
 of the generator associated with the class of \AgdaRef{ρ}.
 
 The generator for a subclass is obtained by modifying the generator of its parent class

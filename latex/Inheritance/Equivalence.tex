@@ -9,68 +9,78 @@
 \\
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Data.Nat.Base}%
-\>[31]\AgdaKeyword{using}\AgdaSpace{}%
+\AgdaModule{Data.Nat.Base}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaKeyword{using}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaSpace{}%
 \AgdaDatatype{ℕ}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaInductiveConstructor{zero}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaInductiveConstructor{suc}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≤\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{)}%
-\>[63]\AgdaComment{--\ natural\ numbers}\<%
+\>[34]\AgdaComment{--\ ℕ\ \ \ \ \ \ \ \ \ \ \ \ \ \textasciitilde{}\ Nat}\<%
 \\
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Data.Maybe.Base}%
-\>[31]\AgdaKeyword{renaming}\AgdaSpace{}%
+\AgdaModule{Data.Maybe.Base}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaKeyword{renaming}\AgdaSpace{}%
 \AgdaSymbol{(}%
-\>[43]\AgdaDatatype{Maybe}\AgdaSpace{}%
+\>[14I]\AgdaDatatype{Maybe}\AgdaSpace{}%
 \AgdaSymbol{to}\AgdaSpace{}%
 \AgdaDatatype{\AgdaUnderscore{}+?}\AgdaSymbol{;}%
-\>[63]\AgdaComment{--\ A\ +?\ is\ disjoint\ union\ of\ A\ and\ \{??\}}\<%
+\>[34]\AgdaComment{--\ A\ +?\ \ \ \ \ \ \ \ \ \textasciitilde{}\ A\ +\ ?}\<%
 \\
-%
-\>[43]\AgdaInductiveConstructor{nothing}\AgdaSpace{}%
+\>[.][@{}l@{}]\<[14I]%
+\>[13]\AgdaInductiveConstructor{nothing}\AgdaSpace{}%
 \AgdaSymbol{to}\AgdaSpace{}%
 \AgdaInductiveConstructor{??}\AgdaSymbol{;}%
-\>[63]\AgdaComment{--\ ??\ represents\ absence\ of\ an\ A\ value}\<%
+\>[34]\AgdaComment{--\ ??\ \ \ \ \ \ \ \ \ \ \ \ \ \textasciitilde{}\ ⊥?}\<%
 \\
 %
-\>[43]\AgdaFunction{maybe′}\AgdaSpace{}%
+\>[13]\AgdaFunction{maybe′}\AgdaSpace{}%
 \AgdaSymbol{to}\AgdaSpace{}%
 \AgdaFunction{[\AgdaUnderscore{},\AgdaUnderscore{}]?}\AgdaSpace{}%
 \AgdaSymbol{)}%
-\>[63]\AgdaComment{--\ [\ f\ ,\ x\ ]?\ is\ case\ analysis\ on\ A\ +?}\<%
+\>[34]\AgdaComment{--\ [\ f\ ,\ x\ ]?\ \ \ \ \textasciitilde{}\ [f,\ λ⊥?.x]}\<%
 \\
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Data.Product.Base}%
-\>[31]\AgdaKeyword{using}\AgdaSpace{}%
+\AgdaModule{Data.Product.Base}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaKeyword{using}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}×\AgdaUnderscore{}}}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{\AgdaUnderscore{},\AgdaUnderscore{}}}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaField{proj₁}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaField{proj₂}\AgdaSymbol{)}%
-\>[63]\AgdaComment{--\ A\ ×\ B\ is\ Cartesian\ product,\ \AgdaUnderscore{},\AgdaUnderscore{}\ is\ pairing}\<%
+\>[34]\AgdaComment{--\ A\ ×\ B\ \ \ \ \ \ \ \ \textasciitilde{}\ A\ ×\ B}\<%
 \\
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Function}%
-\>[31]\AgdaKeyword{using}\AgdaSpace{}%
+\AgdaModule{Function}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaKeyword{using}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaRecord{Inverse}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}↔\AgdaUnderscore{}}}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}∘\AgdaUnderscore{}}}\AgdaSymbol{)}%
-\>[63]\AgdaComment{--\ A\ ↔\ B\ is\ isomorphism\ between\ A\ and\ B}\<%
+\>[34]\AgdaComment{--\ A\ ↔\ B\ \ \ \ \ \ \textasciitilde{}\ implicit}\<%
 \\
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaModule{Inverse}\AgdaSpace{}%
 \AgdaSymbol{\{\{}\AgdaSpace{}%
 \AgdaSymbol{...}\AgdaSpace{}%
-\AgdaSymbol{\}\}}%
-\>[31]\AgdaKeyword{using}\AgdaSpace{}%
+\AgdaSymbol{\}\}}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaKeyword{using}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{to}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaField{from}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaFunction{inverseˡ}\AgdaSymbol{)}%
-\>[63]\AgdaComment{--\ to\ :\ A\ →\ B;\ from\ :\ B\ →\ A}\<%
+\>[34]\AgdaComment{--\ to\ from\ \ \ \ \ \textasciitilde{}\ implicit}\<%
 \end{code}%
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -87,8 +97,7 @@ and elided here.
 \AgdaBound{Domain}%
 \>[14]\AgdaSymbol{:}%
 \>[17]\AgdaPrimitive{Set₁}\AgdaSpace{}%
-\AgdaSymbol{)}%
-\>[62]\AgdaComment{--\ Domain\ is\ a\ type\ of\ cpo}\<%
+\AgdaSymbol{)}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -97,8 +106,7 @@ and elided here.
 \>[17]\AgdaBound{Domain}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaPrimitive{Set}\AgdaSpace{}%
-\AgdaSymbol{)}%
-\>[62]\AgdaComment{--\ ⟨\ D\ ⟩\ is\ the\ type\ of\ elements\ of\ D}\<%
+\AgdaSymbol{)}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -117,8 +125,7 @@ and elided here.
 \AgdaOperator{\AgdaBound{⟩}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaPrimitive{Set}\AgdaSpace{}%
-\AgdaSymbol{)}%
-\>[62]\AgdaComment{--\ x\ ⊑\ y\ is\ the\ partial\ order\ of\ D}\<%
+\AgdaSymbol{)}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -131,8 +138,7 @@ and elided here.
 \AgdaOperator{\AgdaBound{⟨}}\AgdaSpace{}%
 \AgdaBound{D}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{⟩}}\AgdaSpace{}%
-\AgdaSymbol{)}%
-\>[62]\AgdaComment{--\ ⊥\ is\ the\ least\ element\ of\ D}\<%
+\AgdaSymbol{)}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -155,18 +161,14 @@ and elided here.
 \AgdaOperator{\AgdaBound{⟨}}\AgdaSpace{}%
 \AgdaBound{D}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{⟩}}\AgdaSpace{}%
-\AgdaSymbol{)}%
-\>[62]\AgdaComment{--\ fix\ f\ is\ the\ least\ fixed-point\ of\ f}\<%
+\AgdaSymbol{)}\<%
 \\
-%
-\\[\AgdaEmptyExtraSkip]%
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaBound{?⊥}%
 \>[14]\AgdaSymbol{:}%
 \>[17]\AgdaBound{Domain}\AgdaSpace{}%
-\AgdaSymbol{)}%
-\>[62]\AgdaComment{--\ ⊥\ is\ the\ only\ element\ of\ ?⊥}\<%
+\AgdaSymbol{)}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -177,8 +179,7 @@ and elided here.
 \AgdaBound{Domain}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{Domain}\AgdaSpace{}%
-\AgdaSymbol{)}%
-\>[62]\AgdaComment{--\ D\ +⊥\ E\ is\ the\ separated\ sum\ of\ D\ and\ E}\<%
+\AgdaSymbol{)}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -198,8 +199,7 @@ and elided here.
 \AgdaOperator{\AgdaBound{+⊥}}\AgdaSpace{}%
 \AgdaBound{E}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{⟩}}\AgdaSpace{}%
-\AgdaSymbol{)}%
-\>[62]\AgdaComment{--\ inl\ injects\ elements\ of\ D\ into\ D\ +⊥\ E}\<%
+\AgdaSymbol{)}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -219,8 +219,7 @@ and elided here.
 \AgdaOperator{\AgdaBound{+⊥}}\AgdaSpace{}%
 \AgdaBound{E}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{⟩}}\AgdaSpace{}%
-\AgdaSymbol{)}%
-\>[62]\AgdaComment{--\ inr\ injects\ elements\ of\ E\ into\ D\ +⊥\ E}\<%
+\AgdaSymbol{)}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -231,8 +230,7 @@ and elided here.
 \AgdaBound{F}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{Domain}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}%
-\>[62]\AgdaComment{--\ [\ f\ ,\ g\ ]⊥\ is\ case\ analysis\ on\ D\ +⊥\ E}\<%
+\AgdaSymbol{→}\<%
 \\
 \>[17][@{}l@{\AgdaIndent{0}}]%
 \>[19]\AgdaSymbol{(}\AgdaSpace{}%
@@ -254,8 +252,10 @@ and elided here.
 \AgdaBound{F}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{⟩}}\AgdaSpace{}%
 \AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{⟨}}\AgdaSpace{}%
+\AgdaSymbol{→}\<%
+\\
+%
+\>[19]\AgdaOperator{\AgdaBound{⟨}}\AgdaSpace{}%
 \AgdaBound{D}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{+⊥}}\AgdaSpace{}%
 \AgdaBound{E}\AgdaSpace{}%
@@ -267,14 +267,12 @@ and elided here.
 \AgdaSymbol{)}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaBound{Instance}%
 \>[17]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPrimitive{Set}\AgdaSpace{}%
 \AgdaSymbol{)}%
-\>[26]\AgdaComment{--\ objects}\<%
+\>[32]\AgdaComment{--\ objects}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -282,7 +280,7 @@ and elided here.
 \>[17]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPrimitive{Set}\AgdaSpace{}%
 \AgdaSymbol{)}%
-\>[26]\AgdaComment{--\ class\ names}\<%
+\>[32]\AgdaComment{--\ class\ names}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -290,7 +288,7 @@ and elided here.
 \>[17]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPrimitive{Set}\AgdaSpace{}%
 \AgdaSymbol{)}%
-\>[26]\AgdaComment{--\ method\ names}\<%
+\>[32]\AgdaComment{--\ method\ names}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -298,17 +296,15 @@ and elided here.
 \>[17]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPrimitive{Set}\AgdaSpace{}%
 \AgdaSymbol{)}%
-\>[26]\AgdaComment{--\ function\ names}\<%
+\>[32]\AgdaComment{--\ function\ names}\<%
 \\
-%
-\\[\AgdaEmptyExtraSkip]%
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaBound{Number}%
 \>[16]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{Domain}\AgdaSpace{}%
 \AgdaSymbol{)}%
-\>[32]\AgdaComment{--\ the\ domain\ of\ numbers\ is\ unconstrained}\<%
+\>[32]\AgdaComment{--\ unspecified}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -316,7 +312,7 @@ and elided here.
 \>[16]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{Domain}\AgdaSpace{}%
 \AgdaSymbol{)}%
-\>[32]\AgdaComment{--\ a\ value\ is\ (isomorphic\ to)\ a\ behavior\ or\ a\ number}\<%
+\>[32]\AgdaComment{--\ a\ value\ is\ a\ behavior\ or\ a\ number}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -324,7 +320,7 @@ and elided here.
 \>[16]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{Domain}\AgdaSpace{}%
 \AgdaSymbol{)}%
-\>[32]\AgdaComment{--\ a\ behaviour\ maps\ a\ method\ name\ to\ a\ fun,\ or\ to\ the\ only\ element\ of\ ?⊥}\<%
+\>[32]\AgdaComment{--\ a\ behavior\ maps\ keys\ to\ funs}\<%
 \\
 %
 \>[4]\AgdaSymbol{(}\AgdaSpace{}%
@@ -332,7 +328,7 @@ and elided here.
 \>[16]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{Domain}\AgdaSpace{}%
 \AgdaSymbol{)}%
-\>[32]\AgdaComment{--\ a\ fun\ maps\ an\ argument\ value\ to\ a\ value\ (possibly\ ⊥)}\<%
+\>[32]\AgdaComment{--\ a\ fun\ maps\ values\ to\ values}\<%
 \\
 %
 \>[4]\AgdaSymbol{\{\{}\AgdaSpace{}%
@@ -660,7 +656,7 @@ so they can be defined in Agda without an explicit least fixed-point:
 \end{code}
 %
 Cases of Agda definitions are sequential:
-below, putting a case for \AgdaRef{zero}
+putting a case for \AgdaRef{zero}
 before the corresponding case for \AgdaRef{n}
 implies that \AgdaRef{n} is positive in the latter.
 %
@@ -944,10 +940,10 @@ The proofs of the lemmas use the following additional modules from the standard 
 
 Lemma~1 establishes a significant fact about the relationship
 between the denotational semantics and the intermediate semantics of method systems.
-Its Agda proof exhibits the equational reasoning steps of the original proofs in CP89.
+Its Agda proof exhibits the equational reasoning steps of the original proof in CP89.
 This checks the correctness not only of the stated result, but also of the steps themselves.
 
-The Agda standard library defines notation for equational reasoning:
+The Agda standard library defines the following notation for equational reasoning:
 \begin{itemize}
 \item \AgdaRef{x ≡ y} asserts the equality of \AgdaRef{x} and \AgdaRef{y};
 \item \AgdaRef{begin} starts a proof;
@@ -1000,7 +996,7 @@ The restriction to the class \AgdaRef{child c κ} ensures that it is not the roo
 in CP89, the use of $\textit{parent}(κ)$ as an argument of type \textbf{Class}
 in the statement of Lemma~1 leaves this restriction implicit.
 
-The proof of this lemma is a straightforward structural induction.
+The proof of this lemma is a straightforward structural induction:
 
 \begin{code}%
 %
@@ -1226,7 +1222,7 @@ are quite complicated in Agda.
 This is mainly due to the case analysis required in the semantics of method calls
 to make the semantics type-correct
 (these cases are left implicit in CP89).
-Using rewrite below concisely hides the complicated terms needed for the intermediate proof steps.
+The use of \AgdaRef{rewrite} below succinctly verifies the correctness of the case analysis:
 %
 \begin{code}%
 %

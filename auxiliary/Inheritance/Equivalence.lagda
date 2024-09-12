@@ -13,7 +13,7 @@ open import Data.Product.Base
 open import Function
   using (Inverse; _↔_; _∘_)       -- A ↔ B      ~ implicit
 open Inverse {{ ... }}
-  using (to; from; inverseˡ)                -- to from     ~ implicit
+  using (to; from; inverseˡ)      -- to from     ~ implicit
 
 module Inheritance.Equivalence
     ( Domain  :  Set₁ )                                     
@@ -32,7 +32,7 @@ module Inheritance.Equivalence
     ( Name       : Set )        -- class names
     ( Key        : Set )        -- method names
     ( Primitive  : Set )        -- function names
-    ( Number    : Domain )      -- unconstrained
+    ( Number    : Domain )      -- unspecified
     ( Value     : Domain )      -- a value is a behavior or a number
     ( Behavior  : Domain )      -- a behavior maps keys to funs
     ( Fun       : Domain )      -- a fun maps values to values

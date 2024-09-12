@@ -3,13 +3,18 @@
 \begin{AgdaAlign}
 \begin{code}[hide]
 {-# OPTIONS --allow-unsolved-metas #-}
-open import Data.Nat.Base      using ( ℕ; zero; suc; _≤_ )     -- natural numbers
-open import Data.Maybe.Base    renaming (  Maybe to _+?;       -- A +? is disjoint union of A and {??}
-                                           nothing to ??;      -- ?? represents absence of an A value
-                                           maybe′ to [_,_]? )  -- [ f , x ]? is case analysis on A +?
-open import Data.Product.Base  using (_×_; _,_; proj₁; proj₂)  -- A × B is Cartesian product, _,_ is pairing
-open import Function           using (Inverse; _↔_; _∘_)       -- A ↔ B is isomorphism between A and B
-open Inverse {{ ... }}         using (to; from; inverseˡ)      -- to : A → B; from : B → A
+open import Data.Nat.Base
+  using ( ℕ; zero; suc; _≤_ )     -- ℕ             ~ Nat
+open import Data.Maybe.Base
+  renaming ( Maybe to _+?;        -- A +?         ~ A + ?
+             nothing to ??;       -- ??             ~ ⊥?
+             maybe′ to [_,_]? )   -- [ f , x ]?    ~ [f, λ⊥?.x]
+open import Data.Product.Base
+  using (_×_; _,_; proj₁; proj₂)  -- A × B        ~ A × B
+open import Function
+  using (Inverse; _↔_; _∘_)       -- A ↔ B      ~ implicit
+open Inverse {{ ... }}
+  using (to; from; inverseˡ)      -- to from     ~ implicit
 \end{code}%
 \begin{code}
 module Inheritance.Equivalence
@@ -20,28 +25,26 @@ and elided here.
 %
 \newcommand{\EquivalenceParameters}{
 \begin{code}
-    ( Domain  :  Set₁ )                                       -- Domain is a type of cpo
-    ( ⟨_⟩     :  Domain → Set )                               -- ⟨ D ⟩ is the type of elements of D
-    ( _⊑_     :  {D : Domain} → ⟨ D ⟩ → ⟨ D ⟩ → Set )         -- x ⊑ y is the partial order of D
-    ( ⊥       :  {D : Domain} → ⟨ D ⟩ )                       -- ⊥ is the least element of D
-    ( fix     :  {D : Domain} → ( ⟨ D ⟩ → ⟨ D ⟩ ) → ⟨ D ⟩ )   -- fix f is the least fixed-point of f
-
-    ( ?⊥      :  Domain )                                     -- ⊥ is the only element of ?⊥
-    ( _+⊥_    :  Domain → Domain → Domain )                   -- D +⊥ E is the separated sum of D and E
-    ( inl     :  {D E : Domain} → ⟨ D ⟩ → ⟨ D +⊥ E ⟩ )        -- inl injects elements of D into D +⊥ E
-    ( inr     :  {D E : Domain} → ⟨ E ⟩ → ⟨ D +⊥ E ⟩ )        -- inr injects elements of E into D +⊥ E
-    ( [_,_]⊥  :  {D E F : Domain} →                           -- [ f , g ]⊥ is case analysis on D +⊥ E
-                   ( ⟨ D ⟩ → ⟨ F ⟩ ) → ( ⟨ E ⟩ → ⟨ F ⟩ ) → ⟨ D +⊥ E ⟩ → ⟨ F ⟩ )
-
-    ( Instance   : Set )  -- objects
-    ( Name       : Set )  -- class names
-    ( Key        : Set )  -- method names
-    ( Primitive  : Set )  -- function names
-
-    ( Number    : Domain )      -- the domain of numbers is unconstrained
-    ( Value     : Domain )      -- a value is (isomorphic to) a behavior or a number
-    ( Behavior  : Domain )      -- a behaviour maps a method name to a fun, or to the only element of ?⊥
-    ( Fun       : Domain )      -- a fun maps an argument value to a value (possibly ⊥)
+    ( Domain  :  Set₁ )                                     
+    ( ⟨_⟩     :  Domain → Set )                             
+    ( _⊑_     :  {D : Domain} → ⟨ D ⟩ → ⟨ D ⟩ → Set )
+    ( ⊥       :  {D : Domain} → ⟨ D ⟩ )                     
+    ( fix     :  {D : Domain} → ( ⟨ D ⟩ → ⟨ D ⟩ ) → ⟨ D ⟩ ) 
+    ( ?⊥      :  Domain )                             
+    ( _+⊥_    :  Domain → Domain → Domain )           
+    ( inl     :  {D E : Domain} → ⟨ D ⟩ → ⟨ D +⊥ E ⟩ )
+    ( inr     :  {D E : Domain} → ⟨ E ⟩ → ⟨ D +⊥ E ⟩ )
+    ( [_,_]⊥  :  {D E F : Domain} →                   
+                   ( ⟨ D ⟩ → ⟨ F ⟩ ) → ( ⟨ E ⟩ → ⟨ F ⟩ ) →
+                   ⟨ D +⊥ E ⟩ → ⟨ F ⟩ )
+    ( Instance   : Set )        -- objects
+    ( Name       : Set )        -- class names
+    ( Key        : Set )        -- method names
+    ( Primitive  : Set )        -- function names
+    ( Number    : Domain )      -- unspecified
+    ( Value     : Domain )      -- a value is a behavior or a number
+    ( Behavior  : Domain )      -- a behavior maps keys to funs
+    ( Fun       : Domain )      -- a fun maps values to values
     {{ isoᵛ     : ⟨ Value ⟩     ↔  ⟨ Behavior +⊥ Number ⟩     }}
     {{ isoᵇ     : ⟨ Behavior ⟩  ↔  ( Key → ⟨ Fun +⊥ ?⊥ ⟩ )    }}
     {{ isoᶠ     : ⟨ Fun ⟩       ↔  ( ⟨ Value ⟩ → ⟨ Value ⟩ )  }}
@@ -92,7 +95,7 @@ so they can be defined in Agda without an explicit least fixed-point:
 \end{code}
 %
 Cases of Agda definitions are sequential:
-below, putting a case for \AgdaRef{zero}
+putting a case for \AgdaRef{zero}
 before the corresponding case for \AgdaRef{n}
 implies that \AgdaRef{n} is positive in the latter.
 %
@@ -143,10 +146,10 @@ The proofs of the lemmas use the following additional modules from the standard 
 
 Lemma~1 establishes a significant fact about the relationship
 between the denotational semantics and the intermediate semantics of method systems.
-Its Agda proof exhibits the equational reasoning steps of the original proofs in CP89.
+Its Agda proof exhibits the equational reasoning steps of the original proof in CP89.
 This checks the correctness not only of the stated result, but also of the steps themselves.
 
-The Agda standard library defines notation for equational reasoning:
+The Agda standard library defines the following notation for equational reasoning:
 \begin{itemize}
 \item \AgdaRef{x ≡ y} asserts the equality of \AgdaRef{x} and \AgdaRef{y};
 \item \AgdaRef{begin} starts a proof;
@@ -166,7 +169,7 @@ The restriction to the class \AgdaRef{child c κ} ensures that it is not the roo
 in CP89, the use of $\textit{parent}(κ)$ as an argument of type \textbf{Class}
 in the statement of Lemma~1 leaves this restriction implicit.
 
-The proof of this lemma is a straightforward structural induction.
+The proof of this lemma is a straightforward structural induction:
 
 \begin{code}
     lemma-1 n self ρ c κ =
@@ -196,7 +199,7 @@ are quite complicated in Agda.
 This is mainly due to the case analysis required in the semantics of method calls
 to make the semantics type-correct
 (these cases are left implicit in CP89).
-Using rewrite below concisely hides the complicated terms needed for the intermediate proof steps.
+The use of \AgdaRef{rewrite} below succinctly verifies the correctness of the case analysis:
 %
 \begin{code}
     lemma-1 n (call e₁ m e₂) ρ c κ

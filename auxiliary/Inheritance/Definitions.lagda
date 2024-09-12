@@ -33,7 +33,7 @@ module Inheritance.Definitions
     ( Name       : Set )        -- class names
     ( Key        : Set )        -- method names
     ( Primitive  : Set )        -- function names
-    ( Number    : Domain )      -- unconstrained
+    ( Number    : Domain )      -- unspecified
     ( Value     : Domain )      -- a value is a behavior or a number
     ( Behavior  : Domain )      -- a behavior maps keys to funs
     ( Fun       : Domain )      -- a fun maps values to values
@@ -53,7 +53,7 @@ variable κ : Class
 data Exp : Set where
   self   : Exp                    -- current object behavior
   super  : Exp                    -- superclass behavior
-  arg    : Exp                    -- argument value
+  arg    : Exp                    -- method argument value
   call   : Exp → Key → Exp → Exp  -- call method with argument
   appl   : Primitive → Exp → Exp  -- apply primitive to value
 variable e : Exp
