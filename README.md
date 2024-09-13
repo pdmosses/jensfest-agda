@@ -9,7 +9,7 @@ The Agda types and function definitions correspond closely to those given in
 
 Agda verifies that the definitions given here are well-typed,
 and checks that proofs of the stated results are valid.
-The code imports various modules from the [standard Agda library version 2.0],
+The code imports various modules from the [standard Agda library version 2.1],
 and type-checks with Agda version 2.6.4.3.
 
 In denotational semantics, types are generally taken to be Scott domains,
