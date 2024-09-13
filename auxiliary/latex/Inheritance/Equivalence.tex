@@ -394,7 +394,9 @@
 \\
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaKeyword{where}\<%
-\\
+\end{code}
+\clearpage
+\begin{code}%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
 \AgdaModule{Inheritance.Definitions}\<%
@@ -512,7 +514,6 @@
 \AgdaSymbol{)}\<%
 \end{code}
 
-\clearpage
 \subsection*{Intermediate Semantics}
 
 \begin{code}%
@@ -839,7 +840,7 @@
 \AgdaBound{α}\AgdaSymbol{)}\<%
 \end{code}
 
-\clearpage
+%\clearpage
 \section*{Proofs}
 
 \begin{code}%
@@ -908,7 +909,6 @@
 \>[4]\AgdaKeyword{where}\<%
 \end{code}
 
-\clearpage
 \subsection*{Lemma 1}
 
 \begin{code}%
@@ -1200,9 +1200,9 @@
 \AgdaBound{κ}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{refl}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
+\end{code}
+\clearpage
+\begin{code}%
 %
 \>[4]\AgdaFunction{lemma-1}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSpace{}%
@@ -1351,7 +1351,7 @@
 \AgdaBound{κ}\AgdaSymbol{))}\<%
 \end{code}
 
-\clearpage
+%\clearpage
 \subsection*{Lemma 2}
 
 \begin{code}%
@@ -1930,10 +1930,7 @@
 \>[8][@{}l@{\AgdaIndent{0}}]%
 \>[10]\AgdaFunction{π′}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaComment{--\ TODO:\ how\ to\ refer\ to\ π\ instead\ of\ π′?}\<%
-\\
-\>[10][@{}l@{\AgdaIndent{0}}]%
-\>[12]\AgdaFunction{lookup′}\AgdaSymbol{(}\AgdaInductiveConstructor{suc}\AgdaSpace{}%
+\AgdaFunction{lookup′}\AgdaSymbol{(}\AgdaInductiveConstructor{suc}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{κ}\AgdaSpace{}%
 \AgdaBound{ρ}\<%
@@ -2012,8 +2009,10 @@
 \>[14]\AgdaBound{[,]⊥-elim}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{A}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaDatatype{Exp}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaArgument{x}\AgdaSpace{}%
+\AgdaDatatype{Exp}\AgdaSymbol{\}}\<%
+\\
+\>[14][@{}l@{\AgdaIndent{0}}]%
+\>[16]\AgdaSymbol{\{}\AgdaArgument{x}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{e}\AgdaSpace{}%
@@ -2088,7 +2087,7 @@
 \AgdaSymbol{\AgdaUnderscore{}))))}\<%
 \end{code}
 
-\clearpage
+%\clearpage
 \subsection*{Lemma 3}
 
 \begin{code}%
@@ -2357,10 +2356,10 @@
 \\
 %
 \>[10]\AgdaSymbol{(}%
-\>[1528I]\AgdaBound{is-assumed-monotone}\AgdaSpace{}%
+\>[1527I]\AgdaBound{is-assumed-monotone}\AgdaSpace{}%
 \AgdaSymbol{:}\<%
 \\
-\>[.][@{}l@{}]\<[1528I]%
+\>[.][@{}l@{}]\<[1527I]%
 \>[12]\AgdaSymbol{\{}\AgdaBound{D}\AgdaSpace{}%
 \AgdaBound{E}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -2396,10 +2395,10 @@
 \\
 %
 \>[10]\AgdaSymbol{(}%
-\>[1558I]\AgdaBound{is-assumed-monotone-2}\AgdaSpace{}%
+\>[1557I]\AgdaBound{is-assumed-monotone-2}\AgdaSpace{}%
 \AgdaSymbol{:}\<%
 \\
-\>[.][@{}l@{}]\<[1558I]%
+\>[.][@{}l@{}]\<[1557I]%
 \>[12]\AgdaSymbol{\{}\AgdaBound{D}\AgdaSpace{}%
 \AgdaBound{E}\AgdaSpace{}%
 \AgdaBound{F}\AgdaSpace{}%
@@ -2551,7 +2550,7 @@
 \AgdaBound{q}\<%
 \\
 %
-\>[8]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}≡⊑⟨\AgdaUnderscore{}⟩\AgdaUnderscore{}}}\AgdaSpace{}%
+\>[8]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}≡-⊑⟨\AgdaUnderscore{}⟩\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{D}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -2586,18 +2585,18 @@
 \\
 %
 \>[8]\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{≡⊑⟨}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≡-⊑⟨}}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟩}}\AgdaSpace{}%
 \AgdaBound{q}\AgdaSpace{}%
-\AgdaSymbol{=}%
-\>[24]\AgdaBound{⊑-is-transitive}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{⊑-is-transitive}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{⊑-is-reflexive}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{q}\<%
 \\
 %
-\>[8]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⊑≡⟨\AgdaUnderscore{}⟩\AgdaUnderscore{}}}\AgdaSpace{}%
+\>[8]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⊑-≡⟨\AgdaUnderscore{}⟩\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{D}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -2632,12 +2631,12 @@
 \\
 %
 \>[8]\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊑≡⟨}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊑-≡⟨}}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟩}}\AgdaSpace{}%
 \AgdaBound{q}\AgdaSpace{}%
-\AgdaSymbol{=}%
-\>[24]\AgdaBound{⊑-is-transitive}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{⊑-is-transitive}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{⊑-is-reflexive}\AgdaSpace{}%
 \AgdaBound{q}\AgdaSymbol{)}\<%
@@ -2685,32 +2684,32 @@
 \\
 %
 \>[8]\AgdaKeyword{infix}%
-\>[15]\AgdaNumber{1}\AgdaSpace{}%
+\>[16]\AgdaNumber{1}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{begin-⊑\AgdaUnderscore{}}}\<%
 \\
 %
-\>[8]\AgdaKeyword{infixr}\AgdaSpace{}%
-\AgdaNumber{2}\AgdaSpace{}%
+\>[8]\AgdaKeyword{infixr}%
+\>[16]\AgdaNumber{2}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⊑⟨\AgdaUnderscore{}⟩\AgdaUnderscore{}}}\<%
 \\
 %
-\>[8]\AgdaKeyword{infixr}\AgdaSpace{}%
-\AgdaNumber{2}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⊑≡⟨\AgdaUnderscore{}⟩\AgdaUnderscore{}}}\<%
+\>[8]\AgdaKeyword{infixr}%
+\>[16]\AgdaNumber{2}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⊑-≡⟨\AgdaUnderscore{}⟩\AgdaUnderscore{}}}\<%
 \\
 %
-\>[8]\AgdaKeyword{infixr}\AgdaSpace{}%
-\AgdaNumber{2}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}≡⊑⟨\AgdaUnderscore{}⟩\AgdaUnderscore{}}}\<%
+\>[8]\AgdaKeyword{infixr}%
+\>[16]\AgdaNumber{2}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}≡-⊑⟨\AgdaUnderscore{}⟩\AgdaUnderscore{}}}\<%
 \\
 %
-\>[8]\AgdaKeyword{infixr}\AgdaSpace{}%
-\AgdaNumber{2}\AgdaSpace{}%
+\>[8]\AgdaKeyword{infixr}%
+\>[16]\AgdaNumber{2}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⊑⟨⟩\AgdaUnderscore{}}}\<%
 \\
 %
 \>[8]\AgdaKeyword{infix}%
-\>[15]\AgdaNumber{3}\AgdaSpace{}%
+\>[16]\AgdaNumber{3}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}∎-⊑}}\<%
 \\
 %
@@ -2778,9 +2777,9 @@
 \AgdaSymbol{(}\AgdaFunction{iter-is-chain}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
+\end{code}
+\clearpage
+\begin{code}%
 %
 \>[8]\AgdaFunction{lemma-4-send′}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -2968,7 +2967,7 @@
 \AgdaBound{κ}\AgdaSymbol{)}\<%
 \\
 %
-\>[10]\AgdaOperator{\AgdaFunction{≡⊑⟨}}\AgdaSpace{}%
+\>[10]\AgdaOperator{\AgdaFunction{≡-⊑⟨}}\AgdaSpace{}%
 \AgdaFunction{lemma-1}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSpace{}%
 \AgdaBound{e}\AgdaSpace{}%
@@ -2992,12 +2991,12 @@
 \\
 %
 \>[10]\AgdaOperator{\AgdaFunction{⊑⟨}}%
-\>[1985I]\AgdaBound{is-assumed-monotone-2}\AgdaSpace{}%
+\>[1982I]\AgdaBound{is-assumed-monotone-2}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaOperator{\AgdaFunction{eval⟦}}\AgdaSpace{}%
 \AgdaBound{e}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟧}}\AgdaSymbol{)}\<%
 \\
-\>[1985I][@{}l@{\AgdaIndent{0}}]%
+\>[1982I][@{}l@{\AgdaIndent{0}}]%
 \>[15]\AgdaSymbol{(}\AgdaFunction{send′}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSpace{}%
 \AgdaBound{ρ}\AgdaSymbol{)}\AgdaSpace{}%
@@ -3028,7 +3027,7 @@
 \\
 %
 \>[10]\AgdaOperator{\AgdaFunction{⊑⟨}}%
-\>[2009I]\AgdaBound{is-assumed-monotone}\AgdaSpace{}%
+\>[2006I]\AgdaBound{is-assumed-monotone}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaOperator{\AgdaFunction{eval⟦}}\AgdaSpace{}%
 \AgdaBound{e}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
@@ -3037,7 +3036,7 @@
 \AgdaBound{n}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{ρ}\AgdaSymbol{))}\<%
 \\
-\>[2009I][@{}l@{\AgdaIndent{0}}]%
+\>[2006I][@{}l@{\AgdaIndent{0}}]%
 \>[15]\AgdaSymbol{(}\AgdaFunction{lookup′}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{suc}\AgdaSpace{}%
 \AgdaBound{n}\AgdaSymbol{)}\AgdaSpace{}%
@@ -3074,7 +3073,7 @@
 \AgdaBound{ρ}\AgdaSymbol{)}\<%
 \\
 %
-\>[10]\AgdaOperator{\AgdaFunction{≡⊑⟨}}\AgdaSpace{}%
+\>[10]\AgdaOperator{\AgdaFunction{≡-⊑⟨}}\AgdaSpace{}%
 \AgdaFunction{sym}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{lemma-1}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{suc}\AgdaSpace{}%
@@ -3230,26 +3229,26 @@
 %
 \>[10]\AgdaFunction{proposition-1}\AgdaSpace{}%
 \AgdaBound{ρ}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaHole{\{!\ \ \ !\}}\<%
+\AgdaSymbol{=}%
+\>[29]\AgdaHole{\{!\ \ \ !\}}\<%
 \\
 %
 \>[10]\AgdaFunction{proposition-2}\AgdaSpace{}%
 \AgdaBound{ρ}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaHole{\{!\ \ \ !\}}\<%
+\AgdaSymbol{=}%
+\>[29]\AgdaHole{\{!\ \ \ !\}}\<%
 \\
 %
 \>[10]\AgdaFunction{proposition-3}\AgdaSpace{}%
 \AgdaBound{ρ}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaHole{\{!\ \ \ !\}}\<%
+\AgdaSymbol{=}%
+\>[29]\AgdaHole{\{!\ \ \ !\}}\<%
 \\
 %
 \>[10]\AgdaFunction{theorem-1}\AgdaSpace{}%
 \AgdaBound{ρ}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaHole{\{!\ \ \ !\}}\<%
+\AgdaSymbol{=}%
+\>[29]\AgdaHole{\{!\ \ \ !\}}\<%
 \end{code}
 \end{AgdaAlign}
  

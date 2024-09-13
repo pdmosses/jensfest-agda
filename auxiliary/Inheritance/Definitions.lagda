@@ -16,7 +16,9 @@ open import Function
   using (Inverse; _↔_; _∘_)       -- A ↔ B      ~ implicit
 open Inverse {{ ... }}
   using (to; from)                -- to from     ~ implicit
-
+\end{code}
+\clearpage
+\begin{code}
 module Inheritance.Definitions
     ( Domain  :  Set₁ )                                     
     ( ⟨_⟩     :  Domain → Set )                             
@@ -57,7 +59,9 @@ data Exp : Set where
   call   : Exp → Key → Exp → Exp  -- call method with argument
   appl   : Primitive → Exp → Exp  -- apply primitive to value
 variable e : Exp
-
+\end{code}
+\clearpage
+\begin{code}
 module Semantics
     ( class     : Instance → Class )        -- the class of an object
     ( methods′  : Class → Key → (Exp +?) )  -- the methods of a class
@@ -67,7 +71,7 @@ module Semantics
   methods origin m       = ??
 \end{code}
 
-\clearpage
+%\clearpage
 \subsection*{Method Lookup Semantics}
 
 \begin{code}
@@ -105,7 +109,9 @@ module Semantics
                    ]⊥ (to (to (d⟦ e₁ ⟧ ρ κ) α))
       do⟦ appl f e₁     ⟧ ρ κ  =
         from λ α → apply⟦ f ⟧ (to (d⟦ e₁ ⟧ ρ κ) α)
-
+\end{code}
+\clearpage
+\begin{code}
     γ : ⟨ Gᵍ ⟩ → ⟨ Gᵍ ⟩
     γ = from ∘ g ∘ to
     send     = proj₁ (to (fix γ))
@@ -113,7 +119,7 @@ module Semantics
     do⟦_⟧    = proj₂ (proj₂ (to (fix γ)))
 \end{code}
 
-\clearpage
+%\clearpage
 \subsection*{Denotational Semantics}
 
 \begin{code}

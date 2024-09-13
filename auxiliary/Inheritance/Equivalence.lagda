@@ -41,6 +41,9 @@ module Inheritance.Equivalence
     {{ isoᶠ     : ⟨ Fun ⟩       ↔  ( ⟨ Value ⟩ → ⟨ Value ⟩ )  }}
     ( apply⟦_⟧  : Primitive → ⟨ Value ⟩ → ⟨ Value ⟩ )
   where
+\end{code}
+\clearpage
+\begin{code}
 open import Inheritance.Definitions
     ( Domain ) ( ⟨_⟩ ) ( ⊥ ) ( fix ) ( ?⊥ )
     ( _+⊥_ ) ( inl ) ( inr ) ( [_,_]⊥ )
@@ -55,7 +58,6 @@ module _
   open Semantics ( class ) ( methods′ )
 \end{code}
 
-\clearpage
 \subsection*{Intermediate Semantics}
 
 \begin{code}
@@ -90,7 +92,7 @@ module _
     from λ α → apply⟦ f ⟧ (to (do′ n ⟦ e₁ ⟧ ρ κ) α)
 \end{code}
 
-\clearpage
+%\clearpage
 \section*{Proofs}
 
 \begin{code}
@@ -108,7 +110,6 @@ module _
     where
 \end{code}
 
-\clearpage
 \subsection*{Lemma 1}
 
 \begin{code}
@@ -140,7 +141,9 @@ module _
     lemma-1 n (call e₁ m e₂) ρ c κ
       rewrite (lemma-1 n e₁ ρ c κ)
       rewrite (lemma-1 n e₂ ρ c κ) = refl
-
+\end{code}
+\clearpage
+\begin{code}
     lemma-1 n (appl f e₁) ρ c κ =
       begin
         do′ (suc n) ⟦ appl f e₁ ⟧ ρ (child c κ)
@@ -162,7 +165,7 @@ module _
               apply⟦ f ⟧ ((to X) α)) (lemma-1 n e₁ ρ c κ))
 \end{code}
 
-\clearpage
+%\clearpage
 \subsection*{Lemma 2}
 
 \begin{code}
@@ -224,8 +227,7 @@ module _
           lookup′ (suc n) (child c κ) ρ
         ∎
         where
-          π′ = -- TODO: how to refer to π instead of π′?
-            lookup′(suc n) κ ρ
+          π′ = lookup′(suc n) κ ρ
           use-lemma-2 =
             cong (λ X → wrap (child c κ) (send′ n ρ) X ⊕ X) (lemma-2 κ n ρ)
           use-to∘from-inverse =
@@ -233,14 +235,15 @@ module _
               cong (λ X → [ _ , ( λ _ → to π′ x ) ]⊥ (X x)) (inverseˡ refl))
           use-[,]⊥-elim =
             cong from (ext λ x → 
-              [,]⊥-elim {A = Exp} {x = λ e → eval⟦ e ⟧ (send′ n ρ) π′} {y = ⊥} {z = methods (child c κ) x})
+              [,]⊥-elim {A = Exp} 
+                {x = λ e → eval⟦ e ⟧ (send′ n ρ) π′} {y = ⊥} {z = methods (child c κ) x})
           use-lemma-1 =
             cong from (ext λ m → 
               cong (λ X → [ X , ( to (lookup′ (suc n) κ ρ) m ) ]? (methods (child c κ) m))
                   (ext λ e → cong inl (sym (lemma-1 n e _ _ _))))
 \end{code}
 
-\clearpage
+%\clearpage
 \subsection*{Lemma 3}
 
 \begin{code}
@@ -296,18 +299,18 @@ module _
         x ∎-⊑ = ⊑-is-reflexive refl
         _⊑⟨_⟩_ : {D : Domain} → (x : ⟨ D ⟩ ) → {y z : ⟨ D ⟩ } → x ⊑ y → y ⊑ z → x ⊑ z
         x ⊑⟨ p ⟩ q = ⊑-is-transitive p q
-        _≡⊑⟨_⟩_ : {D : Domain} → (x : ⟨ D ⟩ ) → {y z : ⟨ D ⟩ } → x ≡ y → y ⊑ z → x ⊑ z
-        x ≡⊑⟨ p ⟩ q =   ⊑-is-transitive (⊑-is-reflexive p) q
-        _⊑≡⟨_⟩_ : {D : Domain} → (x : ⟨ D ⟩ ) → {y z : ⟨ D ⟩ } → x ⊑ y → y ≡ z → x ⊑ z
-        x ⊑≡⟨ p ⟩ q =   ⊑-is-transitive p (⊑-is-reflexive q)
+        _≡-⊑⟨_⟩_ : {D : Domain} → (x : ⟨ D ⟩ ) → {y z : ⟨ D ⟩ } → x ≡ y → y ⊑ z → x ⊑ z
+        x ≡-⊑⟨ p ⟩ q = ⊑-is-transitive (⊑-is-reflexive p) q
+        _⊑-≡⟨_⟩_ : {D : Domain} → (x : ⟨ D ⟩ ) → {y z : ⟨ D ⟩ } → x ⊑ y → y ≡ z → x ⊑ z
+        x ⊑-≡⟨ p ⟩ q = ⊑-is-transitive p (⊑-is-reflexive q)
         _⊑⟨⟩_ : {D : Domain} → (x : ⟨ D ⟩ ) → {y : ⟨ D ⟩ } → x ⊑ y → x ⊑ y
         x ⊑⟨⟩ q = x ⊑⟨ ⊑-is-reflexive refl ⟩ q
-        infix  1 begin-⊑_
-        infixr 2 _⊑⟨_⟩_
-        infixr 2 _⊑≡⟨_⟩_
-        infixr 2 _≡⊑⟨_⟩_
-        infixr 2 _⊑⟨⟩_
-        infix  3 _∎-⊑
+        infix   1 begin-⊑_
+        infixr  2 _⊑⟨_⟩_
+        infixr  2 _⊑-≡⟨_⟩_
+        infixr  2 _≡-⊑⟨_⟩_
+        infixr  2 _⊑⟨⟩_
+        infix   3 _∎-⊑
 
         -- is-chain : {D : Domain} → (δ : ℕ → ⟨ D ⟩) → Set
         -- is-chain δ = ∀ n → (δ n) ⊑ (δ (suc n))
@@ -316,7 +319,9 @@ module _
         iter-is-chain zero g = ⊥-is-least
         iter-is-chain (suc n) g =
           is-assumed-monotone g (iter n g) (iter (suc n) g) (iter-is-chain n g)
-
+\end{code}
+\clearpage
+\begin{code}
         lemma-4-send′ : ∀ n ρ →
           send′ n ρ ⊑ send′ (suc n) ρ
 
@@ -341,7 +346,7 @@ module _
         lemma-4-do′ n e ρ c κ =
           begin-⊑
             do′ (suc n) ⟦ e ⟧ ρ (child c κ)
-          ≡⊑⟨ lemma-1 n e ρ c κ ⟩
+          ≡-⊑⟨ lemma-1 n e ρ c κ ⟩
             eval⟦ e ⟧ (send′ n ρ) (lookup′ (suc n) κ ρ)
           ⊑⟨ is-assumed-monotone-2 (eval⟦ e ⟧)
                (send′ n ρ) (send′ (suc n) ρ)
@@ -351,7 +356,7 @@ module _
                (lookup′ (suc n) κ ρ) (lookup′ (suc (suc n)) κ ρ)
                (lemma-4-lookup′ (suc n) κ ρ) ⟩
             eval⟦ e ⟧ (send′ (suc n) ρ) (lookup′ (suc (suc n)) κ ρ)
-          ≡⊑⟨ sym (lemma-1 (suc n) e ρ c κ) ⟩
+          ≡-⊑⟨ sym (lemma-1 (suc n) e ρ c κ) ⟩
             do′ (suc (suc n)) ⟦ e ⟧ ρ (child c κ)
           ∎-⊑
 \end{code}
@@ -374,10 +379,10 @@ module _
           proposition-3 :  ∀ ρ → send ρ ⊑ interpret ρ
           theorem-1 :      ∀ ρ → send ρ ≡ behave ρ
 
-          proposition-1 ρ = {!   !}
-          proposition-2 ρ = {!   !}
-          proposition-3 ρ = {!   !}
-          theorem-1 ρ = {!   !}
+          proposition-1 ρ =  {!   !}
+          proposition-2 ρ =  {!   !}
+          proposition-3 ρ =  {!   !}
+          theorem-1 ρ =      {!   !}
 \end{code}
 \end{AgdaAlign}
  
