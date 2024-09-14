@@ -20,7 +20,9 @@ open Inverse {{ ... }}
 module Inheritance.Equivalence
 \end{code}%
 %
-The imports and parameters of this module are the same as those of \AgdaRef{Inheritance.Definitions},
+The imports and parameters of this module are the same as those of
+\AgdaCode[\AgdaModule{Inheritance.Definitions}]
+{Inheritance.Definitions},
 and elided here.
 %
 \newcommand{\EquivalenceParameters}{
@@ -95,9 +97,12 @@ so they can be defined in Agda without an explicit least fixed-point:
 \end{code}
 %
 Cases of Agda definitions are sequential:
-putting a case for \AgdaRef{zero}
-before the corresponding case for \AgdaRef{n}
-implies that \AgdaRef{n} is positive in the latter.
+putting a case for \AgdaCode[\AgdaInductiveConstructor{zero}]
+{zero}
+before the corresponding case for \AgdaCode[\AgdaBound{n}]
+{n}
+implies that \AgdaCode[\AgdaBound{n}]
+{n} is positive in the latter.
 %
 \begin{code}
   do′ zero     ⟦ e     ⟧ ρ κ = ⊥
@@ -151,12 +156,24 @@ This checks the correctness not only of the stated result, but also of the steps
 
 The Agda standard library defines the following notation for equational reasoning:
 \begin{itemize}
-\item \AgdaRef{x ≡ y} asserts the equality of \AgdaRef{x} and \AgdaRef{y};
-\item \AgdaRef{begin} starts a proof;
-\item \AgdaRef{≡⟨⟩} adds a step that Agda can check automatically;
-\item \AgdaRef{≡⟨ t ⟩} adds a step with an explicit proof term \AgdaRef{t};
+\item \AgdaCode[\AgdaBound{x}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaBound{y}]
+{x ≡ y} asserts the equality of \AgdaCode[\AgdaBound{x}]
+{x} and \AgdaCode[\AgdaBound{y}]
+{y};
+\item \AgdaCode[\AgdaOperator{\AgdaFunction{begin}}]
+{begin} starts a proof;
+\item \AgdaCode[\AgdaFunction{≡⟨⟩}]
+{≡⟨⟩} adds a step that Agda can check automatically;
+\item \AgdaCode[\AgdaFunction{≡⟨}\AgdaSpace{}%
+\AgdaBound{t}\AgdaSpace{}%
+\AgdaFunction{⟩}]
+{≡⟨ t ⟩} adds a step with an explicit proof term \AgdaCode[\AgdaBound{t}]
+{t};
 and
-\item \AgdaRef{∎} concludes a proof.
+\item \AgdaCode[\AgdaOperator{\AgdaFunction{∎}}]
+{∎} concludes a proof.
 \end{itemize}
 
 \begin{code}
@@ -165,7 +182,10 @@ and
       eval⟦ e ⟧ (send′ n ρ) (lookup′ (suc n) κ ρ)
 \end{code}
 %
-The restriction to the class \AgdaRef{child c κ} ensures that it is not the root class;
+The restriction to the class \AgdaCode[\AgdaInductiveConstructor{child}\AgdaSpace{}%
+\AgdaBound{c}\AgdaSpace{}%
+\AgdaBound{κ}]
+{child c κ} ensures that it is not the root class;
 in CP89, the use of $\textit{parent}(κ)$ as an argument of type \textbf{Class}
 in the statement of Lemma~1 leaves this restriction implicit.
 
@@ -199,7 +219,8 @@ are quite complicated in Agda.
 This is mainly due to the case analysis required in the semantics of method calls
 to make the semantics type-correct
 (these cases are left implicit in CP89).
-The use of \AgdaRef{rewrite} below succinctly verifies the correctness of the case analysis:
+The use of \AgdaCode[\AgdaKeyword{rewrite}]
+{rewrite} below succinctly verifies the correctness of the case analysis:
 %
 \begin{code}
     lemma-1 n (call e₁ m e₂) ρ c κ

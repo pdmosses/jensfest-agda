@@ -21,8 +21,22 @@ open Inverse {{ ... }}
   using (to; from)                -- to from     ~ implicit
 \end{code}
 %
-The declaration \AgdaRef{open Inverse \{\{ ... \}\}} above introduces overloaded functions
-\AgdaRef{to} and \AgdaRef{from} for each parameter of the form \AgdaRef{\{\{ i : A ↔ B \}\}}.
+The declaration \AgdaCode[\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaModule{Inverse}\AgdaSpace{}%
+\AgdaSymbol{\{\{}\AgdaSpace{}%
+\AgdaSymbol{...}\AgdaSpace{}%
+\AgdaSymbol{\}\}}]
+{open Inverse \{\{ ... \}\}} above introduces overloaded functions
+\AgdaCode[\AgdaField{to}]
+{to} and \AgdaCode[\AgdaField{from}]
+{from} for each parameter of the form \AgdaCode[\AgdaSymbol{\{\{}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{↔}}\AgdaSpace{}%
+\AgdaBound{B}\AgdaSpace{}%
+\AgdaSymbol{\}\}}]
+{\{\{ i : A ↔ B \}\}}.
 The double braces specify so-called instance parameters,
 which are the Agda equivalent of Haskell type class constraints.
 %(Such isomorphisms are usually left implicit in published semantic definitions.)
@@ -33,15 +47,23 @@ The types and functions declared below as module parameters
 correspond to assumptions about various features of Scott domains.
 They are used when defining the semantics of method systems in Agda.
 
-An element \AgdaRef{D : Domain} is an Agda type corresponding to a domain used in CP89.
-Such a type \AgdaRef{D} has a type of elements \AgdaRef{⟨ D ⟩}
-and a distinguished element \AgdaRef{⊥}.
+An element \AgdaCode[\AgdaBound{D}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{Domain}]
+{D : Domain} is an Agda type corresponding to a domain used in CP89.
+Such a type \AgdaCode[\AgdaBound{D}]
+{D} has a type of elements \AgdaCode[\AgdaOperator{\AgdaBound{⟨}}\AgdaSpace{}%
+\AgdaBound{D}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{⟩}}]
+{⟨ D ⟩}
+and a distinguished element \AgdaCode[\AgdaBound{⊥}]
+{⊥}.
 Further assumptions about domains
-%the existence of limits of ascending chains,
-%\AgdaRef{⊥} being the least element,
-%and continuity of functions between domains)
 will be made in Section~\ref{sec:equivalence}, when proving results that
-involve the partial order on \AgdaRef{⟨ D ⟩}.
+involve the partial order on \AgdaCode[\AgdaOperator{\AgdaBound{⟨}}\AgdaSpace{}%
+\AgdaBound{D}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{⟩}}]
+{⟨ D ⟩}.
 %
 \begin{code}
 module Inheritance.Definitions
@@ -51,17 +73,24 @@ module Inheritance.Definitions
     ( fix     :  {D : Domain} → ( ⟨ D ⟩ → ⟨ D ⟩ ) → ⟨ D ⟩ ) 
 \end{code}
 %
-The function \AgdaRef{fix} is supposed to correspond to the least fixed point operator
+The function \AgdaCode[\AgdaBound{fix}]
+{fix} is supposed to correspond to the least fixed point operator
 on the space of continuous functions on a domain.
-To ensure that \AgdaRef{fix} can be applied only to continuous functions,
+To ensure that \AgdaCode[\AgdaBound{fix}]
+{fix} can be applied only to continuous functions,
 it would need to take a proof of continuity as an extra argument.
 
-In practice, however, we intend to apply \AgdaRef{fix} only to functions on \AgdaRef{⟨ D ⟩}
+In practice, however, we intend to apply \AgdaCode[\AgdaBound{fix}]
+{fix} only to functions on \AgdaCode[\AgdaOperator{\AgdaBound{⟨}}\AgdaSpace{}%
+\AgdaBound{D}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{⟩}}]
+{⟨ D ⟩}
 that are defined by lambda-abstraction and application, 
 and these are \emph{assumed} to correspond to continuous functions on domains.
 It is superfluous to pass an \emph{assumption} of continuity as an explicit argument
 – the same assumption can be made wherever it is needed
-– so we simply omit the extra argument from the type of \AgdaRef{fix}.
+– so we simply omit the extra argument from the type of \AgdaCode[\AgdaBound{fix}]
+{fix}.
 
 \clearpage
 \begin{code}
@@ -74,15 +103,33 @@ It is superfluous to pass an \emph{assumption} of continuity as an explicit argu
                    ⟨ D +⊥ E ⟩ → ⟨ F ⟩ )
 \end{code}
 %
-\AgdaRef{?⊥} here corresponds to the 1-point domain written $?$ in CP89;
-its only element is \AgdaRef{⊥} ($⊥_?$ in CP89).
-\AgdaRef{D +⊥ E} corresponds to the notation $D + E$ for separated sums of domains in CP89.
-The injection functions \AgdaRef{inl} and \AgdaRef{inr} are left implicit in CP89.
-(Case analysis \AgdaRef{[ f , g ]⊥} on \AgdaRef{D +⊥ E} is decorated with $⊥$ to avoid confusion with
+\AgdaCode[\AgdaBound{?⊥}]
+{?⊥} here corresponds to the 1-point domain written `$?$' in CP89;
+its only element is \AgdaCode[\AgdaBound{⊥}]
+{⊥} ($⊥_?$ in CP89).
+\AgdaCode[\AgdaBound{D}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{+⊥}}\AgdaSpace{}%
+\AgdaBound{E}]
+{D +⊥ E} corresponds to the notation $D + E$ for separated sums of domains in CP89.
+The injection functions \AgdaCode[\AgdaBound{inl}]
+{inl} and \AgdaCode[\AgdaBound{inr}]
+{inr} are left implicit in CP89.
+(Case analysis \AgdaCode[\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
+\AgdaBound{f}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{,}}\AgdaSpace{}%
+\AgdaBound{g}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{]⊥}}]
+{[ f , g ]⊥} on \AgdaCode[\AgdaBound{D}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{+⊥}}\AgdaSpace{}%
+\AgdaBound{E}]
+{D +⊥ E} is decorated with $⊥$ to avoid confusion with
 the case analysis for ordinary disjoint union of Agda types.)
 
 The Cartesian products of types provided by the standard Agda library support products of domains,
-regarding a pair \AgdaRef{(⊥ , ⊥)} as the least element of the product of two domains.  
+regarding a pair \AgdaCode[\AgdaSymbol{(}\AgdaBound{⊥}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{⊥}\AgdaSymbol{)}]
+{(⊥ , ⊥)} as the least element of the product of two domains.  
 
 \subsection{Method Systems}
 
@@ -101,8 +148,11 @@ and it is simpler to declare them as ordinary Agda types instead of domains:
     ( Primitive  : Set )        -- function names
 \end{code}
 %
-Both the operational and the denotational semantics of method systems in CP89 involve
-the mutually-recursive domains \AgdaRef{Value}, \AgdaRef{Behavior}, and \AgdaRef{Fun}:
+Both the operational and denotational semantics of method systems in CP89 involve
+the mutually-recursive domains \AgdaCode[\AgdaBound{Value}]
+{Value}, \AgdaCode[\AgdaBound{Behavior}]
+{Behavior}, and \AgdaCode[\AgdaBound{Fun}]
+{Fun}:
 %
 \begin{code}
     ( Number    : Domain )      -- unspecified
@@ -114,7 +164,14 @@ the mutually-recursive domains \AgdaRef{Value}, \AgdaRef{Behavior}, and \AgdaRef
 These domains cannot be defined (safely) as Agda types,
 due to the termination check on recursive type definitions.
 Scott domain theory ensures the existence of isomorphisms between the types of elements of these domains
-when the elements of \AgdaRef{⟨ Value ⟩ → ⟨ Value ⟩} are restricted to continuous functions.
+when the elements of \AgdaCode[\AgdaOperator{\AgdaBound{⟨}}\AgdaSpace{}%
+\AgdaBound{Value}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{⟩}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{⟨}}\AgdaSpace{}%
+\AgdaBound{Value}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{⟩}}]
+{⟨ Value ⟩ → ⟨ Value ⟩} are restricted to continuous functions.
 However, this restriction is irrelevant for checking the types of functions on domains,
 so it is omitted.
 %
@@ -133,12 +190,18 @@ elements $f$ of the flat domain \textbf{Primitive} are treated
 as if they are elements of the function domain \textbf{Fun}.
 When checking the corresponding part of the Agda formulation,
 the Agda type checker reported this as an error.
-The semantic function \AgdaRef{apply⟦ ⟧} declared above is assumed to map
-elements of \AgdaRef{Primitive} to functions on \AgdaRef{⟨ Value ⟩},
+The semantic function \AgdaCode[\AgdaOperator{\AgdaBound{apply⟦\AgdaUnderscore{}⟧}}]
+{apply⟦ ⟧} declared above is assumed to map
+elements of \AgdaCode[\AgdaBound{Primitive}]
+{Primitive} to functions on \AgdaCode[\AgdaOperator{\AgdaBound{⟨}}\AgdaSpace{}%
+\AgdaBound{Value}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{⟩}}]
+{⟨ Value ⟩},
 and using it fixed the error.
 
 In CP89, the inheritance hierarchy is assumed to be a finite tree.
-Below, \AgdaRef{Class} is defined as the datatype of all finite trees.
+Below, \AgdaCode[\AgdaDatatype{Class}]
+{Class} is defined as the datatype of all finite trees.
 Using a datatype avoids the need for the partial \textit{parent} function,
 and for a predicate for testing whether a class is the root of the hierarchy.
 %
@@ -149,7 +212,8 @@ data Class : Set where
 variable κ : Class
 \end{code}
 %
-The syntax of method expressions is defined by the inductive datatype \AgdaRef{Exp}:
+The syntax of method expressions is defined by the inductive datatype \AgdaCode[\AgdaDatatype{Exp}]
+{Exp}:
 %
 \begin{code}
 data Exp : Set where
@@ -172,12 +236,18 @@ module Semantics
 \subsection{Method Lookup Semantics}
 
 The method lookup semantics uses mutually-recursive functions 
-\AgdaRef{send}, \AgdaRef{lookup}, and \AgdaRef{do⟦ ⟧},
+\AgdaCode[\AgdaFunction{send}]
+{send}, \AgdaCode[\AgdaFunction{lookup}]
+{lookup}, and \AgdaCode[\AgdaOperator{\AgdaFunction{do⟦\AgdaUnderscore{}⟧}}]
+{do⟦ ⟧},
 which can be non-terminating, 
 They are therefore defined in Agda as the least fixed point
-of a non-recursive function \AgdaRef{g}
-(as in the proof of Proposition~3 in CP89) on a domain \AgdaRef{Gᵍ}
-that is isomorphic to~\AgdaRef{Dᵍ}:
+of a non-recursive function \AgdaCode[\AgdaFunction{g}]
+{g}
+(as in the proof of Proposition~3 in CP89) on a domain \AgdaCode[\AgdaBound{Gᵍ}]
+{Gᵍ}
+that is isomorphic to~\AgdaCode[\AgdaFunction{Dᵍ}]
+{Dᵍ}:
 %
 \begin{code}
   Dᵍ =  ( Instance → ⟨ Behavior ⟩ ) ×
@@ -192,22 +262,42 @@ that is isomorphic to~\AgdaRef{Dᵍ}:
     g (s , l , d⟦_⟧) = (send , lookup , do⟦_⟧) where
 \end{code}
 %
-The behavior of \AgdaRef{send ρ} is to use \AgdaRef{lookup} 
-(to be supplied as the argument \AgdaRef{l} of \AgdaRef{g} above)
-to obtain the behavior of \AgdaRef{ρ} using the class of \AgdaRef{ρ} itself:
+The behavior of \AgdaCode[\AgdaFunction{send}\AgdaSpace{}%
+\AgdaBound{ρ}]
+{send ρ} is to use \AgdaCode[\AgdaFunction{lookup}]
+{lookup} 
+(to be supplied as the argument \AgdaCode[\AgdaBound{l}]
+{l} of \AgdaCode[\AgdaFunction{g}]
+{g} above)
+to obtain the behavior of \AgdaCode[\AgdaBound{ρ}]
+{ρ} using the class of \AgdaCode[\AgdaBound{ρ}]
+{ρ} itself:
 %
 \begin{code}
       send : Instance → ⟨ Behavior ⟩
       send ρ = l (class ρ) ρ
 \end{code}
 %
-The behavior of \AgdaRef{lookup κ ρ} for a subclass \AgdaRef{κ} 
-depends on whether it is called with a method \AgdaRef{m} defined by \AgdaRef{κ}:
-if so, it uses \AgdaRef{do⟦ e ⟧} (via argument \AgdaRef{d⟦ ⟧} of \AgdaRef{g})
+The behavior of \AgdaCode[\AgdaFunction{lookup}\AgdaSpace{}%
+\AgdaBound{κ}\AgdaSpace{}%
+\AgdaBound{ρ}]
+{lookup κ ρ} for a subclass \AgdaCode[\AgdaBound{κ}]
+{κ} 
+depends on whether it is called with a method \AgdaCode[\AgdaBound{m}]
+{m} defined by \AgdaCode[\AgdaBound{κ}]
+{κ}:
+if so, it uses \AgdaCode[\AgdaOperator{\AgdaFunction{do⟦}}\AgdaSpace{}%
+\AgdaBound{e}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⟧}}]
+{do⟦ e ⟧} (via argument \AgdaCode[\AgdaOperator{\AgdaBound{d⟦\AgdaUnderscore{}⟧}}]
+{d⟦ ⟧} of \AgdaCode[\AgdaFunction{g}]
+{g})
 to execute the corresponding method expression;
-if not, it recursively looks up \AgdaRef{m} in the superclass of {κ}.
-%\footnote{The isomorphisms \AgdaRef{to} and \AgdaRef{from} can be ignored.}
-The behavior is undefined when \AgdaRef{κ} is the root of the inheritance hierarchy,
+if not, it recursively looks up \AgdaCode[\AgdaBound{m}]
+{m} in the superclass of \AgdaCode[\AgdaBound{κ}]
+{κ}.
+The behavior is undefined when \AgdaCode[\AgdaBound{κ}]
+{κ} is the root of the inheritance hierarchy,
 which has been defined to have no methods:
 %
 \begin{code}
@@ -219,8 +309,16 @@ which has been defined to have no methods:
       lookup origin ρ = ⊥
 \end{code}
 %
-When applied to a value \AgdaRef{α}, the value returned by the function \AgdaRef{to (do⟦ e ⟧ ρ κ)} may be
-a behavior, a number, or undefined (\AgdaRef{⊥}):
+When applied to a value \AgdaCode[\AgdaBound{α}]
+{α}, the value returned by the function \AgdaCode[\AgdaField{to}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{do⟦}}\AgdaSpace{}%
+\AgdaBound{e}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⟧}}\AgdaSpace{}%
+\AgdaBound{ρ}\AgdaSpace{}%
+\AgdaBound{κ}\AgdaSymbol{)}]
+{to (do⟦ e ⟧ ρ κ)} may be
+a behavior, a number, or undefined (\AgdaCode[\AgdaFunction{⊥}]
+{⊥}):
 %
 \begin{code}
       do⟦_⟧ : Exp → Instance → Class → ⟨ Fun ⟩
@@ -238,14 +336,23 @@ a behavior, a number, or undefined (\AgdaRef{⊥}):
         from λ α → apply⟦ f ⟧ (to (d⟦ e₁ ⟧ ρ κ) α)
 \end{code}
 %
-The only complicated case is for calling method \AgdaRef{m} of object \AgdaRef{e₁} 
-with argument \AgdaRef{e₂}.
-When the value of \AgdaRef{e₁} is a behavior \AgdaRef{σ} that maps \AgdaRef{m} to a function \AgdaRef{φ},
-that function is applied to the value of \AgdaRef{e₂};
+The only complicated case is for calling method \AgdaCode[\AgdaBound{m}]
+{m} of object \AgdaCode[\AgdaBound{e₁}]
+{e₁} 
+with argument \AgdaCode[\AgdaBound{e₂}]
+{e₂}.
+When the value of \AgdaCode[\AgdaBound{e₁}]
+{e₁} is a behavior \AgdaCode[\AgdaBound{σ}]
+{σ} that maps \AgdaCode[\AgdaBound{m}]
+{m} to a function \AgdaCode[\AgdaBound{φ}]
+{φ},
+that function is applied to the value of \AgdaCode[\AgdaBound{e₂}]
+{e₂};
 otherwise the value of the call is undefined.
 The undefined cases are not explicit in CP89.
 
-The use of \AgdaRef{fix} below has the effect of making the above definitions mutually recursive:
+The use of \AgdaCode[\AgdaBound{fix}]
+{fix} below has the effect of making the above definitions mutually recursive:
 %
 \begin{code}
     γ : ⟨ Gᵍ ⟩ → ⟨ Gᵍ ⟩
@@ -260,8 +367,12 @@ That concludes the Agda definition of the method lookup semantics.
 \subsection{Denotational Semantics}
 
 The denotational semantics of method expressions takes the behavior of the 
-expressions \AgdaRef{self} (\AgdaRef{σ})
-and \AgdaRef{super} (\AgdaRef{π}) as arguments, so their evaluation is trivial.
+expressions \AgdaCode[\AgdaInductiveConstructor{self}]
+{self} (\AgdaCode[\AgdaBound{σ}]
+{σ})
+and \AgdaCode[\AgdaInductiveConstructor{super}]
+{super} (\AgdaCode[\AgdaBound{π}]
+{π}) as arguments, so their evaluation is trivial.
 The evaluation of the other method expressions is similar to their method lookup semantics.
 %
 \begin{code}
@@ -279,21 +390,36 @@ The evaluation of the other method expressions is similar to their method lookup
     from λ α → apply⟦ f ⟧ (to (eval⟦ e₁ ⟧ σ π) α)
 \end{code}
 %
-The recursively-defined function \AgdaRef{eval⟦ ⟧} is obviously total,
+The recursively-defined function \AgdaCode[\AgdaOperator{\AgdaFunction{eval⟦\AgdaUnderscore{}⟧}}]
+{eval⟦ ⟧} is obviously total,
 so there is no need for an explicit fixed point.
 
 According to the conceptual analysis of inheritance in CP89,
-the behavior of an instance \AgdaRef{ρ} is the fixed point
-of the generator associated with the class of \AgdaRef{ρ}.
+the behavior of an instance \AgdaCode[\AgdaBound{ρ}]
+{ρ} is the fixed point
+of the generator associated with the class of \AgdaCode[\AgdaBound{ρ}]
+{ρ}.
 
 The generator for a subclass is obtained by modifying the generator of its parent class
 using a wrapper that provides the behavior of the methods defined by the subclass,
-given the behavior of the expressions \AgdaRef{self} (\AgdaRef{σ})
-and \AgdaRef{super} (\AgdaRef{π}) as arguments.
+given the behavior of the expressions \AgdaCode[\AgdaInductiveConstructor{self}]
+{self} (\AgdaCode[\AgdaBound{σ}]
+{σ})
+and \AgdaCode[\AgdaInductiveConstructor{super}]
+{super} (\AgdaCode[\AgdaBound{π}]
+{π}) as arguments.
 
-The auxiliary operation \AgdaRef{σ₁ ⊕ σ₂} combines its argument behaviors,
-letting the methods of \AgdaRef{σ₁} shadow those of \AgdaRef{σ₂}.
-The operation \AgdaRef{w ⍄ p} combines the wrapper of a subclass with the generator of its parent class.
+The auxiliary operation \AgdaCode[\AgdaBound{σ₁}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊕}}\AgdaSpace{}%
+\AgdaBound{σ₂}]
+{σ₁ ⊕ σ₂} combines its argument behaviors,
+letting the methods of \AgdaCode[\AgdaBound{σ₁}]
+{σ₁} shadow those of \AgdaCode[\AgdaBound{σ₂}]
+{σ₂}.
+The operation \AgdaCode[\AgdaBound{w}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⍄}}\AgdaSpace{}%
+\AgdaBound{p}]
+{w ⍄ p} combines the wrapper of a subclass with the generator of its parent class.
 See Figure~9 of CP89 for an illustration of wrapper application.
 %
 \begin{code}
