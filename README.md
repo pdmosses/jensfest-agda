@@ -3,8 +3,9 @@
 > Agda code corresponding to a semantics of inheritance
 
 This repository contains the Agda source code for a paper ([Mosses 2024])
-accepted for presentation at [JensFest] in October 2024.
-The Agda types and function definitions correspond closely to those given in
+presented at [JensFest] in October 2024.
+The Agda types and function definitions correspond closely to those given
+in highly-cited publications by William Cook and Jens Palsberg
 ([Cook 1989]; [Cook and Palsberg 1989]; [Cook and Palsberg 1994]).
 
 Agda verifies that the definitions given here are well-typed,
@@ -40,11 +41,11 @@ as are all abstracted functions.
 The impossibility of discharging these assumptions does not interfere with
 type-checking and proof validation in Agda.
 
-[Mosses 2024]: TBA
-[JensFest]: https://2024.splashcon.org/home/jensfest-2024
+[Mosses 2024]: https://doi.org/10.1145/3694848.3694852 "JENSFEST 2024 paper"
+[JensFest]: https://2024.splashcon.org/home/jensfest-2024 "SPLASH 2024 workshop home page"
 [Cook 1989]: https://cs.brown.edu/research/pubs/theses/phd/1989/cook.pdf "PhD thesis"
-[Cook and Palsberg 1989]: https://doi.org/10.1145/74877.74922 "OOPSLA '89"
-[Cook and Palsberg 1994]: https://doi.org/10.1006/INCO.1994.1090 "Inf. Comput."
-[standard Agda library version 2.0]: https://agda.github.io/agda-stdlib/v2.0/
+[Cook and Palsberg 1989]: https://doi.org/10.1145/74877.74922 "OOPSLA '89 paper"
+[Cook and Palsberg 1994]: https://doi.org/10.1006/INCO.1994.1090 "Inf. Comput. 1994 paper"
+[standard Agda library version 2.1]: https://agda.github.io/agda-stdlib/v2.1/
 [DomainTheory]: https://www.cs.bham.ac.uk/~mhe/TypeTopology/DomainTheory.index.html
 [TypeTopology]: https://www.cs.bham.ac.uk/~mhe/TypeTopology/
